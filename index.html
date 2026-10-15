@@ -1,511 +1,743 @@
-<title>Mill Creek Pipeline</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Fleet Ops Manager</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --navy: #123350;
-    --navy-soft: #1c4266;
-    --teal: #2FADC4;
-    --teal-dark: #22879A;
-    --bg: #E7EFEE;
-    --band: #DCE6E4;
-    --hairline: #C7D6D5;
-    --muted: #5B7280;
-    --card: #FFFFFF;
-    --st-new: #8DA0A9;
-    --st-contacted: #2FADC4;
-    --st-replied: #C68A2E;
-    --st-meeting: #7A5FB0;
-    --st-client: #2E8B57;
-    --st-passed: #B34A4A;
-    color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --navy: #E7EFEE;
-      --navy-soft: #C7D6D5;
-      --bg: #0F1E2A;
-      --band: #16293A;
-      --hairline: #2A4256;
-      --muted: #93A9B6;
-      --card: #142838;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --navy: #E7EFEE;
-    --navy-soft: #C7D6D5;
-    --bg: #0F1E2A;
-    --band: #16293A;
-    --hairline: #2A4256;
-    --muted: #93A9B6;
-    --card: #142838;
-    color-scheme: dark;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--navy); font-family: 'Source Sans 3', Arial, sans-serif; padding-inline: 20px; }
-  .wrap { max-width: 980px; margin: 0 auto; padding-block: 32px 60px; }
-  h1, h2, .mono-label { font-family: 'Montserrat', sans-serif; }
-  h1 { font-weight: 900; font-size: 28px; margin: 0 0 4px 0; text-wrap: balance; }
-  .sub { color: var(--muted); font-size: 15px; margin: 0 0 24px 0; }
-  .top-bar { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-  .btn { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.02em; padding: 11px 20px; border: none; cursor: pointer; }
-  .btn-primary { background: var(--navy); color: var(--bg); }
-  .btn-primary:hover { background: var(--teal-dark); }
-  .btn-ghost { background: transparent; color: var(--navy); border: 1px solid var(--hairline); }
-  .btn-ghost:hover { border-color: var(--teal); color: var(--teal-dark); }
-  .stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin: 28px 0; }
-  .stat { background: var(--card); border-top: 3px solid var(--hairline); padding: 12px 10px; text-align: center; cursor: pointer; }
-  .stat.active { border-top-color: var(--teal); }
-  .stat .n { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-  .filters { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
-  .search { flex: 1 1 220px; border: 1px solid var(--hairline); background: var(--card); color: var(--navy); padding: 9px 12px; font-size: 14px; font-family: inherit; }
-  .search::placeholder { color: var(--muted); }
-  .list { display: flex; flex-direction: column; gap: 10px; }
-  .row-card { background: var(--card); border: 1px solid var(--hairline); padding: 16px 18px; display: flex; gap: 16px; align-items: flex-start; }
-  .row-main { flex: 1 1 auto; min-width: 0; }
-  .row-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-  .company { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 17px; }
-  .industry-tag { font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
-  .contact-line { font-size: 14px; color: var(--muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-  .contact-item { display: inline-flex; align-items: center; gap: 6px; }
-  .contact-item a { color: var(--muted); }
-  .contact-item a:hover { color: var(--teal-dark); }
-  .copy-btn { background: none; border: 1px solid var(--hairline); color: var(--muted); font-size: 11px; padding: 1px 7px; cursor: pointer; font-family: 'Source Sans 3', Arial, sans-serif; }
-  .copy-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
-  .notes-line { font-size: 14px; margin-top: 8px; line-height: 1.45; }
-  .row-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex: 0 0 auto; }
-  .pill { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; padding: 5px 10px; border: none; cursor: pointer; }
-  .last-contact { font-size: 12px; color: var(--muted); }
-  .row-actions { display: flex; gap: 10px; }
-  .icon-btn { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 13px; font-family: 'Source Sans 3', Arial, sans-serif; padding: 0; }
-  .icon-btn:hover { color: var(--teal-dark); text-decoration: underline; }
-  .empty { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .modal-backdrop { position: fixed; inset: 0; z-index: 100; background: rgba(18,51,80,0.55); display: none; align-items: center; justify-content: center; padding: 20px; }
-  .modal-backdrop.open { display: flex; }
-  .modal-box { background: var(--bg); width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; padding: 26px 28px; position: relative; }
-  .modal-close { position: absolute; top: 12px; right: 14px; background: none; border: none; cursor: pointer; font-size: 22px; color: var(--navy); }
-  .field { margin-bottom: 14px; }
-  .field label { display: block; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .field input, .field select, .field textarea {
-    width: 100%; border: none; border-bottom: 1px solid var(--hairline); background: transparent;
-    font-family: 'Source Sans 3', Arial, sans-serif; font-size: 15px; color: var(--navy); padding: 8px 2px;
-  }
-  .field textarea { resize: vertical; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .modal-title { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 20px; margin: 0 0 18px 0; }
-  .research-panel { margin-top: 44px; padding-top: 28px; border-top: 1px solid var(--hairline); }
-  .research-panel h2 { font-weight: 900; font-size: 19px; margin: 0 0 8px 0; }
-  .request-list { margin-top: 20px; display: flex; flex-direction: column; gap: 8px; }
-  .request-row { background: var(--card); border: 1px solid var(--hairline); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-  .request-main { font-size: 14px; }
-  .request-main .rq-industry { font-weight: 700; }
-  .request-main .rq-area { color: var(--muted); }
-  .req-pill { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; padding: 4px 9px; color: #fff; flex: 0 0 auto; }
-  .req-pill.pending { background: var(--st-new); }
-  .req-pill.done { background: var(--st-client); }
-  @media (max-width: 700px) {
-    .stats { grid-template-columns: repeat(3, 1fr); }
-    .row-card { flex-direction: column; }
-    .row-side { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }
-    .two-col { grid-template-columns: 1fr; }
-  }
+:root {
+  --bg:    #0e0d0b;
+  --bg2:   #161512;
+  --bg3:   #1e1c19;
+  --bg4:   #252320;
+  --fg:    #f0ece4;
+  --fg2:   #a89f90;
+  --fg3:   #6b6358;
+  --border: #2c2a26;
+  --border2: #3a3832;
+  --accent: #c4a567;
+  --accent2: #a8894e;
+  --ok:    #7dbd8a;
+  --ok-bg: #0d2314;
+  --warn:  #d4a843;
+  --warn-bg: #1f1600;
+  --danger: #d46b6b;
+  --danger-bg: #200a0a;
+  --sidebar-w: 210px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 13.5px;
+  display: flex; flex-direction: column;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+.app { display: flex; flex: 1; overflow: hidden; }
+
+.sidebar {
+  width: var(--sidebar-w); background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  overflow-y: auto;
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+}
+.sidebar-logo { padding: 20px 16px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-logo .co { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; letter-spacing: .04em; color: var(--accent); line-height: 1.2; }
+.sidebar-logo .app-name { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: .14em; color: var(--fg3); margin-top: 5px; }
+.nav-section { padding: 10px 0 6px; }
+.nav-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .16em; color: var(--fg3); padding: 0 16px; margin-bottom: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 16px; font-size: 12.5px; font-weight: 400;
+  color: var(--fg2); cursor: pointer;
+  border: none; background: none; width: 100%; text-align: left;
+  transition: background .12s, color .12s;
+  letter-spacing: .01em;
+}
+.nav-item:hover { background: var(--bg3); color: var(--fg); }
+.nav-item.active { background: var(--bg3); color: var(--accent); font-weight: 500; border-right: 2px solid var(--accent); }
+.nav-icon { font-size: 14px; width: 18px; flex-shrink: 0; opacity: .7; }
+.badge { margin-left: auto; font-size: 10px; font-weight: 600; background: var(--danger); color: #fff; border-radius: 10px; padding: 1px 5px; }
+
+.main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 28px; border-bottom: 1px solid var(--border);
+  background: var(--bg2); position: sticky; top: 0; z-index: 5;
+}
+.topbar h1 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: .02em; color: var(--fg); }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.content { padding: 28px; flex: 1; }
+
+.btn { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: .04em; padding: 7px 16px; border-radius: 4px; border: 1px solid var(--border2); background: var(--bg3); color: var(--fg2); cursor: pointer; transition: background .12s, color .12s; }
+.btn:hover { background: var(--bg4); color: var(--fg); }
+.btn-primary { background: var(--accent); color: #0e0d0b; border-color: var(--accent); font-weight: 600; }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #0e0d0b; }
+.btn-sm { padding: 4px 11px; font-size: 11px; }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+.btn-icon { padding: 4px 7px; font-size: 13px; line-height: 1; }
+
+.stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; padding: 16px 18px; }
+.stat-label { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .13em; color: var(--fg3); }
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 600; line-height: 1.05; margin-top: 5px; font-variant-numeric: tabular-nums; }
+.stat-sub { font-size: 12px; color: var(--fg2); margin-top: 3px; }
+.stat-ok { color: var(--ok); }
+.stat-warn { color: var(--warn); }
+.stat-danger { color: var(--danger); }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { text-align: left; font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--fg3); padding: 9px 14px; border-bottom: 1px solid var(--border); background: var(--bg2); white-space: nowrap; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:last-child { border-bottom: none; }
+tbody td { padding: 10px 14px; vertical-align: middle; }
+tbody tr:hover td { background: var(--bg3); }
+
+.pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+.pill-ok { background: var(--ok-bg); color: var(--ok); }
+.pill-warn { background: var(--warn-bg); color: var(--warn); }
+.pill-danger { background: var(--danger-bg); color: var(--danger); }
+.pill-neutral { background: var(--bg3); color: var(--fg2); }
+
+.section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-head h2 { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600; letter-spacing: .01em; }
+.section-head p { font-size: 12px; color: var(--fg2); margin-top: 2px; }
+
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 20px; }
+.card-pad { padding: 16px; }
+
+.modal-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.45); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: 5px; width: 100%; max-width: 480px; padding: 28px; max-height: 90vh; overflow-y: auto; }
+.modal h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; margin-bottom: 18px; letter-spacing: .02em; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-group.full { grid-column: 1/-1; }
+label { font-size: 12px; font-weight: 600; color: var(--fg2); }
+input, select, textarea { font-family: 'Inter', sans-serif; font-size: 13px; padding: 7px 10px; border: 1px solid var(--border2); border-radius: 4px; background: var(--bg3); color: var(--fg); width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+.form-section { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--fg3); grid-column: 1/-1; margin-top: 4px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+/* DQ checklist */
+.checklist { display: flex; flex-direction: column; gap: 6px; }
+.check-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg3); }
+.check-row.done { background: var(--ok-bg); border-color: var(--ok); }
+.check-row.done .check-label { color: var(--ok); }
+.check-box { width: 16px; height: 16px; border: 1.5px solid var(--border2); border-radius: 2px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.check-box.checked { background: var(--ok); border-color: var(--ok); }
+.check-box.checked::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 700; }
+.check-label { font-size: 13px; font-weight: 500; flex: 1; min-width: 0; }
+.check-date { font-size: 11px; color: var(--fg3); font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+
+/* Photo button */
+.photo-btn { cursor: pointer; font-size: 15px; padding: 2px 5px; border-radius: 4px; border: 1px solid var(--border); background: var(--bg2); line-height: 1.3; flex-shrink: 0; }
+.photo-btn.has-photo { border-color: var(--ok); background: var(--ok-bg); }
+.photo-thumb { width: 28px; height: 28px; object-fit: cover; border-radius: 3px; cursor: pointer; flex-shrink: 0; border: 1px solid var(--border); }
+
+/* IFTA */
+.state-list { display: flex; flex-direction: column; gap: 6px; }
+.state-row { display: flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px; background: var(--bg3); }
+.state-row.base { border-color: var(--accent); background: #1c1810; }
+.state-abbr { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 700; width: 32px; flex-shrink: 0; }
+.state-field { display: flex; align-items: center; gap: 5px; flex: 1; }
+.state-input { border: 1px solid var(--border2); border-radius: 4px; padding: 5px 8px; background: var(--bg2); color: var(--fg); font-family: 'Inter', monospace; font-size: 13px; width: 100px; font-variant-numeric: tabular-nums; }
+.state-input:focus { outline: none; border-color: var(--accent); }
+.state-unit { font-size: 11px; color: var(--fg3); white-space: nowrap; }
+.add-state-row { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+
+.q-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.q-tab { padding: 6px 16px; font-size: 11px; font-weight: 500; letter-spacing: .06em; border: 1px solid var(--border2); border-radius: 3px; cursor: pointer; background: var(--bg2); color: var(--fg2); text-transform: uppercase; }
+.q-tab.active { background: var(--accent); color: #0e0d0b; border-color: var(--accent); font-weight: 600; }
+
+/* D&A */
+.da-row { display: grid; grid-template-columns: 90px 80px 130px 1fr auto; gap: 10px; align-items: center; padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.da-row:last-child { border-bottom: none; }
+.da-head { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--fg3); padding: 8px 12px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 90px 80px 130px 1fr auto; gap: 10px; background: var(--bg); }
+
+/* CSA */
+.csa-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.csa-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 5px; padding: 16px; }
+.csa-name { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+.csa-bar-bg { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; margin-bottom: 6px; }
+.csa-bar { height: 100%; border-radius: 4px; transition: width .3s; }
+
+.empty { text-align: center; padding: 48px 24px; color: var(--fg3); }
+.empty-icon { font-size: 32px; margin-bottom: 10px; }
+.alert-banner { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: 7px; margin-bottom: 14px; font-size: 13px; }
+.alert-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(212,168,67,.3); border-radius: 4px; }
+.alert-danger { background: var(--danger-bg); color: var(--danger); border: 1px solid rgba(212,107,107,.3); border-radius: 4px; }
+.dl-list { display: flex; flex-direction: column; gap: 6px; }
+.dl-item { display: flex; align-items: center; gap: 12px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+.dl-date { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; width: 70px; flex-shrink: 0; color: var(--fg2); font-variant-numeric: tabular-nums; }
+.dl-name { flex: 1; }
+.dl-days { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; }
+
+/* Photo lightbox */
+.lightbox { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,.85); display: flex; align-items: center; justify-content: center; cursor: zoom-out; }
+.lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 6px; object-fit: contain; }
+
+@media (max-width: 600px) {
+  .sidebar { display: none; }
+  .form-grid { grid-template-columns: 1fr; }
+  .da-row, .da-head { grid-template-columns: 1fr 1fr; }
+  .da-row span:nth-child(n+3), .da-head span:nth-child(n+3) { display: none; }
+}
 </style>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Source+Sans+3:wght@400;600&display=swap">
 
-<div class="wrap">
-  <div class="top-bar">
-    <div>
-      <h1>Mill Creek Pipeline</h1>
-      <p class="sub">Local leads, tracked from first contact to client.</p>
+<div class="app">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="co">Dwyer Marble<br>& Stone</div>
+      <div class="app-name">Fleet Compliance</div>
     </div>
-    <button class="btn btn-primary" id="add-btn">+ Add lead</button>
-  </div>
+    <div class="nav-section">
+      <div class="nav-label">Overview</div>
+      <button class="nav-item active" onclick="nav('dashboard')"><span class="nav-icon">◉</span>Dashboard</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Compliance</div>
+      <button class="nav-item" onclick="nav('drivers')"><span class="nav-icon">👤</span>DQ Files<span class="badge" id="dq-badge" hidden></span></button>
+      <button class="nav-item" onclick="nav('da')"><span class="nav-icon">🧪</span>Drug & Alcohol</button>
+      <button class="nav-item" onclick="nav('csa')"><span class="nav-icon">📊</span>CSA Score</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Tax & Reg</div>
+      <button class="nav-item" onclick="nav('ifta')"><span class="nav-icon">⛽</span>IFTA Filing</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Admin</div>
+      <button class="nav-item" onclick="nav('deadlines')"><span class="nav-icon">📅</span>Deadlines</button>
+    </div>
+  </nav>
 
-  <div class="stats" id="stats"></div>
-
-  <div class="filters">
-    <input class="search" id="search" type="text" placeholder="Search company, contact, or notes">
-    <button class="btn btn-ghost" id="clear-filter" style="display:none;">Clear filter</button>
-  </div>
-
-  <div class="list" id="list"></div>
-  <div class="empty" id="empty" style="display:none;">No leads match this view yet.</div>
-
-  <div class="research-panel">
-    <h2>Find more leads</h2>
-    <p class="sub" style="margin-bottom:16px;">This page can't browse the web on its own. Set what you're looking for here, and Claude picks up the request in your next conversation and adds real, verified businesses to the list above &mdash; it won't invent company names.</p>
-    <form id="research-form">
-      <div class="two-col">
-        <div class="field">
-          <label for="r-industry">Industry / keywords</label>
-          <input id="r-industry" placeholder="e.g. propane dealers, small manufacturers" required>
-        </div>
-        <div class="field">
-          <label for="r-area">Area</label>
-          <input id="r-area" value="Thumb region (St. Clair, Sanilac, Huron, Tuscola counties)">
-        </div>
-      </div>
-      <div class="field">
-        <label for="r-notes">Anything else to narrow it down</label>
-        <textarea id="r-notes" rows="2" placeholder="Company size, must have a website, exclude companies you already know, etc."></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary">Submit request</button>
-    </form>
-    <div class="request-list" id="request-list"></div>
+  <div class="main">
+    <div class="topbar">
+      <h1 id="page-title">Dashboard</h1>
+      <div class="topbar-actions" id="topbar-actions"></div>
+    </div>
+    <div class="content" id="main-content"></div>
   </div>
 </div>
 
-<!-- lead modal -->
-<div class="modal-backdrop" id="lead-modal" onclick="if (event.target === this) closeModal()">
-  <div class="modal-box">
-    <button type="button" class="modal-close" aria-label="Close" onclick="closeModal()">&times;</button>
-    <div class="modal-title" id="modal-title">Add a lead</div>
-    <form id="lead-form">
-      <div class="field">
-        <label for="f-company">Company</label>
-        <input id="f-company" required>
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label for="f-industry">Industry</label>
-          <input id="f-industry" placeholder="e.g. Trucking, Manufacturing">
-        </div>
-        <div class="field">
-          <label for="f-status">Status</label>
-          <select id="f-status">
-            <option value="new">New</option>
-            <option value="contacted">Contacted</option>
-            <option value="replied">Replied</option>
-            <option value="meeting">Meeting set</option>
-            <option value="client">Client</option>
-            <option value="passed">Passed</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label for="f-contact-name">Contact name</label>
-        <input id="f-contact-name">
-      </div>
-      <div class="two-col">
-        <div class="field">
-          <label for="f-contact-email">Email</label>
-          <input id="f-contact-email" type="email" placeholder="name@company.com">
-        </div>
-        <div class="field">
-          <label for="f-contact-phone">Phone</label>
-          <input id="f-contact-phone" type="tel" placeholder="(810) 555-0100">
-        </div>
-      </div>
-      <div class="field">
-        <label for="f-source">Website / link (optional)</label>
-        <input id="f-source" placeholder="https://...">
-      </div>
-      <div class="field">
-        <label for="f-last-contact">Last contact date</label>
-        <input id="f-last-contact" type="date">
-      </div>
-      <div class="field">
-        <label for="f-notes">Notes</label>
-        <textarea id="f-notes" rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;">Save lead</button>
-    </form>
-  </div>
-</div>
+<div id="modal-root"></div>
+<input type="file" id="photo-input" accept="image/*" style="display:none" onchange="handlePhotoFile(event)">
 
 <script>
-  const STATUSES = [
-    { key: 'new', label: 'New', color: 'var(--st-new)' },
-    { key: 'contacted', label: 'Contacted', color: 'var(--st-contacted)' },
-    { key: 'replied', label: 'Replied', color: 'var(--st-replied)' },
-    { key: 'meeting', label: 'Meeting set', color: 'var(--st-meeting)' },
-    { key: 'client', label: 'Client', color: 'var(--st-client)' },
-    { key: 'passed', label: 'Passed', color: 'var(--st-passed)' },
-  ];
-  const statusLabel = k => (STATUSES.find(s => s.key === k) || STATUSES[0]).label;
-  const statusColor = k => (STATUSES.find(s => s.key === k) || STATUSES[0]).color;
+const ALL_STATES = ['AL','AK','AR','AZ','CA','CO','CT','DE','FL','GA','IA','ID','IL','IN','KS','KY','LA','MA','MD','ME','MN','MO','MS','MT','NC','ND','NE','NH','NJ','NM','NV','NY','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VA','VT','WA','WI','WV','WY'];
 
-  let leads = [];
-  let requests = [];
-  let activeFilter = null;
-  let editingId = null;
-  let db = null;
+let S = {
+  drivers: [], da: [], csa: {},
+  ifta: {},
+  iftaStates: { 'Q1': ['MI'], 'Q2': ['MI'], 'Q3': ['MI'], 'Q4-prev': ['MI'] },
+  activeQ: curQ()
+};
 
-  function fmtDate(iso) {
-    if (!iso) return 'No contact logged';
-    const d = new Date(iso + 'T00:00:00');
-    if (isNaN(d)) return iso;
-    return 'Last contact ' + d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
+let pendingPhoto = null; // { driverId, key }
 
-  function render() {
-    const statsEl = document.getElementById('stats');
-    statsEl.innerHTML = STATUSES.map(s => {
-      const count = leads.filter(l => l.status === s.key).length;
-      const active = activeFilter === s.key ? ' active' : '';
-      return `<div class="stat${active}" data-status="${s.key}"><div class="n" style="color:${s.color}">${count}</div><div class="l">${s.label}</div></div>`;
-    }).join('');
-    statsEl.querySelectorAll('.stat').forEach(el => {
-      el.addEventListener('click', () => {
-        const k = el.getAttribute('data-status');
-        activeFilter = activeFilter === k ? null : k;
-        document.getElementById('clear-filter').style.display = activeFilter ? 'inline-block' : 'none';
-        renderList();
-      });
-    });
-    renderList();
-  }
+function curQ() {
+  const m = new Date().getMonth();
+  return m < 3 ? 'Q4-prev' : m < 6 ? 'Q1' : m < 9 ? 'Q2' : 'Q3';
+}
 
-  function renderList() {
-    const q = (document.getElementById('search').value || '').toLowerCase().trim();
-    let filtered = leads.slice();
-    if (activeFilter) filtered = filtered.filter(l => l.status === activeFilter);
-    if (q) filtered = filtered.filter(l =>
-      (l.company || '').toLowerCase().includes(q) ||
-      (l.contact_name || '').toLowerCase().includes(q) ||
-      (l.contact_email || '').toLowerCase().includes(q) ||
-      (l.contact_phone || '').toLowerCase().includes(q) ||
-      (l.notes || '').toLowerCase().includes(q) ||
-      (l.industry || '').toLowerCase().includes(q)
-    );
-    filtered.sort((a, b) => (a.company || '').localeCompare(b.company || ''));
-
-    const listEl = document.getElementById('list');
-    const emptyEl = document.getElementById('empty');
-    if (filtered.length === 0) {
-      listEl.innerHTML = '';
-      emptyEl.style.display = 'block';
-      return;
+function save() { try { localStorage.setItem('fleetops_v2', JSON.stringify(S)); } catch(e) {} }
+function load() {
+  try {
+    const d = localStorage.getItem('fleetops_v2');
+    if (d) {
+      const parsed = JSON.parse(d);
+      S = { ...S, ...parsed };
+      if (!S.iftaStates) S.iftaStates = { 'Q1': ['MI'], 'Q2': ['MI'], 'Q3': ['MI'], 'Q4-prev': ['MI'] };
     }
-    emptyEl.style.display = 'none';
+  } catch(e) {}
+}
 
-    listEl.innerHTML = filtered.map(l => {
-      const optionsHtml = STATUSES.map(s => `<option value="${s.key}" ${s.key === l.status ? 'selected' : ''}>${s.label}</option>`).join('');
-      const parts = [];
-      if (l.contact_name) parts.push(`<span class="contact-item">${escapeHtml(l.contact_name)}</span>`);
-      if (l.contact_email) parts.push(`<span class="contact-item"><a href="mailto:${escapeAttr(l.contact_email)}">${escapeHtml(l.contact_email)}</a><button type="button" class="copy-btn" data-copy="${escapeAttr(l.contact_email)}">Copy</button></span>`);
-      if (l.contact_phone) parts.push(`<span class="contact-item"><a href="tel:${escapeAttr(l.contact_phone.replace(/[^\d+]/g, ''))}">${escapeHtml(l.contact_phone)}</a><button type="button" class="copy-btn" data-copy="${escapeAttr(l.contact_phone)}">Copy</button></span>`);
-      if (l.source_url) parts.push(`<span class="contact-item"><a href="${escapeAttr(l.source_url)}" target="_blank" rel="noopener">site</a></span>`);
-      const contactLine = parts.join('');
-      return `
-        <div class="row-card" data-id="${l.id}">
-          <div class="row-main">
-            <div class="row-top">
-              <span class="company">${escapeHtml(l.company)}</span>
-              ${l.industry ? `<span class="industry-tag">${escapeHtml(l.industry)}</span>` : ''}
-            </div>
-            ${contactLine ? `<div class="contact-line">${contactLine}</div>` : ''}
-            ${l.notes ? `<div class="notes-line">${escapeHtml(l.notes)}</div>` : ''}
-          </div>
-          <div class="row-side">
-            <select class="pill status-select" data-id="${l.id}" style="background:${statusColor(l.status)}">${optionsHtml}</select>
-            <div class="last-contact">${fmtDate(l.last_contact)}</div>
-            <div class="row-actions">
-              <button class="icon-btn edit-btn" data-id="${l.id}">Edit</button>
-              <button class="icon-btn delete-btn" data-id="${l.id}">Delete</button>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+const DQ_ITEMS = [
+  { key: 'app', label: 'Employment Application (10-yr history)' },
+  { key: 'clearinghouse', label: 'Clearinghouse Query (full)' },
+  { key: 'mvr', label: 'MVR Pulled (all states, 3 yrs)', hasDate: true },
+  { key: 'med', label: 'Medical Certificate', hasExpiry: true },
+  { key: 'road', label: 'Road Test Certificate / CDL Copy' },
+  { key: 'prev_emp', label: 'Prior Employer Verification (3 yrs)' },
+  { key: 'drug', label: 'Pre-Employment Drug Test (negative)' },
+];
 
-    listEl.querySelectorAll('.status-select').forEach(sel => {
-      sel.addEventListener('change', async (e) => {
-        const id = sel.getAttribute('data-id');
-        const newStatus = sel.value;
-        sel.style.background = statusColor(newStatus);
-        const lead = leads.find(x => x.id === id);
-        if (lead) lead.status = newStatus;
-        if (db) {
-          try { await db.collection('leads').doc(id).update({ status: newStatus }); } catch (err) {}
-        }
-      });
-    });
-    listEl.querySelectorAll('.copy-btn').forEach(btn => {
-      btn.addEventListener('click', () => copyText(btn.getAttribute('data-copy'), btn));
-    });
-    listEl.querySelectorAll('.edit-btn').forEach(btn => {
-      btn.addEventListener('click', () => openModal(btn.getAttribute('data-id')));
-    });
-    listEl.querySelectorAll('.delete-btn').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-id');
-        if (!confirmInline(btn)) return;
-        leads = leads.filter(x => x.id !== id);
-        renderList();
-        if (db) {
-          try { await db.collection('leads').doc(id).delete(); } catch (err) {}
-        }
-      });
-    });
-  }
+const CSA_CATS = [
+  { key: 'unsafe', label: 'Unsafe Driving', threshold: 65 },
+  { key: 'hos', label: 'HOS Compliance', threshold: 65 },
+  { key: 'fitness', label: 'Driver Fitness', threshold: 80 },
+  { key: 'da', label: 'Controlled Substances/Alcohol', threshold: 80 },
+  { key: 'maint', label: 'Vehicle Maintenance', threshold: 80 },
+  { key: 'hazmat', label: 'Hazardous Materials', threshold: 80 },
+  { key: 'crash', label: 'Crash Indicator', threshold: 65 },
+];
 
-  // artifact viewer has no confirm(); a double-click style inline confirm instead
-  function confirmInline(btn) {
-    if (btn.dataset.armed === '1') { btn.dataset.armed = '0'; btn.textContent = 'Delete'; return true; }
-    btn.dataset.armed = '1';
-    btn.textContent = 'Sure?';
-    setTimeout(() => { btn.dataset.armed = '0'; btn.textContent = 'Delete'; }, 2500);
-    return false;
-  }
+const QUARTERS = ['Q1','Q2','Q3','Q4-prev'];
+const Q_LABELS = { 'Q1':'Q1 (Jan–Mar)', 'Q2':'Q2 (Apr–Jun)', 'Q3':'Q3 (Jul–Sep)', 'Q4-prev':'Q4 Prior Year' };
+const Q_DUE = { 'Q1':'Apr 30', 'Q2':'Jul 31', 'Q3':'Oct 31', 'Q4-prev':'Jan 31' };
 
-  function escapeHtml(s) {
-    return (s || '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  }
-  function escapeAttr(s) { return escapeHtml(s); }
+function dq_pct(d) {
+  const done = DQ_ITEMS.filter(i => d.dq?.[i.key]?.done).length;
+  return Math.round(done / DQ_ITEMS.length * 100);
+}
 
-  async function copyText(text, btn) {
-    const original = btn.textContent;
-    try {
-      await navigator.clipboard.writeText(text);
-      btn.textContent = 'Copied';
-    } catch (err) {
-      try {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.textContent = 'Copied';
-      } catch (err2) {
-        btn.textContent = 'Select to copy';
-      }
+function dq_status(d) {
+  const p = dq_pct(d);
+  if (p === 100) {
+    if (d.dq?.med?.expiry) {
+      const days = Math.ceil((new Date(d.dq.med.expiry) - new Date()) / 86400000);
+      if (days < 0) return { label: 'Med Expired', cls: 'pill-danger' };
+      if (days < 30) return { label: 'Med Expiring', cls: 'pill-warn' };
     }
-    setTimeout(() => { btn.textContent = original; }, 1600);
-  }
-
-  function openModal(id) {
-    editingId = id || null;
-    const form = document.getElementById('lead-form');
-    form.reset();
-    document.getElementById('modal-title').textContent = id ? 'Edit lead' : 'Add a lead';
-    if (id) {
-      const l = leads.find(x => x.id === id);
-      if (l) {
-        document.getElementById('f-company').value = l.company || '';
-        document.getElementById('f-industry').value = l.industry || '';
-        document.getElementById('f-status').value = l.status || 'new';
-        document.getElementById('f-contact-name').value = l.contact_name || '';
-        document.getElementById('f-contact-email').value = l.contact_email || '';
-        document.getElementById('f-contact-phone').value = l.contact_phone || '';
-        document.getElementById('f-source').value = l.source_url || '';
-        document.getElementById('f-last-contact').value = l.last_contact || '';
-        document.getElementById('f-notes').value = l.notes || '';
-      }
+    if (d.dq?.mvr?.date) {
+      const days = Math.ceil((new Date() - new Date(d.dq.mvr.date)) / 86400000);
+      if (days > 365) return { label: 'MVR Overdue', cls: 'pill-danger' };
+      if (days > 335) return { label: 'MVR Due Soon', cls: 'pill-warn' };
     }
-    document.getElementById('lead-modal').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    return { label: 'Complete', cls: 'pill-ok' };
   }
-  function closeModal() {
-    document.getElementById('lead-modal').classList.remove('open');
-    document.body.style.overflow = '';
-    editingId = null;
-  }
+  if (p === 0) return { label: 'Not Started', cls: 'pill-neutral' };
+  return { label: `${p}% Complete`, cls: 'pill-warn' };
+}
 
-  document.getElementById('add-btn').addEventListener('click', () => openModal(null));
-  document.getElementById('search').addEventListener('input', renderList);
-  document.getElementById('clear-filter').addEventListener('click', () => {
-    activeFilter = null;
-    document.getElementById('clear-filter').style.display = 'none';
-    render();
+function days_until(dateStr) {
+  if (!dateStr) return null;
+  return Math.ceil((new Date(dateStr) - new Date()) / 86400000);
+}
+
+function fmt_date(s) {
+  if (!s) return '—';
+  return new Date(s + 'T12:00:00').toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+}
+
+function all_deadlines() {
+  const list = [];
+  [['Q1','2026-04-30'],['Q2','2026-07-31'],['Q3','2026-10-31'],['Q4-prev','2027-01-31']].forEach(([q,d]) => {
+    list.push({ date: d, name: `IFTA ${Q_LABELS[q]} filing`, type: 'ifta' });
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-
-  document.getElementById('lead-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
-      company: document.getElementById('f-company').value.trim(),
-      industry: document.getElementById('f-industry').value.trim(),
-      status: document.getElementById('f-status').value,
-      contact_name: document.getElementById('f-contact-name').value.trim(),
-      contact_email: document.getElementById('f-contact-email').value.trim(),
-      contact_phone: document.getElementById('f-contact-phone').value.trim(),
-      source_url: document.getElementById('f-source').value.trim(),
-      last_contact: document.getElementById('f-last-contact').value,
-      notes: document.getElementById('f-notes').value.trim(),
-    };
-    if (!data.company) return;
-
-    if (editingId) {
-      const idx = leads.findIndex(x => x.id === editingId);
-      if (idx > -1) leads[idx] = { ...leads[idx], ...data };
-      if (db) { try { await db.collection('leads').doc(editingId).update(data); } catch (err) {} }
-    } else {
-      const tempId = 'tmp-' + Date.now();
-      leads.push({ id: tempId, ...data });
-      if (db) {
-        try {
-          const ref = await db.collection('leads').add(data);
-          const t = leads.findIndex(x => x.id === tempId);
-          if (t > -1) leads[t].id = ref.id;
-        } catch (err) {}
-      }
+  S.drivers.forEach(drv => {
+    if (drv.dq?.med?.expiry) list.push({ date: drv.dq.med.expiry, name: `${drv.name} — Medical Certificate`, type: 'med' });
+    if (drv.dq?.mvr?.date) {
+      const annualDue = new Date(new Date(drv.dq.mvr.date).getTime() + 365 * 86400000);
+      list.push({ date: annualDue.toISOString().slice(0,10), name: `${drv.name} — Annual MVR Review`, type: 'mvr' });
     }
-    closeModal();
-    render();
   });
+  return list.filter(d => days_until(d.date) >= 0).sort((a,b) => a.date.localeCompare(b.date));
+}
 
-  function renderRequests() {
-    const el = document.getElementById('request-list');
-    if (!requests.length) { el.innerHTML = ''; return; }
-    const sorted = requests.slice().sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
-    el.innerHTML = sorted.map(r => `
-      <div class="request-row">
-        <div class="request-main">
-          <span class="rq-industry">${escapeHtml(r.industry)}</span>
-          <span class="rq-area"> &middot; ${escapeHtml(r.area)}</span>
-          ${r.notes ? `<div style="color:var(--muted); margin-top:2px;">${escapeHtml(r.notes)}</div>` : ''}
-          ${r.status === 'done' && r.result_summary ? `<div style="color:var(--muted); margin-top:2px;">${escapeHtml(r.result_summary)}</div>` : ''}
-        </div>
-        <span class="req-pill ${r.status === 'done' ? 'done' : 'pending'}">${r.status === 'done' ? 'Done' : 'Pending'}</span>
+function total_ifta_miles(q) {
+  const data = S.ifta[q] || {};
+  return Object.values(data).reduce((a,b) => a + (Number(b.miles)||0), 0);
+}
+function total_ifta_gallons(q) {
+  const data = S.ifta[q] || {};
+  return Object.values(data).reduce((a,b) => a + (Number(b.gallons)||0), 0);
+}
+function incomplete_dq() { return S.drivers.filter(d => dq_pct(d) < 100).length; }
+function expiring_soon() {
+  return S.drivers.filter(d => {
+    const md = d.dq?.med?.expiry ? days_until(d.dq.med.expiry) : null;
+    const mr = d.dq?.mvr?.date ? Math.ceil((new Date(new Date(d.dq.mvr.date).getTime()+365*86400000)-new Date())/86400000) : null;
+    return (md !== null && md >= 0 && md < 30) || (mr !== null && mr >= 0 && mr < 30);
+  }).length;
+}
+
+// ─── Nav ─────────────────────────────────────────────────────────────────────
+let currentPage = 'dashboard';
+function nav(page) {
+  currentPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const map = { dashboard:0, drivers:1, da:2, csa:3, ifta:4, deadlines:5 };
+  document.querySelectorAll('.nav-item')[map[page]]?.classList.add('active');
+  render();
+}
+
+function render() {
+  const titles = { dashboard:'Dashboard', drivers:'DQ Files', da:'Drug & Alcohol Log', csa:'CSA Score Tracker', ifta:'IFTA Filing', deadlines:'Upcoming Deadlines' };
+  document.getElementById('page-title').textContent = titles[currentPage]||'';
+  const inc = incomplete_dq();
+  const badge = document.getElementById('dq-badge');
+  badge.textContent = inc; badge.hidden = inc === 0;
+  const actions = { drivers:`<button class="btn btn-primary btn-sm" onclick="openAddDriver()">+ Add Driver</button>`, da:`<button class="btn btn-primary btn-sm" onclick="openAddDA()">+ Log Test</button>` };
+  document.getElementById('topbar-actions').innerHTML = actions[currentPage]||'';
+  document.getElementById('main-content').innerHTML = '';
+  ({ dashboard:renderDashboard, drivers:renderDrivers, da:renderDA, csa:renderCSA, ifta:renderIFTA, deadlines:renderDeadlines }[currentPage]||(() => {}))();
+}
+
+// ─── Dashboard ───────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const el = document.getElementById('main-content');
+  const inc = incomplete_dq(), exp = expiring_soon();
+  const dl = all_deadlines().filter(d => days_until(d.date) <= 45);
+  let alerts = '';
+  if (inc > 0) alerts += `<div class="alert-banner alert-danger">⚠ ${inc} driver${inc>1?'s':''} with incomplete DQ files.</div>`;
+  if (exp > 0) alerts += `<div class="alert-banner alert-warn">⏰ ${exp} driver${exp>1?'s':''} with documents expiring within 30 days.</div>`;
+  const upcoming = dl.map(d => {
+    const days = days_until(d.date);
+    return `<div class="dl-item"><span class="dl-date">${fmt_date(d.date)}</span><span class="dl-name">${d.name}</span><span class="dl-days ${days<=7?'stat-danger':days<=21?'stat-warn':'stat-ok'}">${days}d</span></div>`;
+  }).join('') || '<div style="font-size:13px;color:var(--fg3);padding:12px">No deadlines in the next 45 days.</div>';
+  const mi = total_ifta_miles(S.activeQ), gal = total_ifta_gallons(S.activeQ);
+  el.innerHTML = `${alerts}
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-label">Total Drivers</div><div class="stat-num">${S.drivers.length}</div><div class="stat-sub">in roster</div></div>
+      <div class="stat-card"><div class="stat-label">DQ Incomplete</div><div class="stat-num ${inc>0?'stat-danger':'stat-ok'}">${inc}</div><div class="stat-sub">${inc===0?'all current':'action required'}</div></div>
+      <div class="stat-card"><div class="stat-label">Docs Expiring</div><div class="stat-num ${exp>0?'stat-warn':'stat-ok'}">${exp}</div><div class="stat-sub">within 30 days</div></div>
+      <div class="stat-card"><div class="stat-label">D&A Tests</div><div class="stat-num">${S.da.length}</div><div class="stat-sub">logged</div></div>
+      <div class="stat-card"><div class="stat-label">IFTA Miles</div><div class="stat-num" style="font-size:20px">${mi.toLocaleString()}</div><div class="stat-sub">${Q_LABELS[S.activeQ]}</div></div>
+    </div>
+    <div class="section-head"><div><h2>Upcoming Deadlines</h2><p>Next 45 days</p></div></div>
+    <div class="card"><div class="dl-list" style="padding:12px">${upcoming}</div></div>
+    <div class="section-head" style="margin-top:4px"><div><h2>Driver DQ Status</h2></div><button class="btn btn-sm" onclick="nav('drivers')">View all →</button></div>
+    <div class="card"><div class="table-wrap"><table>
+      <thead><tr><th>Driver</th><th>CDL</th><th>Status</th><th>Med Exp</th><th>MVR Pulled</th></tr></thead>
+      <tbody>${S.drivers.length===0?`<tr><td colspan="5"><div class="empty"><div class="empty-icon">👤</div><p>No drivers added yet.</p></div></td></tr>`:S.drivers.map(d=>{
+        const st=dq_status(d);
+        return `<tr><td><strong>${d.name}</strong></td><td style="font-family:'IBM Plex Mono',monospace;font-size:12px">${d.cdl||'—'}</td><td><span class="pill ${st.cls}">${st.label}</span></td><td style="font-size:12px;font-family:'IBM Plex Mono',monospace">${d.dq?.med?.expiry?fmt_date(d.dq.med.expiry):'—'}</td><td style="font-size:12px;font-family:'IBM Plex Mono',monospace">${d.dq?.mvr?.date?fmt_date(d.dq.mvr.date):'—'}</td></tr>`;
+      }).join('')}</tbody>
+    </table></div></div>`;
+}
+
+// ─── DQ Files ────────────────────────────────────────────────────────────────
+function renderDrivers() {
+  const el = document.getElementById('main-content');
+  if (S.drivers.length === 0) { el.innerHTML = `<div class="empty"><div class="empty-icon">📂</div><p>No drivers yet. Add a driver to start tracking DQ files.</p></div>`; return; }
+  el.innerHTML = S.drivers.map(d => driverCard(d)).join('');
+}
+
+function driverCard(drv) {
+  const st = dq_status(drv), pct = dq_pct(drv);
+  const barColor = pct===100?'var(--ok)':pct>50?'var(--warn)':'var(--danger)';
+  return `<div class="card" style="margin-bottom:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border)">
+      <div>
+        <strong style="font-size:15px">${drv.name}</strong>
+        <span style="font-size:12px;color:var(--fg3);margin-left:10px;font-family:'IBM Plex Mono',monospace">${drv.cdl||''}</span>
+        ${drv.hired?`<span style="font-size:12px;color:var(--fg3);margin-left:8px">Hired ${fmt_date(drv.hired)}</span>`:''}
       </div>
-    `).join('');
-  }
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="pill ${st.cls}">${st.label}</span>
+        <button class="btn btn-sm" onclick="openEditDriver('${drv.id}')">Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteDriver('${drv.id}')">Remove</button>
+      </div>
+    </div>
+    <div style="padding:14px 16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${barColor};border-radius:3px"></div>
+        </div>
+        <span style="font-size:12px;font-weight:600;font-family:'IBM Plex Mono',monospace;color:var(--fg2)">${pct}%</span>
+      </div>
+      <div class="checklist">
+        ${DQ_ITEMS.map(item => {
+          const rec = drv.dq?.[item.key] || {};
+          const done = rec.done;
+          const expiry = rec.expiry, date = rec.date, photo = rec.photo;
+          return `<div class="check-row ${done?'done':''}">
+            <div class="check-box ${done?'checked':''}" onclick="toggleDQ('${drv.id}','${item.key}')"></div>
+            <span class="check-label">${item.label}</span>
+            ${expiry?`<span class="check-date">Exp: ${fmt_date(expiry)}</span>`:''}
+            ${date&&!expiry?`<span class="check-date">${fmt_date(date)}</span>`:''}
+            ${photo
+              ? `<img class="photo-thumb" src="${photo}" onclick="showPhoto('${drv.id}','${item.key}')" title="View photo">`
+              : `<span class="photo-btn" onclick="triggerPhotoUpload('${drv.id}','${item.key}')" title="Attach photo">📷</span>`
+            }
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  </div>`;
+}
 
-  document.getElementById('research-form').addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = {
-      industry: document.getElementById('r-industry').value.trim(),
-      area: document.getElementById('r-area').value.trim(),
-      notes: document.getElementById('r-notes').value.trim(),
-      status: 'pending',
-      created_at: new Date().toISOString(),
+function toggleDQ(id, key) {
+  const drv = S.drivers.find(d => d.id===id); if (!drv) return;
+  if (!drv.dq) drv.dq = {};
+  if (!drv.dq[key]) drv.dq[key] = {};
+  drv.dq[key].done = !drv.dq[key].done;
+  save(); render();
+}
+
+function deleteDriver(id) { S.drivers = S.drivers.filter(d => d.id!==id); save(); render(); }
+function openAddDriver() { openDriverModal(null); }
+function openEditDriver(id) { openDriverModal(S.drivers.find(d => d.id===id)); }
+
+function openDriverModal(drv) {
+  const isEdit = !!drv;
+  document.getElementById('modal-root').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h3>${isEdit?'Edit Driver':'Add Driver'}</h3>
+      <div class="form-grid">
+        <div class="form-group full"><label>Full Name</label><input id="m-name" value="${drv?.name||''}" placeholder="John Smith"></div>
+        <div class="form-group"><label>CDL Number</label><input id="m-cdl" value="${drv?.cdl||''}" placeholder="D123456789"></div>
+        <div class="form-group"><label>CDL State</label><input id="m-cdlstate" value="${drv?.cdlstate||''}" placeholder="MI"></div>
+        <div class="form-group"><label>Hire Date</label><input id="m-hired" type="date" value="${drv?.hired||''}"></div>
+        <div class="form-group"><label>Phone</label><input id="m-phone" value="${drv?.phone||''}" placeholder="555-000-0000"></div>
+        <div class="form-section">DQ File Details</div>
+        <div class="form-group"><label>MVR Pull Date</label><input id="m-mvr" type="date" value="${drv?.dq?.mvr?.date||''}"></div>
+        <div class="form-group"><label>Medical Cert Expiry</label><input id="m-med" type="date" value="${drv?.dq?.med?.expiry||''}"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveDriver('${drv?.id||''}')">${isEdit?'Save Changes':'Add Driver'}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function saveDriver(existingId) {
+  const name = document.getElementById('m-name').value.trim(); if (!name) return;
+  const mvrDate = document.getElementById('m-mvr').value;
+  const medExpiry = document.getElementById('m-med').value;
+  if (existingId) {
+    const drv = S.drivers.find(d => d.id===existingId); if (!drv) return;
+    drv.name = name; drv.cdl = document.getElementById('m-cdl').value.trim();
+    drv.cdlstate = document.getElementById('m-cdlstate').value.trim();
+    drv.hired = document.getElementById('m-hired').value;
+    drv.phone = document.getElementById('m-phone').value.trim();
+    if (!drv.dq) drv.dq = {};
+    if (mvrDate) { if (!drv.dq.mvr) drv.dq.mvr={}; drv.dq.mvr.date=mvrDate; drv.dq.mvr.done=true; }
+    if (medExpiry) { if (!drv.dq.med) drv.dq.med={}; drv.dq.med.expiry=medExpiry; drv.dq.med.done=true; }
+  } else {
+    const dq = {};
+    if (mvrDate) dq.mvr = { done:true, date:mvrDate };
+    if (medExpiry) dq.med = { done:true, expiry:medExpiry };
+    S.drivers.push({ id:'drv_'+Date.now(), name, cdl:document.getElementById('m-cdl').value.trim(), cdlstate:document.getElementById('m-cdlstate').value.trim(), hired:document.getElementById('m-hired').value, phone:document.getElementById('m-phone').value.trim(), dq });
+  }
+  save(); closeModal(); render();
+}
+
+// ─── Photo upload ─────────────────────────────────────────────────────────────
+function triggerPhotoUpload(driverId, key) {
+  pendingPhoto = { driverId, key };
+  document.getElementById('photo-input').value = '';
+  document.getElementById('photo-input').click();
+}
+
+function handlePhotoFile(e) {
+  const file = e.target.files[0]; if (!file || !pendingPhoto) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const img = new Image();
+    img.onload = function() {
+      const canvas = document.createElement('canvas');
+      const MAX = 900;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX/w); w = MAX; }
+      if (h > MAX) { w = Math.round(w * MAX/h); h = MAX; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      const drv = S.drivers.find(d => d.id === pendingPhoto.driverId);
+      if (drv) {
+        if (!drv.dq) drv.dq = {};
+        if (!drv.dq[pendingPhoto.key]) drv.dq[pendingPhoto.key] = {};
+        drv.dq[pendingPhoto.key].photo = dataUrl;
+        drv.dq[pendingPhoto.key].done = true;
+        save(); render();
+      }
+      pendingPhoto = null;
     };
-    if (!data.industry) return;
-    const tempId = 'tmp-' + Date.now();
-    requests.push({ id: tempId, ...data });
-    renderRequests();
-    if (db) {
-      try { await db.collection('research_requests').add(data); } catch (err) {}
-    }
-    e.target.reset();
-    document.getElementById('r-area').value = 'Thumb region (St. Clair, Sanilac, Huron, Tuscola counties)';
-  });
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
 
-  async function boot() {
-    try {
-      db = (window.claude && window.claude.use) ? await window.claude.use('db') : null;
-    } catch (err) { db = null; }
-    if (db) {
-      db.collection('leads').onSnapshot(
-        (snap) => {
-          leads = snap.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
-          render();
-        },
-        () => { render(); }
-      );
-      db.collection('research_requests').onSnapshot(
-        (snap) => {
-          requests = snap.docs.map(d => ({ id: d.id, ...(d.data() || {}) }));
-          renderRequests();
-        },
-        () => { renderRequests(); }
-      );
-    } else {
-      render();
-    }
+function showPhoto(driverId, key) {
+  const drv = S.drivers.find(d => d.id===driverId);
+  const photo = drv?.dq?.[key]?.photo; if (!photo) return;
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.innerHTML = `<img src="${photo}">`;
+  lb.onclick = () => lb.remove();
+  document.body.appendChild(lb);
+}
+
+// ─── Drug & Alcohol ───────────────────────────────────────────────────────────
+function renderDA() {
+  const el = document.getElementById('main-content');
+  const yr = new Date().getFullYear();
+  const yrTests = S.da.filter(t => t.date?.startsWith(String(yr)));
+  const drug = yrTests.filter(t => t.type!=='alcohol').length;
+  const alc = yrTests.filter(t => t.type==='alcohol').length;
+  const dc = S.drivers.length;
+  const drugPct = dc ? Math.round(drug/dc*100):0, alcPct = dc?Math.round(alc/dc*100):0;
+  const rows = [...S.da].reverse().map(t => {
+    const cls = t.result==='Negative'?'pill-ok':t.result==='Positive'?'pill-danger':'pill-warn';
+    return `<div class="da-row"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px">${fmt_date(t.date)}</span><span><span class="pill ${cls}">${t.result||'Pending'}</span></span><span style="font-size:12px;color:var(--fg2)">${t.testtype||'Drug'}</span><span>${t.driver}</span><button class="btn btn-sm btn-danger" onclick="deleteDA('${t.id}')">✕</button></div>`;
+  }).join('')||`<div class="empty"><div class="empty-icon">🧪</div><p>No tests logged yet.</p></div>`;
+  el.innerHTML = `
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-label">Drug Tests ${yr}</div><div class="stat-num ${drugPct>=50?'stat-ok':'stat-warn'}">${drug}</div><div class="stat-sub">${drugPct}% of fleet · need 50%</div></div>
+      <div class="stat-card"><div class="stat-label">Alcohol Tests ${yr}</div><div class="stat-num ${alcPct>=10?'stat-ok':'stat-warn'}">${alc}</div><div class="stat-sub">${alcPct}% of fleet · need 10%</div></div>
+      <div class="stat-card"><div class="stat-label">Total Logged</div><div class="stat-num">${S.da.length}</div><div class="stat-sub">all time</div></div>
+      <div class="stat-card"><div class="stat-label">Positives</div><div class="stat-num ${S.da.filter(t=>t.result==='Positive').length>0?'stat-danger':'stat-ok'}">${S.da.filter(t=>t.result==='Positive').length}</div><div class="stat-sub">all time</div></div>
+    </div>
+    <div class="card"><div class="da-head"><span>Date</span><span>Result</span><span>Test Type</span><span>Driver</span><span></span></div>${rows}</div>`;
+}
+
+function openAddDA() {
+  document.getElementById('modal-root').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <h3>Log Drug & Alcohol Test</h3>
+      <div class="form-grid">
+        <div class="form-group"><label>Driver Name</label>
+          <input id="da-driver" placeholder="Driver name" list="da-dl">
+          <datalist id="da-dl">${S.drivers.map(d=>`<option value="${d.name}">`).join('')}</datalist>
+        </div>
+        <div class="form-group"><label>Test Date</label><input id="da-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+        <div class="form-group"><label>Test Category</label>
+          <select id="da-testtype"><option>Pre-Employment</option><option>Random</option><option>Post-Accident</option><option>Reasonable Suspicion</option><option>Return-to-Duty</option><option>Follow-Up</option></select>
+        </div>
+        <div class="form-group"><label>Substance Type</label>
+          <select id="da-type"><option value="drug">Drug</option><option value="alcohol">Alcohol</option><option value="both">Both</option></select>
+        </div>
+        <div class="form-group"><label>Result</label>
+          <select id="da-result"><option>Negative</option><option>Positive</option><option>Pending</option><option>Cancelled</option></select>
+        </div>
+        <div class="form-group full"><label>Notes</label><input id="da-notes" placeholder="Collection site, SAP referral, etc."></div>
+      </div>
+      <div class="modal-actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveDA()">Log Test</button></div>
+    </div>
+  </div>`;
+}
+
+function saveDA() {
+  const driver = document.getElementById('da-driver').value.trim(); if (!driver) return;
+  S.da.push({ id:'da_'+Date.now(), driver, date:document.getElementById('da-date').value, testtype:document.getElementById('da-testtype').value, type:document.getElementById('da-type').value, result:document.getElementById('da-result').value, notes:document.getElementById('da-notes').value });
+  save(); closeModal(); render();
+}
+function deleteDA(id) { S.da = S.da.filter(t => t.id!==id); save(); render(); }
+
+// ─── CSA ─────────────────────────────────────────────────────────────────────
+function renderCSA() {
+  const el = document.getElementById('main-content');
+  el.innerHTML = `
+    <p style="font-size:13px;color:var(--fg2);margin-bottom:16px">Enter your current CSA percentile scores from the FMCSA Safety Measurement System at <strong>ai.fmcsa.dot.gov</strong>. Scores above the threshold trigger intervention priority.</p>
+    <div class="csa-grid">
+      ${CSA_CATS.map(cat => {
+        const val = S.csa[cat.key]??null, pct = val??0;
+        const color = pct>=cat.threshold?'var(--danger)':pct>=cat.threshold*.8?'var(--warn)':'var(--ok)';
+        return `<div class="csa-card">
+          <div class="csa-name">${cat.label}</div>
+          <div class="csa-bar-bg"><div class="csa-bar" style="width:${pct}%;background:${color}"></div></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <input type="number" min="0" max="100" value="${val??''}" placeholder="—"
+              style="border:1.5px solid var(--border);border-radius:5px;padding:4px 8px;width:70px;background:var(--bg);color:var(--fg);font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600"
+              oninput="updateCSA('${cat.key}',this.value)">
+            <span style="font-size:12px;color:var(--fg3)">/ 100</span>
+            ${val!==null?`<span class="pill ${pct>=cat.threshold?'pill-danger':pct>=cat.threshold*.8?'pill-warn':'pill-ok'}">${pct>=cat.threshold?'Alert':pct>=cat.threshold*.8?'Watch':'OK'}</span>`:''}
+          </div>
+          <div style="font-size:11px;color:var(--fg3)">Threshold: ${cat.threshold}th percentile</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+function updateCSA(key, val) { S.csa[key] = val===''?null:Number(val); save(); renderCSA(); }
+
+// ─── IFTA ─────────────────────────────────────────────────────────────────────
+function renderIFTA() {
+  const el = document.getElementById('main-content');
+  const q = S.activeQ;
+  if (!S.iftaStates[q]) S.iftaStates[q] = ['MI'];
+  const states = S.iftaStates[q];
+  const data = S.ifta[q]||{};
+  const mi = total_ifta_miles(q), gal = total_ifta_gallons(q);
+  const mpg = gal>0?(mi/gal).toFixed(1):'—';
+  const available = ALL_STATES.filter(s => !states.includes(s));
+
+  const stateRows = states.map(st => {
+    const rec = data[st]||{};
+    const isBase = st==='MI';
+    return `<div class="state-row ${isBase?'base':''}">
+      <span class="state-abbr">${st}${isBase?' ★':''}</span>
+      <div class="state-field">
+        <input class="state-input" type="number" min="0" placeholder="0" value="${rec.miles||''}" oninput="updateIFTA('${st}','miles',this.value)" title="Miles driven in ${st}">
+        <span class="state-unit">mi</span>
+      </div>
+      <div class="state-field">
+        <input class="state-input" type="number" min="0" placeholder="0" value="${rec.gallons||''}" oninput="updateIFTA('${st}','gallons',this.value)" title="Gallons purchased in ${st}">
+        <span class="state-unit">gal</span>
+      </div>
+      ${isBase?'<span style="font-size:11px;color:var(--ok);font-weight:600;white-space:nowrap">Base State</span>':`<button class="btn btn-sm btn-danger" onclick="removeIFTAState('${st}')">✕</button>`}
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `
+    <div class="q-tabs">
+      ${QUARTERS.map(qk=>`<div class="q-tab ${q===qk?'active':''}" onclick="switchQ('${qk}')">${qk==='Q4-prev'?'Q4 (Prev)':qk} <span style="font-size:10px;color:var(--fg3)">Due ${Q_DUE[qk]}</span></div>`).join('')}
+    </div>
+    <div class="stat-row" style="margin-bottom:16px">
+      <div class="stat-card"><div class="stat-label">Total Miles</div><div class="stat-num" style="font-size:22px" id="ifta-mi">${mi.toLocaleString()}</div><div class="stat-sub">${Q_LABELS[q]}</div></div>
+      <div class="stat-card"><div class="stat-label">Total Gallons</div><div class="stat-num" style="font-size:22px" id="ifta-gal">${gal.toLocaleString()}</div><div class="stat-sub">purchased</div></div>
+      <div class="stat-card"><div class="stat-label">Fleet MPG</div><div class="stat-num" style="font-size:22px" id="ifta-mpg">${mpg}</div><div class="stat-sub">miles per gallon</div></div>
+    </div>
+    <div class="section-head"><div><h2>Miles & Gallons by State</h2><p>Michigan is your base jurisdiction. Add any state you operated in this quarter.</p></div></div>
+    <div class="card card-pad">
+      <div class="state-list" id="state-list">${stateRows}</div>
+      <div class="add-state-row">
+        <select id="state-add-select" style="max-width:140px">
+          <option value="">Add state...</option>
+          ${available.map(s=>`<option value="${s}">${s}</option>`).join('')}
+        </select>
+        <button class="btn btn-sm btn-primary" onclick="addIFTAState()">+ Add State</button>
+      </div>
+    </div>`;
+}
+
+function switchQ(q) { S.activeQ = q; save(); renderIFTA(); }
+
+function addIFTAState() {
+  const sel = document.getElementById('state-add-select'); if (!sel) return;
+  const st = sel.value; if (!st) return;
+  const q = S.activeQ;
+  if (!S.iftaStates[q]) S.iftaStates[q] = ['MI'];
+  if (!S.iftaStates[q].includes(st)) S.iftaStates[q].push(st);
+  save(); renderIFTA();
+}
+
+function removeIFTAState(st) {
+  const q = S.activeQ;
+  S.iftaStates[q] = (S.iftaStates[q]||[]).filter(s => s!==st);
+  save(); renderIFTA();
+}
+
+function updateIFTA(state, field, val) {
+  if (!S.ifta[S.activeQ]) S.ifta[S.activeQ] = {};
+  if (!S.ifta[S.activeQ][state]) S.ifta[S.activeQ][state] = {};
+  S.ifta[S.activeQ][state][field] = val===''?null:Number(val);
+  save();
+  const mi = total_ifta_miles(S.activeQ), gal = total_ifta_gallons(S.activeQ);
+  const mpg = gal>0?(mi/gal).toFixed(1):'—';
+  const a = document.getElementById('ifta-mi'), b = document.getElementById('ifta-gal'), c = document.getElementById('ifta-mpg');
+  if (a) a.textContent = mi.toLocaleString();
+  if (b) b.textContent = gal.toLocaleString();
+  if (c) c.textContent = mpg;
+}
+
+// ─── Deadlines (no overdue) ───────────────────────────────────────────────────
+function renderDeadlines() {
+  const el = document.getElementById('main-content');
+  const list = all_deadlines(); // already filtered to future-only
+  if (list.length===0) { el.innerHTML='<div class="empty"><div class="empty-icon">📅</div><p>No upcoming deadlines. Add drivers to track their document expirations.</p></div>'; return; }
+  const soon = list.filter(d => days_until(d.date) <= 30);
+  const later = list.filter(d => days_until(d.date) > 30);
+
+  function renderGroup(title, items, cls) {
+    if (!items.length) return '';
+    return `<div class="section-head"><div><h2>${title}</h2></div></div>
+    <div class="card" style="margin-bottom:20px"><div class="dl-list" style="padding:12px;gap:6px">
+      ${items.map(d=>`<div class="dl-item"><span class="dl-date">${fmt_date(d.date)}</span><span class="dl-name">${d.name}</span><span class="dl-days ${cls}">${days_until(d.date)}d</span></div>`).join('')}
+    </div></div>`;
   }
-  boot();
+  el.innerHTML = renderGroup('Next 30 Days', soon, 'stat-warn') + renderGroup('Upcoming', later, 'stat-ok');
+}
+
+function closeModal() { document.getElementById('modal-root').innerHTML=''; }
+load(); render();
 </script>
