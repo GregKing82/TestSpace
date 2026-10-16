@@ -1,0 +1,11 @@
+[
+  {
+    "origin": [
+      "https://gregking82.github.io"
+    ],
+    "method": [
+      "GET"
+    ],
+    "maxAgeSeconds": 3600
+  }
+]
