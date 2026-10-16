@@ -1,5 +1,4 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="claude:viewport-fit-sides" content="cover">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="claude:viewport-fit-sides" content="cover">
 <title>Fleet Compliance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -214,14 +213,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
   .settings-grid, .two-col { grid-template-columns: 1fr; }
 }
 
-.sidebar {display:none !important;}
-.section-selector {display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.section-selector select {width:220px;max-width:100%;}
-.demo-banner {padding:10px 20px;background:#1f1600;color:#d4a843;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-@media(max-width:700px){.topbar{padding:12px;align-items:flex-start;gap:12px;flex-direction:column}.content{padding:14px}.section-selector select{width:100%;}.section-selector{width:100%;}}
+:root{--bg:#fff;--bg2:#f8f6f3;--bg3:#f0ebe6;--bg4:#e6ddd5;--fg:#49443f;--fg2:#776e65;--fg3:#786f66;--border:#e5ded7;--border2:#c6b6a8;--accent:#86786b;--accent2:#bdaa99;--ok:#326344;--ok-bg:#eaf2eb;--warn:#815e23;--warn-bg:#faf2df;--danger:#963f39;--danger-bg:#f9e9e6;color-scheme:light}body{font-family:Arial,sans-serif;background:#fff}.sidebar{display:none!important}.topbar{background:#c1afa0;border:0;position:relative;padding:20px 28px;display:block}.brand{text-align:center;color:white;font-family:'Cormorant Garamond',Georgia,serif;font-size:60px;letter-spacing:-4px;line-height:1.1;font-weight:400}.brand-sub{text-align:center;color:#fff;font-size:10px;letter-spacing:3px;text-transform:uppercase;margin:7px 0 22px}.selector-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:space-between}.section-selector{border:1px solid white;background:transparent;border-radius:30px;color:#fff;padding:12px 20px;max-width:350px;min-width:230px;font-size:14px}.section-selector option{background:#fff;color:#49443f}.topbar-actions{margin-top:15px;justify-content:center}.topbar .btn{border-color:#fff;color:#fff;background:transparent;border-radius:30px}.topbar .btn:hover{background:#ffffff20}.content{padding:25px;max-width:1500px;width:100%;margin:auto}.page-heading{font-family:'Cormorant Garamond',Georgia,serif;font-size:38px;font-weight:400;color:#867b70;margin-bottom:20px}.btn{border-radius:25px;padding:8px 17px;letter-spacing:0}.btn-primary{background:#88786a;color:white;border-color:#88786a}.btn-primary:hover{background:#6e6055;color:white}.card,.stat-card,.settings-card,.csa-card,.hos-box{border-radius:4px;background:#fff;box-shadow:none}.stat-num{font-weight:400}.stat-label,thead th{letter-spacing:1px}.demo-bar{padding:8px 18px;background:#f5f1ec;color:#71665d;font-size:11px;display:flex;align-items:center;justify-content:space-between;gap:12px}.demo-bar button{font-size:10px}.section-head h2,.settings-card h3,.modal h3{font-weight:400}input,select,textarea{background:#fff;color:#49443f}.modal{background:#fff}.pill-gold{background:#eee7df;color:#736253}.state-row.base{background:#f4eee7;border-color:#c1afa0}.check-row.done{background:var(--ok-bg)}.app{min-height:0}.main{min-width:0}@media(max-width:700px){.content{padding:18px 12px}.topbar{padding:20px 16px}.brand{font-size:53px}.selector-row{justify-content:center}.section-selector{width:100%;max-width:none}.topbar-actions{gap:7px}.page-heading{font-size:32px}.stat-row{grid-template-columns:repeat(2,minmax(0,1fr))}.demo-bar{font-size:10px}}
 </style></head><body>
 
-<div class="demo-banner"><span>DEMO MODE · Sample data · Browser-only storage · Not connected to Firebase</span><button class="btn btn-sm" onclick="resetDemo()">Reset demo</button></div><div class="app">
+<div class="demo-bar"><span>INDEPENDENT DEMO · Fictional records · Browser-only storage</span><button class="btn btn-sm" onclick="resetDemo()">Reset demo</button></div><div class="app">
   <nav class="sidebar">
     <div class="sidebar-logo">
       <div class="co">Dwyer Marble<br>& Stone</div>
@@ -251,10 +246,10 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--a
 
   <div class="main">
     <div class="topbar">
-      <div class="section-selector"><label for="section-select">Section</label><select id="section-select" onchange="nav(this.value)"><option value="dashboard">Dashboard</option><option value="drivers">Driver qualification files</option><option value="da">Drug &amp; alcohol</option><option value="csa">CSA score tracker</option><option value="hos">Hours of service</option><option value="ifta">Fuel / IFTA worksheet</option><option value="deadlines">Deadlines</option><option value="settings">Company information</option></select><h1 id="page-title" hidden>Dashboard</h1></div>
+      <div class="brand" aria-label="Dwyer">DWYER</div><div class="brand-sub">Marble &amp; Stone · Fleet &amp; Facilities</div><div class="selector-row"><select id="section-select" class="section-selector" aria-label="Choose workspace section" onchange="nav(this.value)"><option value="dashboard">Dashboard</option><option value="drivers">Driver qualification files</option><option value="da">Drug &amp; alcohol</option><option value="csa">CSA score tracker</option><option value="hos">Hours of service</option><option value="ifta">Fuel / IFTA worksheet</option><option value="deadlines">Deadlines</option><option value="settings">Company information</option></select></div>
       <div class="topbar-actions" id="topbar-actions"></div>
     </div>
-    <div class="content" id="main-content"></div>
+    <div class="content"><h1 class="page-heading" id="page-title">Dashboard</h1><div id="main-content"></div></div>
   </div>
 </div>
 
@@ -280,10 +275,10 @@ function curQ() {
   const m = new Date().getMonth();
   return m<3?'Q4-prev':m<6?'Q1':m<9?'Q2':'Q3';
 }
-function save() { try { localStorage.setItem('fleetops_dropdown_demo_v1', JSON.stringify(S)); } catch(e){} }
+function save() { try { localStorage.setItem('dwyer_visual_demo_v1', JSON.stringify(S)); } catch(e){} }
 function load() {
   try {
-    const d = localStorage.getItem('fleetops_dropdown_demo_v1');
+    const d = localStorage.getItem('dwyer_visual_demo_v1');
     if (d) { const p = JSON.parse(d); S = {...S,...p}; }
     if (!S.iftaStates) S.iftaStates = {'Q1':['MI'],'Q2':['MI'],'Q3':['MI'],'Q4-prev':['MI']};
     if (!S.co) S.co = { dot:'',mc:'',eld:'',state:'MI',name:'Dwyer Marble & Stone' };
@@ -389,8 +384,7 @@ function total_ifta(q,field) {
 let currentPage = 'dashboard';
 const NAV_IDX = {dashboard:0,drivers:1,da:2,csa:3,hos:4,ifta:5,deadlines:6,settings:7};
 function nav(page) {
-  currentPage = page;
-  document.getElementById('section-select').value=page;
+  currentPage = page;document.getElementById('section-select').value=page;
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-item')[NAV_IDX[page]]?.classList.add('active');
   render();
@@ -918,18 +912,5 @@ function saveSettings() {
 }
 
 function closeModal() { document.getElementById('modal-root').innerHTML=''; }
-
-function seedDemo(){
- const date=(days)=>{const d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);};
- S.drivers=[{id:'demo_1',name:'Alex Sample',cdl:'DEMO-1001',cdlstate:'MI',phone:'555-0101',hired:date(-120),dq:{app:{done:true},clearinghouse:{done:true},mvr:{done:true,date:date(-340)},med:{done:true,expiry:date(20)},road:{done:true},prev_emp:{done:true},drug:{done:true}}},{id:'demo_2',name:'Jordan Example',cdl:'DEMO-1002',cdlstate:'MI',hired:date(-30),dq:{app:{done:true},med:{done:true,expiry:date(180)}}}];
- S.da=[{id:'demo_test',driver:'Alex Sample',date:date(-10),testtype:'Random',type:'drug',result:'Negative',notes:'Fictional demonstration record'}];
- S.hosLog=[{id:'demo_hos',driver:'Jordan Example',date:date(-5),vtype:'Missing 30-minute break',notes:'Fictional example — review workflow only'}];
- S.ifta[S.activeQ]={MI:{miles:4800,gallons:640}};
- S.co={dot:'DEMO ONLY',mc:'',eld:'Example provider',state:'MI',name:'Demo Fleet Company'};
- save();
-}
-function resetDemo(){if(!confirm('Replace all demo edits with sample records?'))return;localStorage.removeItem('fleetops_dropdown_demo_v1');location.reload();}
-let demoExists=false;try{demoExists=!!localStorage.getItem('fleetops_dropdown_demo_v1');}catch(e){}
-load();if(!demoExists)seedDemo();render();
-</script>
-</body></html>
+function seedDemo(){const date=(days)=>{const d=new Date();d.setDate(d.getDate()+days);return d.toISOString().slice(0,10);};S.drivers=[{id:'example1',name:'Alex Sample',cdl:'DEMO-1001',cdlstate:'MI',hired:date(-100),dq:{app:{done:true},clearinghouse:{done:true},mvr:{done:true,date:date(-340)},med:{done:true,expiry:date(20)},road:{done:true},prev_emp:{done:true},drug:{done:true}}},{id:'example2',name:'Jordan Example',cdl:'DEMO-1002',cdlstate:'MI',hired:date(-20),dq:{app:{done:true}}}];S.da=[{id:'test1',driver:'Alex Sample',date:date(-10),testtype:'Random',type:'drug',result:'Negative',notes:'Fictional demo record'}];S.ifta[S.activeQ]={MI:{miles:4800,gallons:640}};S.co={dot:'DEMO ONLY',mc:'',eld:'Example ELD',state:'MI',name:'Dwyer Marble & Stone — Independent Demo'};save();}function resetDemo(){if(confirm('Discard demo changes and restore sample records?')){localStorage.removeItem('dwyer_visual_demo_v1');location.reload();}}let exists=false;try{exists=!!localStorage.getItem('dwyer_visual_demo_v1');}catch(e){}load();if(!exists)seedDemo();render();
+</script></body></html>
