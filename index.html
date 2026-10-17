@@ -1,120 +1,964 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dwyer · Fleet & Facilities</title><style>
-:root{--taupe:#bca897;--bg:#f8f6f2;--ink:#433e39;--muted:#786d63;--line:#e1d8ce;--accent:#78614e;--red:#97453e;--green:#356148}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}header{background:var(--taupe);color:white;padding:15px max(16px,calc((100vw - 1140px)/2));display:flex;justify-content:space-between;align-items:center;gap:14px}.brand{font:32px Georgia,serif;letter-spacing:-1.8px}.sub{font-size:10px;letter-spacing:1px}header select{width:175px;background:transparent;color:white;border-color:white;border-radius:25px}option{color:var(--ink);background:white}.demo{text-align:center;padding:7px 12px;font-size:11px;background:#eee6dd;color:#6b594b}main{max-width:1172px;margin:auto;padding:23px 16px 60px}h1{font:30px Georgia,serif;margin:0}h2{font:24px Georgia,serif;margin:0 0 13px}h3{font-size:15px;margin:0 0 7px}p{margin:7px 0 14px}small,.muted{color:var(--muted)}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.spread{justify-content:space-between}.toolbar{margin-bottom:18px}.btn{border:1px solid #c7b7a9;border-radius:24px;padding:9px 15px;min-height:43px;background:white;color:var(--ink)}.primary{background:var(--accent);border-color:var(--accent);color:white}.danger{color:var(--red)}.card{border:1px solid var(--line);border-radius:10px;background:white;padding:17px;margin-bottom:12px}.urgent{border-left:4px solid var(--red)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:12px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.full{grid-column:1/-1}.pill{display:inline-block;background:#eee8e0;font-size:11px;padding:4px 9px;border-radius:14px}.red{background:#f9e7e3;color:var(--red)}.green{background:#e8f0e6;color:var(--green)}.filters{display:flex;gap:9px;flex-wrap:wrap;margin:16px 0}.filters input{flex:1;min-width:160px}.filters select{width:auto;max-width:100%}.tabs{margin:15px 0}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:18px 0}.metrics .card{margin:0}.stat{font:29px Georgia,serif}input,select,textarea{width:100%;min-height:44px;padding:10px;border:1px solid #d1c6ba;border-radius:7px;background:white;color:var(--ink)}input[type=checkbox]{width:19px;min-height:19px;accent-color:var(--accent)}textarea{min-height:86px;resize:vertical}label{display:block;font-size:12px;margin:10px 0 4px}.check{display:flex;align-items:center;gap:9px}.check input{flex-shrink:0}details{margin:15px 0 0;padding-top:12px;border-top:1px solid var(--line)}summary{cursor:pointer;font-size:13px;color:var(--accent)}details p{font-size:13px}.help{padding:12px;border-radius:7px;background:#f3eee7;margin:13px 0;font-size:12px}.empty{padding:30px;text-align:center;color:var(--muted)}dialog{width:min(800px,95vw);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:23px;color:var(--ink)}dialog::backdrop{background:#272019a6}.foot{position:sticky;bottom:-23px;background:white;padding:15px 0 4px;margin-top:18px}.form-error{padding:10px;background:#fae8e4;color:var(--red);margin-bottom:10px}.history{font-size:12px;border-left:2px solid var(--line);padding-left:12px;margin:10px 0}.table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}td,th{padding:10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}#notice{max-width:1140px;margin:10px auto;padding:11px;background:#edf3e9}#notice.error{background:#fae8e4;color:var(--red)}a{color:var(--accent)}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #b78d69;outline-offset:3px}@media(max-width:600px){header{padding:12px 14px}.brand{font-size:27px}.sub{font-size:9px}header select{width:150px}.cols{grid-template-columns:1fr}main{padding:18px 12px 60px}.card{padding:14px}.metrics{gap:6px}.metrics .card{padding:11px 8px}.metrics small{font-size:10px}.stat{font-size:25px}.btn{padding:8px 12px}h1{font-size:27px}.grid{grid-template-columns:1fr}}
-</style></head><body><header><div><div class="brand">DWYER</div><div class="sub">FLEET &amp; FACILITIES</div></div><select id="nav" aria-label="Main navigation"><option value="today">Today</option><option value="assets">Locations & assets</option><option value="people">People & partners</option><option value="work">Work & projects</option><option value="reports">Reports & settings</option></select></header><div class="demo">INDEPENDENT DEMO · Fictional records · Browser-only storage · No Firebase connection</div><div id="notice" role="status" hidden></div><main><div class="row spread toolbar"><div><h1 id="title"></h1><small id="subtitle"></small></div><div class="row" id="actions"></div></div><div id="filters"></div><div id="view"></div></main><dialog id="modal"><div id="body"></div></dialog><script>
+[hidden]{display:none!important}
+:root{--taupe:#bca897;--bg:#f8f6f2;--ink:#433e39;--muted:#786d63;--line:#e1d8ce;--accent:#78614e;--red:#97453e;--amber:#8a5a12;--green:#356148}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+header{background:var(--taupe);color:#fff;padding:14px max(16px,calc((100vw - 1140px)/2));display:flex;justify-content:space-between;align-items:center;gap:14px;position:sticky;top:0;z-index:5}
+.brand{font:30px Georgia,serif;letter-spacing:-1.5px;line-height:1}.sub{font-size:10px;letter-spacing:1.5px;margin-top:4px}
+header select{width:190px;background:transparent;color:#fff;border:1px solid #fff;border-radius:24px;min-height:42px;padding:8px 14px}
+option,optgroup{color:var(--ink);background:#fff}
+.demo{text-align:center;padding:6px 12px;font-size:11px;background:#eee6dd;color:#6b594b}
+main{max-width:1172px;margin:auto;padding:20px 16px 70px}
+h1{font:28px Georgia,serif;margin:0}h2{font:23px Georgia,serif;margin:0}h3{font-size:15px;margin:0 0 4px}
+p{margin:6px 0 12px}small,.muted{color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.spread{justify-content:space-between}
+.toolbar{margin-bottom:14px}
+.btn{border:1px solid #c7b7a9;border-radius:24px;padding:8px 15px;min-height:42px;background:#fff;color:var(--ink);white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:13px}
+.btn.link{border:0;background:none;color:var(--accent);padding:2px 0;min-height:0;text-decoration:underline;white-space:normal;text-align:left}
+.btn.danger{color:var(--red)}
+.card{border:1px solid var(--line);border-radius:10px;background:#fff;padding:15px;margin-bottom:10px}
+.card.overdue{border-left:4px solid var(--red)}.card.soon{border-left:4px solid #c99a4a}.card.missing{border-left:4px solid var(--red)}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.item .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}.grid .card{margin:0}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.full{grid-column:1/-1}
+.pill{display:inline-block;background:#eee8e0;font-size:11px;padding:3px 9px;border-radius:14px;vertical-align:1px;white-space:nowrap}
+.pill.red{background:#f9e7e3;color:var(--red)}.pill.amber{background:#f7ecd9;color:var(--amber)}.pill.green{background:#e8f0e6;color:var(--green)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 14px}
+.chip{border:1px solid #d1c6ba;background:#fff;border-radius:18px;padding:6px 12px;font-size:13px;color:var(--ink)}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.search{max-width:360px;margin-bottom:10px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 18px}
+.metric{border:1px solid var(--line);border-radius:10px;background:#fff;padding:11px 12px;text-align:left;color:var(--ink)}
+.metric.on{outline:2px solid var(--accent)}
+.metric small{display:block;font-size:11px}.stat{font:27px Georgia,serif}
+.sect{font:19px Georgia,serif;margin:20px 0 10px}
+input,select,textarea{width:100%;min-height:44px;padding:9px 10px;border:1px solid #d1c6ba;border-radius:7px;background:#fff;color:var(--ink)}
+input[type=checkbox]{width:20px;min-height:20px;accent-color:var(--accent);margin:0}
+input[readonly]{background:#f3eee7}
+textarea{min-height:80px;resize:vertical}
+label{display:block;font-size:12px;margin:10px 0 4px;color:#5d534a}
+label .req{color:var(--red)}
+.check{display:flex;align-items:center;gap:9px;font-size:14px;margin:12px 0;color:var(--ink)}
+.help{padding:10px 12px;border-radius:7px;background:#f3eee7;margin:12px 0;font-size:12.5px}
+.warn{padding:10px 12px;border-radius:7px;background:#f9e7e3;color:var(--red);margin:12px 0;font-size:13px}
+.empty{padding:26px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:10px}
+dialog{width:min(820px,96vw);max-height:94vh;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:0;color:var(--ink);background:#fff}
+dialog::backdrop{background:#272019a6}
+.mhead{position:sticky;top:0;background:#fff;z-index:2;padding:16px 20px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.mbody{padding:6px 20px 20px}
+.foot{position:sticky;bottom:0;background:#fff;padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.form-error{padding:10px;background:#fae8e4;color:var(--red);margin:12px 0 0;border-radius:7px}
+.panel{border:1px solid var(--line);border-radius:10px;margin:14px 0;overflow:hidden}
+.panel h3{margin:0;padding:10px 14px;background:#f6f1eb;font-size:14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.prow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--line)}
+.prow:first-of-type{border-top:0}
+.prow .acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px 16px;margin:10px 0}
+.kv div small{display:block;font-size:11px}
+.history{font-size:12px;border-left:2px solid var(--line);padding-left:10px;margin:8px 0}
+details{margin:12px 0 0}summary{cursor:pointer;color:var(--accent);font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{padding:8px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+td.n,th.n{text-align:right}
+.table{overflow:auto}
+#notice{max-width:1140px;margin:10px auto 0;padding:10px 14px;background:#edf3e9;border-radius:8px}
+#notice.error{background:#fae8e4;color:var(--red)}
+.typegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin:12px 0}
+.typebtn{text-align:left;border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px;color:var(--ink)}
+.typebtn:hover{border-color:var(--accent)}.typebtn b{display:block}.typebtn small{font-size:12px}
+a{color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,textarea:focus-visible{outline:3px solid #b78d69;outline-offset:2px}
+@media(max-width:640px){header{padding:11px 14px}.brand{font-size:25px}.sub{font-size:9px}header select{width:160px}
+.cols{grid-template-columns:1fr}main{padding:16px 12px 70px}.card{padding:13px}.metrics{grid-template-columns:repeat(2,1fr)}
+.item,.prow{flex-direction:column;align-items:stretch}.item .acts,.prow .acts{justify-content:stretch}.item .acts .btn,.prow .acts .btn{flex:1}
+h1{font-size:25px}.grid{grid-template-columns:1fr}dialog{width:100vw;max-width:100vw;max-height:100dvh;height:100dvh;border-radius:0;margin:0}.mhead,.mbody,.foot{padding-left:14px;padding-right:14px}}
+
+</style></head><body><header><div><div class="brand">DWYER</div><div class="sub">FLEET &amp; FACILITIES</div></div><select id="nav" aria-label="Main navigation"><option value="today">Today</option><option value="drivers">Drivers</option><option value="staff">Staff</option><option value="vendors">Vendors</option><option value="buildings">Buildings</option><option value="assets">Assets</option><option value="work">Work orders</option><option value="reports">Reports &amp; data</option></select></header>
+<div class="demo">INDEPENDENT DEMO · Fictional records · Stored only in this browser</div><div id="notice" role="status" hidden></div>
+<main><div class="row spread toolbar"><div><h1 id="title"></h1><small id="subtitle"></small></div><div class="row" id="actions"></div></div><div id="view"></div></main>
+<dialog id="modal" aria-label="Details"></dialog>
+<script>
 'use strict';
-const KEY='dwyer_typed_workflow_v5';const $=id=>document.getElementById(id);const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uuid=()=>globalThis.crypto?.randomUUID?.()||'r'+Date.now()+Math.random().toString(36).slice(2);function day(n=0){const d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}function plusDay(ds,n){const d=new Date((ds||day())+'T12:00:00');d.setDate(d.getDate()+Number(n));return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}const money=v=>Number(v||0).toLocaleString('en-US',{style:'currency',currency:'USD'});const btn=(l,a,key='',p=false)=>`<button class="btn ${p?'primary':''}" type="button" data-action="${a}" data-id="${esc(key)}">${esc(l)}</button>`;const pill=(s,c='')=>`<span class="pill ${c}">${esc(s)}</span>`;
-const TYPE={
- vehicle:{name:'Road vehicle',desc:'Trucks, vans and other road vehicles. Odometer and road-registration details apply.',fields:[['subtype','Vehicle type',['Truck','Van','Pickup','Other road vehicle']],['vin','VIN'],['plate','Plate'],['assigned','Assigned driver','ref:people'],['axles','Axles','number'],['weight','Registered gross weight (lb)','number'],['combination','Combination gross weight (lb)','number'],['states','Operating states'],['registrationDue','Registration expiration','date'],['ifta','IFTA review',['Needs review','Applicable — reviewed','Not applicable — reviewed']],['irp','Registration / IRP review',['Needs review','Applicable — reviewed','Not applicable — reviewed']]],hours:true},
- trailer:{name:'Trailer',desc:'Trailer identifiers, registration and inspections. Mileage tracking is optional, never presumed.',fields:[['subtype','Trailer type',['Flatbed','Enclosed','Specialized','Other trailer']],['vin','VIN'],['plate','Plate'],['axles','Axles','number'],['weight','Registered weight (lb)','number'],['registrationDue','Registration expiration','date']],mileage:true},
- powered:{name:'Powered equipment',desc:'Forklifts, cranes and powered tools. No road odometer or road-compliance fields.',fields:[['subtype','Equipment type',['Forklift','Crane','Powered pallet jack','Generator','Powered tool','Other powered equipment']],['serial','Serial number'],['make','Manufacturer'],['model','Model']],hours:true},
- equipment:{name:'Unpowered equipment',desc:'Racking, manual pallet jacks, tools and other non-powered equipment. Date-based service only.',fields:[['subtype','Equipment type',['Racking','Manual pallet jack','Tools','Storage / handling fixture','Other unpowered equipment']],['serial','Serial / internal identifier'],['make','Manufacturer'],['model','Model']]},
- building:{name:'Building / facility',desc:'Building records use addresses, site contacts and calendar schedules. No odometer, engine hours, VIN or vehicle tax fields.',fields:[['address','Address'],['siteContact','Site contact'],['phone','Site contact phone'],['landlord','Landlord / property contact'],['emergency','Emergency contacts / escalation','textarea'],['plan','Emergency / evacuation plan URL','url'],['shutoffs','Assembly point / shutoffs / access notes','textarea']]},
- system:{name:'Building system',desc:'HVAC, fire protection, electrical, plumbing, doors and other fixed systems. Calendar schedules by default; hours only if explicitly enabled.',fields:[['subtype','System type',['HVAC','Electrical','Plumbing','Lighting','Fire protection','Security','Door / dock','Grounds','Waste / environmental','Other building system']],['serial','Serial / system identifier'],['make','Manufacturer'],['model','Model'],['contractor','Service contractor','ref:vendors'],['warrantyDue','Warranty expiration','date']],hours:true},
- other:{name:'Other asset',desc:'Basic asset record. Enable a meter only if it is actually used for this asset.',fields:[['subtype','Asset description'],['serial','Serial / internal identifier']],mileage:true,hours:true}
+/* ============================================================
+   CONFIGURATION — what is tracked, and how
+   ============================================================ */
+const KEY = 'dwyer_ffm_v6';
+const SOON_DAYS = 30;
+const INSP_EXTRA = [['by', 'Inspected by'], ['result', 'Result', ['Pass', 'Pass after repairs', 'Failed — repairs needed']]];
+const SVC_EXTRA = [['by', 'Performed by']];
+function R(label, act, every, extra, hint, done, next) {
+  return { label, act, every, extra: extra || INSP_EXTRA, hint: hint || '', done: done || 'Date completed', next: next || 'Next due' };
+}
+/* every: [n,'m'] months, [n,'d'] days */
+const REQ = {
+  // ---------- Drivers
+  medical: R('Medical certificate', 'Record medical exam', [24, 'm'], [['examiner', 'Medical examiner'], ['registry', 'National Registry #'], ['restrict', 'Restrictions', ['None', 'Corrective lenses', 'Hearing aid', 'Other — see notes']]], 'Enter the expiration printed on the medical examiner’s certificate. Certificates run up to 24 months; the examiner may issue a shorter one.', 'Exam date', 'Certificate expires'),
+  cdl: R('CDL', 'Record CDL renewal', [48, 'm'], [['cdlNo', 'License #'], ['cdlState', 'Issuing state']], 'Enter the expiration printed on the license.', 'Issued on', 'CDL expires'),
+  mvr: R('Annual MVR review', 'Record MVR review', [12, 'm'], [['result', 'Result', ['Acceptable', 'Needs follow-up']], ['by', 'Reviewed by']], 'Annual review of the driving record from each state where the driver held a license.', 'Review date', 'Next review due'),
+  clearinghouse: R('Clearinghouse query', 'Record Clearinghouse query', [12, 'm'], [['qtype', 'Query type', ['Limited', 'Full']], ['result', 'Result', ['No information found', 'Information found — follow-up']]], 'At least one query per driver every 12 months.', 'Query date', 'Next query due'),
+  // ---------- Staff
+  forkliftEval: R('Forklift operator evaluation', 'Record forklift evaluation', [36, 'm'], [['by', 'Evaluator'], ['covers', 'Equipment covered']], 'Operator performance evaluation at least once every 3 years.', 'Evaluated on', 'Next evaluation due'),
+  craneCert: R('Crane operator certification', 'Record crane certification', [60, 'm'], [['body', 'Certifying body'], ['certNo', 'Certificate #']], '', 'Certified on', 'Certification expires'),
+  aerialTrain: R('Aerial lift training', 'Record aerial lift training', [36, 'm'], [['by', 'Trainer']], '', 'Trained on', 'Retraining due'),
+  firstAid: R('First aid / CPR', 'Record first aid / CPR', [24, 'm'], [['provider', 'Provider']], '', 'Certified on', 'Certification expires'),
+  // ---------- Vendors
+  coi: R('Certificate of insurance', 'Record new insurance certificate', [12, 'm'], [['insurer', 'Insurer'], ['limits', 'Coverage / limits']], '', 'Received on', 'Policy expires'),
+  contract: R('Service contract', 'Record contract renewal', [12, 'm'], [['terms', 'Rates / terms']], '', 'Renewed on', 'Next renewal'),
+  // ---------- Assets
+  dotInsp: R('Annual DOT inspection', 'Record DOT inspection', [12, 'm'], INSP_EXTRA, 'Periodic (annual) inspection. Keep the inspection report with the unit file.', 'Inspection date', 'Next inspection due'),
+  registration: R('Registration', 'Record registration renewal', [12, 'm'], [], 'Enter the expiration on the new registration.', 'Renewed on', 'Registration expires'),
+  annualInsp: R('Annual inspection', 'Record annual inspection', [12, 'm'], INSP_EXTRA, '', 'Inspection date', 'Next inspection due'),
+  craneMonthly: R('Monthly crane inspection', 'Record monthly crane inspection', [1, 'm'], INSP_EXTRA, 'Frequent inspection: hooks, wire rope, brakes, limit switches, controls.', 'Inspection date', 'Next inspection due'),
+  craneAnnual: R('Annual crane inspection', 'Record annual crane inspection', [12, 'm'], INSP_EXTRA, 'Periodic inspection by a qualified inspector. Keep the written report.', 'Inspection date', 'Next inspection due'),
+  lifterInsp: R('Periodic lifter inspection', 'Record lifter inspection', [12, 'm'], INSP_EXTRA, 'Below-the-hook lifting device: pads, vacuum system, structure, markings.', 'Inspection date', 'Next inspection due'),
+  // ---------- Building items: utilities
+  elecInsp: R('Electrical inspection', 'Record electrical inspection', [12, 'm']),
+  gasCheck: R('Gas safety check', 'Record gas safety check', [12, 'm']),
+  backflow: R('Backflow test', 'Record backflow test', [12, 'm'], INSP_EXTRA, 'Annual backflow preventer test; send the report to the water utility.'),
+  hvacPM: R('HVAC service', 'Record HVAC service', [6, 'm'], SVC_EXTRA, 'Filters, belts, coils and seasonal start-up.'),
+  heaterInsp: R('Heater / boiler inspection', 'Record heater inspection', [12, 'm']),
+  genTest: R('Generator load test', 'Record generator test', [1, 'm'], SVC_EXTRA),
+  genService: R('Generator service', 'Record generator service', [12, 'm'], SVC_EXTRA),
+  compService: R('Compressor service', 'Record compressor service', [6, 'm'], SVC_EXTRA, 'Drain tank, check belts, oil and safety valve.'),
+  // ---------- Building items: safety
+  extMonthly: R('Monthly extinguisher check', 'Record extinguisher check', [1, 'm'], INSP_EXTRA, 'Visual check of every extinguisher: in place, charged, tag initialed.'),
+  extAnnual: R('Annual extinguisher service', 'Record extinguisher service', [12, 'm'], INSP_EXTRA, 'Annual maintenance by a certified service company.'),
+  sprinklerQ: R('Quarterly sprinkler inspection', 'Record sprinkler inspection', [3, 'm']),
+  alarmAnnual: R('Annual fire alarm test', 'Record fire alarm test', [12, 'm']),
+  emMonthly: R('Monthly emergency light test', 'Record emergency light test', [1, 'm'], INSP_EXTRA, '30-second test of every emergency light and exit sign.'),
+  emAnnual: R('Annual 90-minute light test', 'Record 90-minute light test', [12, 'm']),
+  eyewashWeekly: R('Weekly eyewash activation', 'Record eyewash check', [7, 'd'], INSP_EXTRA, 'Activate each unit to flush the line and verify flow.'),
+  firstAidCheck: R('Monthly first aid / AED check', 'Record first aid check', [1, 'm'], INSP_EXTRA, 'Restock supplies; check AED status light, pads and battery dates.'),
+  drill: R('Fire evacuation drill', 'Record fire drill', [12, 'm'], [['people', 'People evacuated', 'number'], ['time', 'Time to clear building (minutes)', 'number'], ['by', 'Drill coordinator']], 'Record who took part, how long it took, and anything to fix.', 'Drill date', 'Next drill due'),
+  // ---------- Building items: structural
+  roofInsp: R('Roof inspection', 'Record roof inspection', [6, 'm'], INSP_EXTRA, 'Spring and fall: membrane, flashing, drains, rooftop units.'),
+  dockPM: R('Dock door / leveler service', 'Record dock service', [6, 'm'], SVC_EXTRA),
+  doorPM: R('Overhead door service', 'Record door service', [12, 'm'], SVC_EXTRA),
+  rackInsp: R('Rack inspection', 'Record rack inspection', [12, 'm'], INSP_EXTRA, 'Uprights, beams, anchors, load signs; damage reported and tagged out.'),
+  lotInsp: R('Lot / yard inspection', 'Record lot inspection', [12, 'm']),
+  structInsp: R('Structural inspection', 'Record structural inspection', [12, 'm'])
 };
-const COMMON=[['name','Asset name / unit number'],['location','Location','ref:locations'],['parentAsset','Parent building / asset','ref:assets'],['status','Availability',['Available','In service','Out of service','Retired']],['inspectionDue','Inspection / review due','date'],['replacement','Replacement estimate $','number'],['vendor','Preferred vendor','ref:vendors'],['notes','Notes','textarea']];
-function meters(r){const t=TYPE[r?.assetType];return{miles:!!t&&(r.assetType==='vehicle'||!!t.mileage&&!!r.trackMiles),hours:!!t&&!!t.hours&&!!r.trackHours};}
-function normalizeAsset(r){const t=TYPE[r.assetType];if(!t)throw Error('Select a valid asset type.');const allowed=new Set(['id','type','assetType','createdAt','updatedAt','history','attachments','meterHistory','outSince','downtimeHours',...COMMON.map(f=>f[0]),...t.fields.map(f=>f[0])]);if(t.mileage)allowed.add('trackMiles');if(t.hours)allowed.add('trackHours');const m=meters(r);if(m.miles)allowed.add('miles');if(m.hours)allowed.add('hours');return Object.fromEntries(Object.entries(r).filter(([k])=>allowed.has(k)));}
-function cleanWork(r,a){const out={...r};const m=meters(a);if(!m.miles){delete out.dueMiles;delete out.repeatMiles;}if(!m.hours){delete out.dueHours;delete out.repeatHours;}return out;}
-const COSTCATS=['Maintenance','Utilities','Equipment / capital','Contract services','Safety / training','Fuel','Other'];const WORKTYPES=['Repair','Preventive maintenance','Inspection','Safety / corrective action','Emergency preparedness','Training','Contract service','Project','Project task','Purchase / replacement','Improvement'];
-const schemas={
- locations:{title:'Location',quick:[['name','Location name'],['address','Address'],['contact','Site lead'],['phone','Phone']],more:[['landlord','Landlord / property contact'],['emergency','Emergency / escalation contacts','textarea'],['plan','Plan URL','url'],['shutoffs','Assembly point / shutoffs / access notes','textarea']]},
- people:{title:'Person / driver',quick:[['name','Name'],['role','Role',['Driver','Warehouse','Operations','Branch lead','Other']],['location','Location','ref:locations'],['phone','Phone']],more:[['medicalDue','Medical review due','date'],['cdlDue','CDL expiration','date'],['mvrDue','MVR review due','date'],['queryDue','Clearinghouse review due','date'],['trainingDue','Training due','date'],['qualifications','Qualification / training review notes','textarea']]},
- vendors:{title:'Vendor / partner',quick:[['name','Vendor name'],['trade','Service type'],['phone','Phone'],['contact','Contact']],more:[['email','Email','email'],['insuranceDue','Insurance expiration','date'],['contractDue','Contract renewal','date'],['terms','Rates / terms / scope','textarea'],['performance','Service performance','textarea']]},
- work:{title:'Work item',quick:[['name','What needs doing?'],['asset','Asset / building / system','ref:assets'],['location','Location','ref:locations'],['category','Work type',WORKTYPES],['priority','Priority',['Routine','Urgent','Safety critical']],['due','Target / service date','date']],more:[['status','Work status',['Open','Scheduled','Assigned','In progress','Awaiting approval','Completed']],['owner','Responsible person'],['vendor','Vendor','ref:vendors'],['parent','Parent project','ref:work'],['person','Person / driver','ref:people'],['repeatDays','Repeat every days','number'],['estimate','Estimate / budget $','number'],['cost','Actual cost $','number'],['costCategory','Budget category',COSTCATS],['invoice','Invoice / PO reference'],['approval','Approval status',['Not requested','Requested','Approved','Declined']],['approvedBy','Decision by'],['decision','Repair / replace / purchase rationale','textarea'],['completed','Completion date','date'],['participants','Training / drill participants and findings','textarea']]},
- quotes:{title:'Quotation',quick:[['name','Proposal title'],['work','Related work / purchase','ref:work'],['vendor','Vendor / dealer','ref:vendors'],['amount','Quoted total $','number']],more:[['specs','Specifications / scope','textarea'],['lead','Lead time / downtime'],['warranty','Warranty / support'],['terms','Commercial terms'],['risk','Risks / exclusions','textarea'],['recommendation','Evaluation / recommendation','textarea']]},
- expenses:{title:'Expense',quick:[['name','Description'],['date','Date','date'],['location','Location','ref:locations'],['category','Category',COSTCATS],['amount','Amount $','number']],more:[['asset','Asset','ref:assets'],['vendor','Vendor','ref:vendors'],['reference','Invoice / receipt reference']]},
- budgets:{title:'Annual budget',quick:[['name','Budget name'],['year','Year','number'],['location','Location','ref:locations'],['category','Category',COSTCATS],['amount','Budget $','number']],more:[]},
- fuel:{title:'Fuel / jurisdiction mileage',quick:[['name','Receipt / trip reference'],['asset','Asset','ref:assets'],['date','Date','date'],['state','Jurisdiction'],['gallons','Gallons','number'],['cost','Cost $','number']],more:[['miles','Jurisdiction miles','number'],['fuelType','Fuel type',['Diesel','Gasoline','Other']]]},
- tests:{title:'Test log',quick:[['name','Reference'],['person','Driver','ref:people'],['date','Date','date'],['category','Category',['Random','Pre-employment','Post-accident','Reasonable suspicion','Return-to-duty','Follow-up']],['substance','Substance',['Drug','Alcohol','Both']],['result','Result',['Pending','Negative','Positive','Cancelled']]],more:[]},
- hos:{title:'Shift review',quick:[['name','Reference'],['person','Driver','ref:people'],['location','Reporting location','ref:locations'],['date','Work date','date'],['start','Start','datetime-local'],['end','Release','datetime-local']],more:[['radius','Maximum radius (air miles)','number'],['returned','Returned to reporting location',['Needs review','Yes','No']],['review','Short-haul review',['Needs review','Eligible — reviewed','Not eligible — reviewed']]]},
- documents:{title:'Document / certificate',quick:[['name','Document name'],['asset','Asset','ref:assets'],['location','Location','ref:locations'],['person','Person','ref:people'],['due','Review / expiration date','date']],more:[['vendor','Vendor','ref:vendors'],['url','Document URL','url'],['review','Review',['Needs review','Reviewed','Expired / superseded']]]}
+
+const F = { year: ['year', 'Year', 'number'], make: ['make', 'Make'], model: ['model', 'Model'], vin: ['vin', 'VIN'], plate: ['plate', 'Plate #'], plateState: ['plateState', 'Plate state'], serial: ['serial', 'Serial #'] };
+const ASSET_TYPES = {
+  truck: { name: 'Truck', plural: 'Trucks', desc: 'CDL trucks: VIN, plate, odometer, DOT inspection', meter: 'miles', pm: { every: 15000 }, driver: true, reqs: ['dotInsp', 'registration'],
+    fields: [['body', 'Body type', ['A-frame slab truck', 'Flatbed', 'Boom truck', 'Box truck', 'Tractor', 'Other']], F.year, F.make, F.model, F.vin, F.plate, F.plateState, ['gvwr', 'GVWR (lb)', 'number']] },
+  pickup: { name: 'Pickup / service vehicle', plural: 'Pickups', desc: 'Non-CDL vehicles: VIN, plate, odometer', meter: 'miles', pm: { every: 5000 }, driver: true, reqs: ['registration'],
+    fields: [F.year, F.make, F.model, F.vin, F.plate, F.plateState] },
+  trailer: { name: 'Trailer', plural: 'Trailers', desc: 'VIN, plate, DOT inspection; date-based service', meter: null, pm: { months: 6, label: 'Brake & bearing service' }, reqs: ['dotInsp', 'registration'],
+    fields: [['ttype', 'Trailer type', ['A-frame slab trailer', 'Flatbed', 'Enclosed', 'Lowboy', 'Other']], F.year, F.make, F.vin, F.plate, F.plateState, ['gvwr', 'GVWR (lb)', 'number']] },
+  forklift: { name: 'Forklift', plural: 'Forklifts', desc: 'Serial, power type, capacity, hour meter', meter: 'hours', pm: { every: 250 }, reqs: ['annualInsp'],
+    fields: [F.make, F.model, F.serial, ['power', 'Power', ['LP gas', 'Electric', 'Diesel', 'Gasoline']], ['capacity', 'Rated capacity (lb)', 'number'], ['attach', 'Mast / attachment']] },
+  crane: { name: 'Crane / hoist', plural: 'Cranes', desc: 'Bridge, gantry or jib: capacity, hour meter, inspections', meter: 'hours', pm: { every: 500 }, reqs: ['craneMonthly', 'craneAnnual'],
+    fields: [['ctype', 'Crane type', ['Overhead bridge crane', 'Gantry crane', 'Jib crane', 'Monorail hoist']], F.make, F.model, F.serial, ['capacity', 'Rated capacity (tons)', 'number'], ['span', 'Span / reach (ft)', 'number']] },
+  powerjack: { name: 'Powered pallet jack / stacker', plural: 'Powered jacks', desc: 'Serial, capacity, hour meter', meter: 'hours', pm: { every: 250 }, reqs: ['annualInsp'],
+    fields: [['ptype', 'Type', ['Powered pallet jack', 'Walkie stacker', 'Rider pallet jack']], F.make, F.model, F.serial, ['capacity', 'Rated capacity (lb)', 'number']] },
+  aerial: { name: 'Scissor / aerial lift', plural: 'Aerial lifts', desc: 'Serial, platform height, hour meter', meter: 'hours', pm: { every: 250 }, reqs: ['annualInsp'],
+    fields: [['ltype', 'Lift type', ['Scissor lift', 'Boom lift', 'Mast lift']], F.make, F.model, F.serial, ['height', 'Platform height (ft)', 'number']] },
+  lifter: { name: 'Vacuum lifter / slab clamp', plural: 'Lifters', desc: 'Below-the-hook devices: capacity, inspections', meter: null, pm: null, reqs: ['lifterInsp'],
+    fields: [['ltype', 'Device type', ['Vacuum lifter', 'Slab clamp', 'Lifting beam', 'Other below-the-hook device']], F.make, F.model, F.serial, ['capacity', 'Rated capacity (lb)', 'number']] },
+  manualjack: { name: 'Manual pallet jack', plural: 'Manual jacks', desc: 'Serial and capacity; no meter', meter: null, pm: null, reqs: ['annualInsp'],
+    fields: [F.make, F.model, F.serial, ['capacity', 'Rated capacity (lb)', 'number']] },
+  other: { name: 'Other equipment', plural: 'Other', desc: 'Anything else: description and serial', meter: null, pm: null, reqs: ['annualInsp'],
+    fields: [['desc', 'What is it?'], F.make, F.model, F.serial] }
 };
-function seed(){const now=new Date().toISOString();return{version:5,profile:{type:'Interstate private carrier — own goods',international:'No',dot:'',mc:'',notes:'Independent demo. Not an official company application.'},records:[
-{id:'l1',type:'locations',name:'Farmington Hills — SAMPLE',address:'Example location record',contact:'Example site lead',phone:'555-0100',emergency:'Use verified emergency procedures. All sample contact details are fictional.'},
-{id:'l2',type:'locations',name:'Branch B — SAMPLE',contact:'Example branch lead'},
-{id:'a1',type:'assets',assetType:'vehicle',name:'Truck 101 — SAMPLE',subtype:'Truck',location:'l1',status:'Available',vin:'DEMO-101',miles:48200,trackHours:false,axles:3,weight:33000,states:'MI, OH (example)',inspectionDue:day(12),registrationDue:day(60),ifta:'Needs review',irp:'Needs review',replacement:45000},
-{id:'a2',type:'assets',assetType:'powered',name:'Forklift 02 — SAMPLE',subtype:'Forklift',location:'l1',status:'Out of service',serial:'DEMO-LIFT',trackHours:true,hours:1240,outSince:now,inspectionDue:day(20)},
-{id:'a3',type:'assets',assetType:'building',name:'Warehouse — SAMPLE',location:'l1',status:'Available',address:'Example address',siteContact:'Example site lead',phone:'555-0100',inspectionDue:day(40),notes:'No vehicle fields apply to this building.'},
-{id:'a4',type:'assets',assetType:'system',name:'HVAC rooftop unit — SAMPLE',parentAsset:'a3',subtype:'HVAC',location:'l1',status:'Available',serial:'DEMO-HVAC',trackHours:false,inspectionDue:day(25)},
-{id:'a5',type:'assets',assetType:'system',name:'Dock door 3 — SAMPLE',parentAsset:'a3',subtype:'Door / dock',location:'l1',status:'Available',trackHours:false},
-{id:'a6',type:'assets',assetType:'trailer',name:'Trailer 201 — SAMPLE',subtype:'Flatbed',vin:'DEMO-TRAILER',location:'l1',status:'Available',trackMiles:false,inspectionDue:day(45)},
-{id:'p1',type:'people',name:'Alex Sample',role:'Driver',location:'l1',medicalDue:day(18),mvrDue:day(40),trainingDue:day(60)},
-{id:'v1',type:'vendors',name:'Example Lift Service',trade:'Equipment repairs',phone:'555-0120',insuranceDue:day(50)},
-{id:'v2',type:'vendors',name:'Example Building Services',trade:'HVAC / doors / facilities',phone:'555-0130',contractDue:day(65)},
-{id:'w1',type:'work',name:'Repair hydraulic leak',asset:'a2',location:'l1',category:'Repair',priority:'Urgent',status:'In progress',vendor:'v1',due:day(),estimate:450,costCategory:'Maintenance',notes:'Fictional repair. Review readiness before release.',history:[{at:now,text:'Sample repair opened.'}]},
-{id:'w2',type:'work',name:'Truck preventive service',asset:'a1',location:'l1',category:'Preventive maintenance',priority:'Routine',status:'Scheduled',due:day(7),dueMiles:50000,repeatDays:90,repeatMiles:5000,costCategory:'Maintenance',estimate:350,notes:'Example intervals; verify actual service requirements.'},
-{id:'w3',type:'work',name:'HVAC seasonal inspection',asset:'a4',location:'l1',category:'Inspection',priority:'Routine',status:'Open',due:day(10),repeatDays:180,vendor:'v2',costCategory:'Maintenance'},
-{id:'w4',type:'work',name:'Dock improvement project',asset:'a5',location:'l1',category:'Project',priority:'Routine',status:'Open',due:day(40),estimate:2500,costCategory:'Equipment / capital'},
-{id:'w5',type:'work',name:'Review contractor proposals',parent:'w4',asset:'a5',location:'l1',category:'Project task',priority:'Routine',status:'Open',due:day(5)},
-{id:'w6',type:'work',name:'Evacuation drill & plan review',asset:'a3',location:'l1',category:'Emergency preparedness',priority:'Routine',status:'Scheduled',due:day(21),repeatDays:180,costCategory:'Safety / training'},
-{id:'q1',type:'quotes',name:'Sample dock repair proposal',work:'w4',vendor:'v2',amount:1800,specs:'Repair existing operator',lead:'Example: 2 weeks',warranty:'Example: 12 months',risk:'Review remaining useful life'},
-{id:'b1',type:'budgets',name:'Annual fleet service budget',year:new Date().getFullYear(),location:'l1',category:'Maintenance',amount:15000}
-]};}
-let S;let warning='';try{const raw=localStorage.getItem(KEY);S=raw?JSON.parse(raw):seed();if(S.version!==5||!Array.isArray(S.records))throw Error('Unsupported stored format');}catch(e){S=seed();warning='Could not read stored demo data. Sample records shown. '+e.message;}
-let page='today',tab='all',query='',site='',workFilter='Open',dirty=false,focusBack=null,busy=false;
-const rec=k=>S.records.find(r=>r.id===k);const list=t=>S.records.filter(r=>r.type===t);const name=k=>rec(k)?.name||'';function siteOf(r){return r?.location||rec(r?.asset)?.location||rec(r?.person)?.location||rec(r?.work)?.location||'';}const clone=()=>JSON.parse(JSON.stringify(S));const history=(r,text)=>[...(r.history||[]),{at:new Date().toISOString(),text}];
-function notice(msg,err=false){$('notice').hidden=false;$('notice').textContent=msg;$('notice').className=err?'error':'';}function error(msg){const e=$('formError');if(e){e.hidden=false;e.textContent=msg;e.scrollIntoView?.({block:'nearest'});}else notice(msg,true);return false;}
-function commit(next){try{localStorage.setItem(KEY,JSON.stringify(next));S=next;notice('Saved in this browser.');return true;}catch(e){return error('Save failed; previous saved state is unchanged. Export a backup. '+e.message);}}
-function options(t,exclude=''){return[['','Unassigned'],...list(t).filter(r=>r.id!==exclude).map(r=>[r.id,r.name])];}
-function field([k,label,t='text'],value='',exclude=''){const opts=Array.isArray(t)?t:typeof t==='string'&&t.startsWith('ref:')?options(t.slice(4),exclude):null;return `<div class="${t==='textarea'?'full':''}"><label for="f-${k}">${esc(label)}</label>${opts?`<select id="f-${k}" name="${k}">${opts.map(o=>{const v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;return `<option value="${esc(v)}" ${String(v)===String(value)?'selected':''}>${esc(l)}</option>`;}).join('')}</select>`:t==='textarea'?`<textarea id="f-${k}" name="${k}">${esc(value)}</textarea>`:`<input id="f-${k}" name="${k}" type="${t}" value="${esc(value)}" ${t==='number'?'min="0" step="any"':''} ${k==='name'?'required':''}>`}</div>`;}
-function checkbox(k,label,value){return `<label class="check"><input type="checkbox" id="f-${k}" name="${k}" ${value?'checked':''}>${esc(label)}</label>`;}
-const footer=label=>`<div class="row foot"><button class="btn primary" type="submit">${label||'Save changes'}</button>${btn('Cancel','close')}</div>`;
-function modal(content,submit){focusBack=document.activeElement;$('body').innerHTML='<div id="formError" class="form-error" role="alert" hidden></div>'+content;dirty=false;if(!$('modal').open)$('modal').showModal();$('body').oninput=()=>dirty=true;if(submit)$('form').onsubmit=e=>{e.preventDefault();submit(Object.fromEntries(new FormData(e.target)));};setTimeout(()=>$('body').querySelector('input,select,button')?.focus(),0);}
-function close(force=false){if(busy)return error('Wait for attachment processing.');if(!force&&dirty&&!confirm('Discard unsaved changes?'))return false;$('modal').close();dirty=false;focusBack?.focus?.();return true;}
-function validParent(id,parent,key){const seen=new Set([id]);let p=parent;while(p){if(seen.has(p))return false;seen.add(p);p=rec(p)?.[key];}return true;}
-function validURL(v){try{return ['https:','http:'].includes(new URL(v).protocol);}catch(e){return false;}}
-function parseNumbers(d,defs){for(const[k,,t]of defs)if(t==='number'&&d[k]!==''&&d[k]!=null){d[k]=Number(d[k]);if(!Number.isFinite(d[k])||d[k]<0)throw Error('Enter valid nonnegative numbers.');}return d;}
-function upsert(n,r){const i=n.records.findIndex(x=>x.id===r.id);if(i<0)n.records.push(r);else n.records[i]=r;}
-function readiness(r,status){const now=new Date().toISOString();if(status==='Out of service'&&r.status!=='Out of service')r.outSince=now;if(r.status==='Out of service'&&status!=='Out of service'&&r.outSince){r.downtimeHours=Number(r.downtimeHours||0)+(Date.now()-Date.parse(r.outSince))/3600000;delete r.outSince;}r.status=status;}
-let draftFiles=[];
-function fileUI(files){draftFiles=[...files];$('fileList').innerHTML=draftFiles.map((f,i)=>`<p>${esc(f.name)} ${btn('Download','draftDownload',String(i))} ${btn('Remove','draftRemove',String(i))}</p>`).join('');$('fileList').onclick=e=>{const b=e.target.closest('[data-action]');if(!b)return;e.stopPropagation();const i=Number(b.dataset.id);if(b.dataset.action==='draftRemove'){const files=[...draftFiles];files.splice(i,1);fileUI(files);dirty=true;}else if(draftFiles[i])downloadFile(draftFiles[i]);};$('upload').onchange=e=>{const f=e.target.files[0];if(!f)return;if(draftFiles.length>=5||f.size>300*1024||!(f.type.startsWith('image/')||f.type==='application/pdf'))return error('Demo limit: 5 PDFs/images per record, 300 KB each.');busy=true;const reader=new FileReader();reader.onload=()=>{const next=[...draftFiles,{name:f.name,mime:f.type,data:reader.result}];busy=false;fileUI(next);dirty=true;};reader.onerror=()=>{busy=false;error('File read failed.');};reader.readAsDataURL(f);};}
-const filesHTML=()=>`<details><summary>Attachments</summary><small>Sample files only. Max 5 PDFs/images, 300 KB each. No confidential data.</small><div id="fileList"></div><input type="file" id="upload" accept="image/*,application/pdf" aria-label="Attach sample file"></details>`;
-function downloadData(data,n,t){const url=URL.createObjectURL(new Blob([data],{type:t}));const a=document.createElement('a');a.href=url;a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}
-function downloadFile(f){const parts=String(f.data).split(',');if(parts.length!==2||!/^data:(image\/[\w.+-]+|application\/pdf);base64$/.test(parts[0]))return error('Invalid file data.');downloadData(Uint8Array.from(atob(parts[1]),c=>c.charCodeAt(0)),f.name,f.mime);}
-function assetForm(key='',prefill={}){const old=rec(key)||{};let draft={assetType:'vehicle',status:'Available',...prefill,...old};let renderedType=draft.assetType;let renderedMeters=meters(draft);function capture(){const form=$('form');const data=Object.fromEntries(new FormData(form));data.assetType=$('f-assetType').value;data.trackMiles=!!$('f-trackMiles')?.checked;data.trackHours=!!$('f-trackHours')?.checked;draft={...draft,...data};}
-function drawType(){const t=TYPE[draft.assetType];renderedType=draft.assetType;renderedMeters=meters(draft);$('typeFields').innerHTML=`<div class="help">${esc(t.desc)}</div><div class="cols">${t.fields.map(f=>field(f,draft[f[0]],key)).join('')}</div><div id="meterControls">${t.mileage?checkbox('trackMiles','Track mileage for this asset',draft.trackMiles):''}${t.hours?checkbox('trackHours',draft.assetType==='system'?'This system has an operating-hour meter':'Track operating hours',draft.trackHours):''}</div><div class="cols" id="meterValues"></div>`;drawMeterValues();if($('f-trackMiles'))$('f-trackMiles').onchange=()=>{draft.trackMiles=$('f-trackMiles').checked;drawMeterValues();dirty=true;};if($('f-trackHours'))$('f-trackHours').onchange=()=>{draft.trackHours=$('f-trackHours').checked;drawMeterValues();dirty=true;};}
-function drawMeterValues(){if($('f-miles'))draft.miles=$('f-miles').value;if($('f-hours'))draft.hours=$('f-hours').value;const m=meters(draft);renderedMeters=m;$('meterValues').innerHTML=(m.miles?field(['miles',draft.assetType==='vehicle'?'Odometer miles':'Tracked mileage','number'],draft.miles):'')+(m.hours?field(['hours','Operating hours','number'],draft.hours):'');}
-modal(`<h2>${key?'Edit':'Add'} asset</h2><form id="form">${field(['assetType','Asset type',Object.entries(TYPE).map(([k,v])=>[k,v.name])],draft.assetType)}<div class="cols">${COMMON.filter(f=>!['notes'].includes(f[0])).map(f=>field(f,draft[f[0]],key)).join('')}</div><div id="typeFields"></div>${field(['notes','Notes','textarea'],draft.notes)}${filesHTML()}<details><summary>How type changes are handled</summary><p>Only fields valid for the selected type are saved as active details. Removed fields are retained in the change history. Pending work on this asset is updated to remove incompatible meter schedules. Completed work history is retained.</p></details>${footer('Save asset')}</form>`,raw=>{try{if(busy)return error('Wait for attachment processing.');capture();let d={...draft,...raw,assetType:$('f-assetType').value,trackMiles:!!$('f-trackMiles')?.checked,trackHours:!!$('f-trackHours')?.checked};if(!d.name.trim())return error('Name is required.');if(!validParent(key||'new',d.parentAsset,'parentAsset'))return error('An asset cannot be its own parent or ancestor.');if(d.parentAsset&&rec(d.parentAsset)?.location&&d.location!==rec(d.parentAsset).location)return error('Asset and parent must use the same location.');if(d.plan&&!validURL(d.plan))return error('Use http:// or https:// for the plan link.');const defs=[...COMMON,...TYPE[d.assetType].fields,['miles','','number'],['hours','','number']];parseNumbers(d,defs);const normalized=normalizeAsset(d);const removed=Object.fromEntries(Object.entries(old).filter(([k,v])=>!(k in normalized)&&!['history','attachments','meterHistory','id','type','createdAt','updatedAt','outSince','downtimeHours'].includes(k)&&v!==''&&v!=null));const changeType=old.assetType&&old.assetType!==d.assetType;const oldM=meters(old),newM=meters(d);const prune=changeType||oldM.miles&&!newM.miles||oldM.hours&&!newM.hours;if(prune&&!confirm('Save the new asset configuration? Incompatible fields will leave the active record and incompatible schedules will be removed from open work. Prior details remain in history.'))return;
-const n=clone(),now=new Date().toISOString();let record={...normalized,id:key||uuid(),type:'assets',createdAt:old.createdAt||now,updatedAt:now,attachments:[...draftFiles],history:history(old,`${key?'Updated':'Created'} ${TYPE[d.assetType].name}`)};if(Object.keys(removed).length)record.history.push({at:now,text:'Retired fields on reclassification / meter change',details:removed});if(old.status)record.status=old.status;readiness(record,d.status);record.meterHistory=[...(old.meterHistory||[]),...((newM.miles&&String(old.miles)!==String(d.miles)||newM.hours&&String(old.hours)!==String(d.hours))?[{at:now,...(newM.miles?{miles:d.miles}:{}),...(newM.hours?{hours:d.hours}:{})}]:[])];upsert(n,record);
-if(prune)for(let i=0;i<n.records.length;i++){const w=n.records[i];if(w.type==='work'&&w.asset===key&&w.status!=='Completed'){const clean=cleanWork(w,record);const removedSchedule=Object.fromEntries(Object.entries(w).filter(([k])=>['dueMiles','repeatMiles','dueHours','repeatHours'].includes(k)&&!(k in clean)));if(Object.keys(removedSchedule).length){clean.history=history(w,'Removed incompatible meter schedule after asset configuration change.');clean.history.push({at:now,text:'Archived prior meter schedule',details:removedSchedule});}n.records[i]=clean;}}
-if(commit(n)){close(true);render();}}catch(e){error(e.message);}});
-drawType();fileUI(old.attachments||[]);$('f-assetType').onchange=()=>{const newType=$('f-assetType').value;capture();draft.assetType=newType;draft.trackMiles=!!TYPE[newType].mileage&&!!draft.trackMiles;draft.trackHours=!!TYPE[newType].hours&&!!draft.trackHours;drawType();dirty=true;};$('f-parentAsset').onchange=e=>{const p=rec(e.target.value);if(p?.location)$('f-location').value=p.location;dirty=true;};}
-function workMeterFields(a){const m=meters(a);return[...(m.miles?[['dueMiles','Due at miles','number'],['repeatMiles','Repeat every miles','number']]:[]),...(m.hours?[['dueHours','Due at hours','number'],['repeatHours','Repeat every hours','number']]:[])];}
-function editor(type,key='',prefill={}){if(type==='assets')return assetForm(key,prefill);const old=rec(key)||{},def=schemas[type];let draft={date:day(),year:new Date().getFullYear(),status:'Open',costCategory:'Maintenance',...prefill,...old};const a=rec(draft.asset);if(!draft.location&&a)draft.location=a.location;const extras=type==='work'?`<div class="cols">${field(['availability','Asset readiness',['Unchanged','Available','In service','Out of service']],'Unchanged')}</div><div id="workMeters"></div>`:'';
-modal(`<h2>${key?'Update':'Add'} ${def.title.toLowerCase()}</h2><form id="form"><div class="cols">${def.quick.map(f=>field(f,draft[f[0]],key)).join('')}</div>${extras}<details ${key?'open':''}><summary>Assignment, schedule & supporting details</summary><div class="cols">${def.more.map(f=>field(f,draft[f[0]],key)).join('')}</div></details>${field(['notes','Notes / findings / work performed','textarea'],draft.notes)}${filesHTML()}<details><summary>Guidance</summary><p>${esc(type==='work'?'Calendar recurrence is available for all work. Meter schedules appear only when the selected asset tracks that meter. Completing a task creates its next recurrence once. Completing work does not automatically certify the asset safe. Approval fields record decisions, not financial authorization.':type==='hos'?'Short-haul review prompts include reporting location, return, radius and shift duration. This is not a full eligibility engine or ELD.':type==='expenses'?'Enter only expenses not already recorded as work actuals or fuel. Do not duplicate invoices.':'Manual tracking and review only. No legal certification, tax filing, external integration or automated compliance determination.')}</p></details>${footer(type==='work'&&!key?'Create work':'Save changes')}</form>`,d=>{try{if(busy)return error('Wait for attachment processing.');if(!d.name.trim())return error('Name is required.');const selected=rec(d.asset);parseNumbers(d,[...def.quick,...def.more,...(type==='work'?workMeterFields(selected):[])]);if(d.url&&!validURL(d.url)||d.plan&&!validURL(d.plan))return error('Links must use http:// or https://.');if(type==='work'){if(!validParent(key||'new',d.parent,'parent'))return error('A task cannot be its own ancestor.');if(d.asset&&d.location!==selected?.location)return error('Work location must match the selected asset.');d=cleanWork(d,selected);if(d.status==='Completed'&&!d.notes.trim())return error('Record completion findings first.');if(d.status==='Completed'&&list('work').some(w=>w.parent===key&&w.status!=='Completed'))return error('Complete child tasks first.');if(d.asset&&d.availability==='Available'&&list('work').some(w=>w.id!==key&&w.asset===d.asset&&w.priority==='Safety critical'&&w.status!=='Completed'))return error('Review other safety-critical work before returning this asset to Available.');if(d.status==='Completed')d.completed=d.completed||day();}
-if(type==='hos'){const h=(new Date(d.end)-new Date(d.start))/3600000;if(d.start&&d.end&&(!Number.isFinite(h)||h<0))return error('Check shift times.');if(d.review==='Eligible — reviewed'&&(!d.location||!d.start||!d.end||h>14||d.radius===''||Number(d.radius)>150||d.returned!=='Yes'))return error('These entries do not support an eligible short-haul review.');}
-const n=clone(),now=new Date().toISOString();let record={...old,...d,id:key||uuid(),type,attachments:[...draftFiles],createdAt:old.createdAt||now,updatedAt:now,history:history(old,`${key?'Updated':'Created'}${d.status?' · '+d.status:''}${type==='work'?' · '+(d.notes||'No findings yet'):''}`)};delete record.availability;if(type==='work')record=cleanWork(record,selected);upsert(n,record);
-if(type==='work'&&selected&&d.availability!=='Unchanged'){const x=n.records.find(x=>x.id===d.asset);readiness(x,d.availability);x.history=history(x,'Readiness '+x.status+' via '+record.name);}
-if(type==='work'&&d.status==='Completed'&&old.status!=='Completed'&&!old.nextWorkId&&(Number(d.repeatDays)>0||Number(d.repeatMiles)>0||Number(d.repeatHours)>0)){const m=meters(selected);const next={...record,id:uuid(),status:'Scheduled',completed:'',cost:'',invoice:'',approval:'Not requested',approvedBy:'',attachments:[],notes:'Next recurring service from '+record.name,createdAt:now,updatedAt:now,history:[{at:now,text:'Recurring service created from '+record.id}],fromWorkId:record.id};delete next.nextWorkId;next.due=Number(d.repeatDays)>0?plusDay(d.completed,d.repeatDays):'';if(m.miles)next.dueMiles=Number(d.repeatMiles)>0?Number(selected?.miles||d.dueMiles||0)+Number(d.repeatMiles):'';if(m.hours)next.dueHours=Number(d.repeatHours)>0?Number(selected?.hours||d.dueHours||0)+Number(d.repeatHours):'';record.nextWorkId=next.id;n.records.push(next);}
-if(commit(n)){close(true);render();}}catch(e){error(e.message);}});
-fileUI(old.attachments||[]);if(type==='work'){function drawMeters(){const aa=rec($('f-asset').value);const m=meters(aa);$('workMeters').innerHTML=`<div class="help">${aa?esc(TYPE[aa.assetType]?.name||'Asset')+' · ':''}${!m.miles&&!m.hours?'Calendar-based scheduling. No mileage or operating-hour fields apply.':'Only enabled meters are shown. Due thresholds mean whichever occurs first.'}</div><div class="cols">${workMeterFields(aa).map(f=>field(f,draft[f[0]])).join('')}</div>`;$('f-availability').disabled=!aa;}
-drawMeters();$('f-asset').onchange=e=>{const selected=rec(e.target.value);draft.dueMiles='';draft.repeatMiles='';draft.dueHours='';draft.repeatHours='';if(selected)$('f-location').value=selected.location||'';$('f-availability').value='Unchanged';drawMeters();dirty=true;};}}
-function dueWork(w){const a=rec(w.asset),m=meters(a);const mm=m.miles&&w.dueMiles!==''&&w.dueMiles!=null&&a.miles!==''&&a.miles!=null&&Number(a.miles)>=Number(w.dueMiles);const hh=m.hours&&w.dueHours!==''&&w.dueHours!=null&&a.hours!==''&&a.hours!=null&&Number(a.hours)>=Number(w.dueHours);return{meter:mm||hh,overdue:mm||hh||!!(w.due&&w.due<day()),soon:mm||hh||!!(w.due&&w.due<=day(7))};}
-function matches(r){return(!site||siteOf(r)===site||r.id===site)&&JSON.stringify([r.name,r.assetType,r.subtype,r.category,r.status,r.notes,name(r.asset),name(r.location),name(r.vendor)]).toLowerCase().includes(query.toLowerCase());}
-function alerts(){const out=[];for(const r of S.records){if(site&&siteOf(r)!==site&&r.id!==site)continue;if(r.type==='work'&&r.status!=='Completed'){const d=dueWork(r);if(d.soon||r.priority==='Safety critical')out.push({r,title:r.name,detail:`${name(r.asset)||name(r.location)||'Work'} · ${d.meter?'Meter service due':r.due||'No date'} · ${r.status}`,urgent:d.overdue||r.priority==='Safety critical'});}if(r.type==='assets'&&r.status==='Out of service')out.push({r,title:r.name+' unavailable',detail:name(r.location),urgent:true});const fields=r.type==='assets'?['inspectionDue','registrationDue','warrantyDue']:r.type==='people'?['medicalDue','cdlDue','mvrDue','queryDue','trainingDue']:r.type==='vendors'?['insuranceDue','contractDue']:r.type==='documents'?['due']:[];for(const k of fields)if(r[k]&&r[k]<=day(30))out.push({r,title:r.name+' · '+k.replace('Due',' review'),detail:'Due '+r[k],urgent:r[k]<day()});}return out.sort((a,b)=>Number(b.urgent)-Number(a.urgent));}
-function costs(){const out=[];for(const r of S.records){if(r.type==='work'&&r.cost!==''&&r.cost!=null)out.push({name:r.name,date:r.completed||r.updatedAt?.slice(0,10)||day(),location:siteOf(r),asset:r.asset,category:r.costCategory||'Maintenance',amount:Number(r.cost)});if(r.type==='expenses')out.push({...r,amount:Number(r.amount||0)});if(r.type==='fuel')out.push({...r,location:siteOf(r),category:'Fuel',amount:Number(r.cost||0)});}return out;}
-function budgetActual(b){return costs().filter(c=>String(c.date||'').slice(0,4)===String(b.year)&&c.category===b.category&&(!b.location||b.location===c.location)).reduce((s,r)=>s+r.amount,0);}
-function jump(p){page=p;tab='all';query='';workFilter='Open';$('nav').value=p;render();}
-function filters(){const tabs=page==='assets'?[['all','All'],['locations','Locations'],['fleet','Fleet'],['equipment','Equipment'],['facilities','Facilities'],['documents','Documents']]:page==='people'?[['all','All'],['people','People'],['vendors','Partners'],['tests','Tests'],['hos','Shift reviews']]:page==='work'?[['all','All work'],['Project','Projects'],['Preventive maintenance','Service'],['Safety / corrective action','Safety'],['Emergency preparedness','Drills'],['Training','Training'],['quotes','Quotes']]:page==='reports'?[['all','Overview'],['budgets','Budgets'],['expenses','Expenses'],['fuel','Fuel / IFTA'],['settings','Settings']]:[];$('filters').innerHTML=(tabs.length?`<div class="row tabs">${tabs.map(([v,l])=>btn(l,tab===v?'noop':'tab',v,tab===v)).join('')}</div>`:'')+`<div class="filters">${page!=='today'?`<input id="search" aria-label="Search records" placeholder="Search records…" value="${esc(query)}">`:''}<select id="site" aria-label="Filter by location"><option value="">All locations</option>${list('locations').map(l=>`<option value="${l.id}" ${site===l.id?'selected':''}>${esc(l.name)}</option>`).join('')}</select>${page==='work'&&tab!=='quotes'?`<select id="workFilter" aria-label="Work status">${['Open','All','Completed','Overdue'].map(s=>`<option ${s===workFilter?'selected':''}>${s}</option>`).join('')}</select>`:''}</div>`;if($('search'))$('search').oninput=e=>{query=e.target.value;renderView();};$('site').onchange=e=>{site=e.target.value;renderView();};if($('workFilter'))$('workFilter').onchange=e=>{workFilter=e.target.value;renderView();};}
-function render(){const titles={today:['Today','Priorities and next actions.'],assets:['Locations & assets','Type-specific fleet, equipment and facility records.'],people:['People & partners','Driver readiness and service relationships.'],work:['Work & projects','Report → assign → resolve → retain history.'],reports:['Reports & settings','Budgets, costs, fuel and data controls.']};$('title').textContent=titles[page][0];$('subtitle').textContent=titles[page][1];$('actions').innerHTML=page==='today'?btn('Report issue','issue','',true):page==='assets'?btn('Add asset / location','addAssets','',true):page==='people'?btn('Add','addPeople','',true):page==='work'?btn('Add work','new','work',true):btn('Add record','addReports','',true);filters();renderView();}
-function card(r){let detail=r.type==='assets'?`${TYPE[r.assetType]?.name||'Asset'}${r.subtype?' · '+r.subtype:''} · ${name(r.location)}`:r.type==='work'?`${name(r.asset)||name(r.location)||'Unassigned'} · ${r.category} · ${r.due||'No date'}`:r.type==='quotes'?`${name(r.vendor)} · ${name(r.work)} · ${money(r.amount)}`:['budgets','expenses'].includes(r.type)?`${r.category} · ${money(r.amount)} · ${r.date||r.year}`:r.type==='fuel'?`${r.date} · ${name(r.asset)} · ${r.state||''} · ${money(r.cost)}`:r.type==='tests'?`${name(r.person)} · ${r.date} · ${r.result}`:r.type==='hos'?`${name(r.person)} · ${r.date} · ${r.review||'Needs review'}`:r.type==='documents'?`${name(r.asset)||name(r.person)||name(r.location)} · ${r.due||'No date'}`:r.role||r.trade||r.address||r.contact||'';return `<article class="card"><div class="row spread"><div><h3>${esc(r.name)}</h3><small>${esc(detail)}</small></div>${r.status?pill(r.status,r.status==='Out of service'?'red':r.status==='Completed'?'green':''):''}</div><div class="row" style="margin-top:12px">${btn(r.type==='work'&&r.status!=='Completed'?'Continue':'Open','open',r.id)}${['locations','assets'].includes(r.type)?btn('Report issue','issue',r.id):''}</div></article>`;}
-function renderView(){if(page==='today'){const a=alerts();$('view').innerHTML=`<div class="metrics">${[['Needs attention',a.length],['Unavailable',list('assets').filter(matches).filter(r=>r.status==='Out of service').length],['Open work',list('work').filter(matches).filter(w=>w.status!=='Completed').length]].map(([l,n])=>`<div class="card"><small>${l}</small><div class="stat">${n}</div></div>`).join('')}</div><div class="row tabs">${btn('Schedule service','schedule')}${btn('Safety / drill','safety')}${btn('Add location','new','locations')}</div><h2>Next actions</h2>${a.map(x=>`<div class="card ${x.urgent?'urgent':''}"><div class="row spread"><div><h3>${esc(x.title)}</h3><small>${esc(x.detail)}</small></div>${btn('Review','open',x.r.id)}</div></div>`).join('')||'<div class="empty">No tracked actions due. Not a compliance clearance.</div>'}`;return;}if(page==='reports')return reports();let rows=[];if(page==='assets'){rows=S.records.filter(r=>['locations','assets','documents'].includes(r.type));if(tab==='fleet')rows=rows.filter(r=>r.type==='assets'&&['vehicle','trailer'].includes(r.assetType));else if(tab==='equipment')rows=rows.filter(r=>r.type==='assets'&&['powered','equipment','other'].includes(r.assetType));else if(tab==='facilities')rows=rows.filter(r=>r.type==='assets'&&['building','system'].includes(r.assetType));else if(tab!=='all')rows=rows.filter(r=>r.type===tab);}if(page==='people')rows=S.records.filter(r=>['people','vendors','tests','hos'].includes(r.type)&&(tab==='all'||tab===r.type));if(page==='work'){rows=S.records.filter(r=>tab==='quotes'?r.type==='quotes':r.type==='work'&&(tab==='all'||r.category===tab));if(tab!=='quotes')rows=rows.filter(r=>workFilter==='All'||workFilter==='Open'&&r.status!=='Completed'||workFilter==='Completed'&&r.status==='Completed'||workFilter==='Overdue'&&r.status!=='Completed'&&dueWork(r).overdue);}$('view').innerHTML=`<div class="${page==='work'?'':'grid'}">${rows.filter(matches).map(card).join('')||'<div class="empty">No matching records.</div>'}</div>`;}
-function openRecord(key){const r=rec(key);if(!r)return;let body=`<div class="row spread"><h2>${esc(r.name)}</h2>${btn('Close','close')}</div><p>${r.status?pill(r.status,r.status==='Out of service'?'red':''):''} <small>${esc(r.type==='assets'?TYPE[r.assetType]?.name:schemas[r.type]?.title)} · ${esc(name(siteOf(r)))}</small></p><div class="row tabs">${btn(r.type==='work'?'Update / complete':'Edit','edit',key,true)}`;if(['assets','locations'].includes(r.type))body+=btn('Report issue','issue',key)+btn('Schedule work','schedule',key)+btn('Add document','doc',key);if(r.type==='locations'||r.type==='assets'&&r.assetType==='building')body+=btn('Add system / equipment','childAsset',key);if(r.type==='people')body+=btn('Log test','test',key)+btn('Shift review','hos',key)+btn('Training task','training',key)+btn('Document','doc',key);if(r.type==='work')body+=btn('Add task','task',key)+btn('Add quote','quote',key);if(r.type==='assets'&&['vehicle','powered','other'].includes(r.assetType))body+=btn('Record fuel','fuel',key);body+='</div>';
-if(r.type==='assets'){const m=meters(r);const cost=costs().filter(c=>c.asset===key).reduce((s,c)=>s+c.amount,0);const downtime=Number(r.downtimeHours||0)+(r.outSince?(Date.now()-Date.parse(r.outSince))/3600000:0);body+=`<div class="help">${esc(TYPE[r.assetType].desc)}${m.miles?'<br>Mileage: '+esc(r.miles??'Not recorded'):''}${m.hours?'<br>Operating hours: '+esc(r.hours??'Not recorded'):''}<br>Recorded costs: ${money(cost)} · Replacement estimate: ${money(r.replacement)}<br>Tracked downtime: ${Math.max(0,downtime).toFixed(1)} hours</div>`;if(r.assetType==='building')body+=`<p>${esc(r.address||'No address recorded')}<br>${esc(r.siteContact||'')} · ${esc(r.phone||'')}</p><details><summary>Emergency information</summary><p>${esc(r.emergency||'Add verified emergency procedures.')}</p><p>${esc(r.shutoffs||'')}</p>${r.plan&&validURL(r.plan)?`<a href="${esc(r.plan)}" target="_blank" rel="noopener noreferrer">Open plan</a>`:''}</details>`;const children=list('assets').filter(a=>a.parentAsset===key);if(children.length)body+=`<details open><summary>Building systems / child assets (${children.length})</summary>${children.map(card).join('')}</details>`;}
-if(r.type==='locations')body+=`<div class="help">${esc(r.address||'')}<br>${esc(r.contact||'')} · ${esc(r.phone||'')}<br>${esc(r.emergency||'Add verified emergency contacts.')}</div><details open><summary>Buildings, systems and equipment</summary>${list('assets').filter(a=>a.location===key).map(card).join('')||'<p>No linked assets.</p>'}</details>`;
-const linked=list('work').filter(w=>r.type==='assets'?w.asset===key:r.type==='locations'?siteOf(w)===key:r.type==='people'?w.person===key:r.type==='vendors'?w.vendor===key:r.type==='work'?w.parent===key:false);if(linked.length)body+=`<details open><summary>${r.type==='work'?'Project tasks':'Linked work'} (${linked.length})</summary>${linked.map(card).join('')}</details>`;
-if(r.type==='work'){body+=`<p>${esc(r.notes||'No findings yet.')}</p><div class="help">Due ${esc(r.due||'not set')} · ${esc(name(r.vendor)||r.owner||'Unassigned')}<br>Estimate ${money(r.estimate)} · Actual ${money(r.cost)}<br>Approval ${esc(r.approval||'Not requested')} · ${esc(r.approvedBy||'')}</div><div class="row">${r.asset?btn('Open asset','open',r.asset):''}${r.parent?btn('Parent project','open',r.parent):''}${r.nextWorkId?btn('Next service','open',r.nextWorkId):''}</div>`;const qs=list('quotes').filter(q=>q.work===key);if(qs.length)body+=`<details open><summary>Quote comparison</summary><div class="table"><table><thead><tr><th>Vendor / price</th><th>Scope / lead</th><th>Terms / warranty</th><th>Risk / recommendation</th></tr></thead><tbody>${qs.map(q=>`<tr><td>${esc(name(q.vendor))}<br>${money(q.amount)}<br>${btn('Open','open',q.id)}</td><td>${esc(q.specs)}<br>${esc(q.lead)}</td><td>${esc(q.terms)}<br>${esc(q.warranty)}</td><td>${esc(q.risk)}<br>${esc(q.recommendation)}</td></tr>`).join('')}</tbody></table></div></details>`;}
-if(r.type==='people')body+=`<details open><summary>Test and shift records</summary>${S.records.filter(x=>['tests','hos'].includes(x.type)&&x.person===key).map(card).join('')||'<p>No entries.</p>'}</details>`;
-const docs=list('documents').filter(d=>d.asset===key||d.person===key||d.location===key||d.vendor===key);if(docs.length)body+=`<details><summary>Linked documents</summary>${docs.map(card).join('')}</details>`;
-const activeDetails=r.type==='assets'?normalizeAsset(r):r;body+=`<details><summary>Retained details</summary>${Object.entries(activeDetails).filter(([k,v])=>!['id','name','type','history','attachments','meterHistory'].includes(k)&&v!==''&&v!=null&&typeof v!=='object').map(([k,v])=>`<p><small>${esc(k)}</small><br>${esc(v)}</p>`).join('')}${r.url&&validURL(r.url)?`<a href="${esc(r.url)}" target="_blank" rel="noopener noreferrer">Open document</a>`:''}</details><details><summary>Attachments (${(r.attachments||[]).length})</summary>${(r.attachments||[]).map((f,i)=>`<p>${esc(f.name)} ${btn('Download','download',key+':'+i)}</p>`).join('')||'<p>No files.</p>'}</details><details><summary>History</summary>${(r.history||[]).slice().reverse().map(h=>`<div class="history">${esc(new Date(h.at).toLocaleString())}<br>${esc(h.text)}${h.details?'<pre style="white-space:pre-wrap">'+esc(JSON.stringify(h.details,null,2))+'</pre>':''}</div>`).join('')||'<p>No changes recorded.</p>'}<small>Editable local history, not an immutable audit trail.</small></details>`;modal(body);}
-function reports(){if(['budgets','expenses','fuel'].includes(tab)){const rows=list(tab).filter(matches);$('view').innerHTML=(tab==='fuel'?'<div class="help">Fuel/IFTA worksheet only. Dates identify year/quarter. No tax calculation, filing or automatic reconciliation. Do not duplicate trip mileage across receipts.</div>':'')+rows.map(r=>card(r)+(tab==='budgets'?`<div class="help">Recorded actual: ${money(budgetActual(r))} · Remaining: ${money(Number(r.amount||0)-budgetActual(r))}</div>`:'')).join('')+(rows.length?'':'<div class="empty">No entries.</div>');return;}
-if(tab==='settings'){$('view').innerHTML=`<div class="card"><h2>Carrier profile</h2><p>${esc(S.profile.type)}<br>International operations: ${esc(S.profile.international)}<br>USDOT: ${esc(S.profile.dot||'Not entered')} · MC: ${esc(S.profile.mc||'Optional / not entered')}</p><div class="help">Private own-goods interstate operations. Applicable safety, IFTA/registration, CDL/testing and HOS requirements require independent review. No international/customs workflow.</div>${btn('Edit profile','profile')}</div><div class="card"><h2>Data controls</h2><div class="row">${btn('Export backup','export')}${btn('Restore version-5 backup','import')}${btn('Reset demo','reset')}</div><details><summary>Scope and limitations</summary><p>No Firebase, user permissions, immutable audit trail, external reminders, ELD integration, tax filing or approval enforcement. Browser-only demo. No older-version automatic migration. Do not enter actual employee/confidential information. Exports include embedded attachments; keep them private.</p></details></div>`;return;}
-const year=String(new Date().getFullYear()),rows=costs().filter(r=>(!site||r.location===site)&&String(r.date||'').startsWith(year));$('view').innerHTML=`<div class="metrics"><div class="card"><small>Recorded cost · ${year}</small><div class="stat">${money(rows.reduce((s,r)=>s+r.amount,0))}</div></div><div class="card"><small>Open work</small><div class="stat">${list('work').filter(matches).filter(w=>w.status!=='Completed').length}</div></div><div class="card"><small>Facilities / systems</small><div class="stat">${list('assets').filter(matches).filter(a=>['building','system'].includes(a.assetType)).length}</div></div></div><div class="card"><h2>Recorded costs by category</h2>${COSTCATS.map(c=>`<p>${c}: ${money(rows.filter(r=>r.category===c).reduce((s,r)=>s+r.amount,0))}</p>`).join('')}<small>Work actuals + separate expenses + fuel. Do not duplicate invoices or child-task costs on parent projects. Open project estimates may overlap child estimates; no automatic consolidation.</small></div><div class="card"><h2>Budgets</h2>${list('budgets').filter(matches).map(b=>`<p>${esc(b.name)} · ${esc(b.year)} · Budget ${money(b.amount)} · Actual ${money(budgetActual(b))} ${btn('Open','open',b.id)}</p>`).join('')||'No budgets.'}</div>`;}
-function menu(title,items){modal(`<h2>${title}</h2><div class="grid">${items.map(([l,t])=>btn(l,'new',t)).join('')}</div><p style="margin-top:18px">${btn('Cancel','close')}</p>`);}
-function exportData(){downloadData(JSON.stringify({format:'dwyer-typed-workflow-v5',exportedAt:new Date().toISOString(),state:S},null,2),'dwyer-workflow-v5-backup.json','application/json');}
-function importData(){modal(`<h2>Restore version-5 demo backup</h2><p>Replaces current records. Export first. Only restore your own trusted files.</p><input type="file" id="importFile" accept="application/json"><p>${btn('Close','close')}</p>`);$('importFile').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>6*1024*1024)throw Error('Backup exceeds 6 MB.');const b=JSON.parse(await f.text());if(b.format!=='dwyer-typed-workflow-v5'||b.state?.version!==5||!Array.isArray(b.state.records)||!b.state.profile)throw Error('Only version-5 backups are supported.');const seen=new Set();for(const r of b.state.records){if(typeof r.id!=='string'||!/^[\w-]+$/.test(r.id)||seen.has(r.id)||typeof r.name!=='string'||!(schemas[r.type]||r.type==='assets'))throw Error('Invalid record.');seen.add(r.id);if(r.type==='assets'){if(!TYPE[r.assetType])throw Error('Invalid asset type.');const clean=normalizeAsset(r);if(Object.keys(r).some(k=>!(k in clean)))throw Error('Asset has incompatible active fields.');}if(r.attachments&&(!Array.isArray(r.attachments)||r.attachments.length>5))throw Error('Invalid attachments.');for(const a of r.attachments||[])if(typeof a.data!=='string'||a.data.length>420000||!/^data:(image\/[\w.+-]+|application\/pdf);base64,/.test(a.data))throw Error('Invalid attachment format.');}if(confirm('Replace this demo with the backup?')&&commit(b.state)){close(true);render();}}catch(e){error(e.message);}};}
-function profile(){modal(`<h2>Carrier profile</h2><form id="form">${field(['dot','USDOT number'],S.profile.dot)}${field(['mc','MC authority (optional)'],S.profile.mc)}${field(['notes','Notes','textarea'],S.profile.notes)}${footer()}</form>`,d=>{const n=clone();n.profile={...n.profile,...d};if(commit(n)){close(true);render();}});}
-function action(a,key){if(['noop','draftDownload','draftRemove'].includes(a))return;if(a==='close')return close();if(busy)return error('Wait for attachment processing.');if($('modal').open&&dirty&&!confirm('Discard unsaved edits?'))return;switch(a){case'tab':tab=key;query='';render();break;case'new':editor(key,'',{location:site});break;case'open':openRecord(key);break;case'edit':editor(rec(key).type,key);break;case'issue':{const r=rec(key);editor('work','',{asset:r?.type==='assets'?key:'',location:r?.type==='locations'?key:siteOf(r)||site,category:'Repair',due:day()});break;}case'schedule':{const r=rec(key);editor('work','',{asset:r?.type==='assets'?key:'',location:r?.type==='locations'?key:siteOf(r)||site,category:'Preventive maintenance',status:'Scheduled',due:day(7)});break;}case'safety':editor('work','',{category:'Safety / corrective action',location:site,due:day()});break;case'childAsset':{const r=rec(key);assetForm('',{assetType:'system',location:r.type==='locations'?key:r.location,parentAsset:r.type==='assets'?key:''});break;}case'task':editor('work','',{parent:key,asset:rec(key)?.asset,location:siteOf(rec(key)),category:'Project task'});break;case'quote':editor('quotes','',{work:key});break;case'doc':{const r=rec(key);editor('documents','',{location:siteOf(r),asset:r.type==='assets'?key:'',person:r.type==='people'?key:''});break;}case'test':editor('tests','',{person:key,name:'Test · '+name(key)});break;case'hos':editor('hos','',{person:key,location:siteOf(rec(key)),name:'Shift review · '+name(key)});break;case'training':editor('work','',{person:key,location:siteOf(rec(key)),category:'Training'});break;case'fuel':editor('fuel','',{asset:key});break;case'addAssets':menu('Add location or asset',[['Location / branch','locations'],['Building, system, vehicle or equipment','assets'],['Document / certificate','documents']]);break;case'addPeople':menu('Add people or partner record',[['Person / driver','people'],['Vendor / contractor','vendors'],['Test log','tests'],['Shift review','hos']]);break;case'addReports':menu('Add financial record',[['Expense / utility bill','expenses'],['Annual budget','budgets'],['Fuel / mileage','fuel'],['Quotation','quotes']]);break;case'profile':profile();break;case'export':exportData();break;case'import':importData();break;case'reset':if(confirm('Discard edits and restore fictional sample records?')&&commit(seed())){close(true);render();}break;case'download':{const [id,i]=key.split(':');const f=rec(id)?.attachments?.[Number(i)];if(f)downloadFile(f);break;}}}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(b)action(b.dataset.action,b.dataset.id||'');});$('nav').onchange=e=>jump(e.target.value);$('modal').addEventListener('cancel',e=>{e.preventDefault();close();});window.addEventListener('beforeunload',e=>{if(dirty||busy){e.preventDefault();e.returnValue='';}});render();if(warning)notice(warning,true);
+const METER = { miles: { label: 'Odometer', unit: 'mi', act: 'Update odometer' }, hours: { label: 'Hour meter', unit: 'hrs', act: 'Update hours' } };
+
+const BCATS = { utilities: 'Utilities', safety: 'Safety', structural: 'Structural' };
+const BITEMS = {
+  electric: { cat: 'utilities', name: 'Electric service', fields: [['provider', 'Utility provider'], ['account', 'Account #'], ['meterNo', 'Meter #'], ['amps', 'Service size (amps)', 'number'], ['panel', 'Main panel location']], reqs: ['elecInsp'] },
+  gas: { cat: 'utilities', name: 'Natural gas / propane', fields: [['provider', 'Utility provider'], ['account', 'Account #'], ['meterNo', 'Meter #'], ['shutoff', 'Shutoff location']], reqs: ['gasCheck'] },
+  water: { cat: 'utilities', name: 'Water & sewer', fields: [['provider', 'Utility provider'], ['account', 'Account #'], ['meterNo', 'Meter #'], ['shutoff', 'Main shutoff location']], reqs: ['backflow'] },
+  hvac: { cat: 'utilities', name: 'HVAC unit', fields: [F.make, F.model, F.serial, ['serves', 'Area served'], ['filter', 'Filter size']], reqs: ['hvacPM'] },
+  heater: { cat: 'utilities', name: 'Boiler / unit heater', fields: [F.make, F.model, F.serial, ['serves', 'Area served']], reqs: ['heaterInsp'] },
+  generator: { cat: 'utilities', name: 'Backup generator', fields: [F.make, F.model, F.serial, ['kw', 'Output (kW)', 'number'], ['fuel', 'Fuel', ['Natural gas', 'Diesel', 'Propane']]], reqs: ['genTest', 'genService'] },
+  compressor: { cat: 'utilities', name: 'Air compressor', fields: [F.make, F.model, F.serial, ['hp', 'Horsepower', 'number']], reqs: ['compService'] },
+  extinguishers: { cat: 'safety', name: 'Fire extinguishers', fields: [['qty', 'Number of extinguishers', 'number'], ['where', 'Locations', 'textarea']], reqs: ['extMonthly', 'extAnnual'] },
+  sprinkler: { cat: 'safety', name: 'Sprinkler system', fields: [['stype', 'System type', ['Wet', 'Dry', 'Pre-action']], ['riser', 'Riser / control valve location']], reqs: ['sprinklerQ'] },
+  alarm: { cat: 'safety', name: 'Fire alarm system', fields: [['panel', 'Panel location'], ['monitor', 'Monitoring company']], reqs: ['alarmAnnual'] },
+  emlights: { cat: 'safety', name: 'Emergency lights & exit signs', fields: [['qty', 'Number of fixtures', 'number']], reqs: ['emMonthly', 'emAnnual'] },
+  eyewash: { cat: 'safety', name: 'Eyewash / safety shower', fields: [['where', 'Location']], reqs: ['eyewashWeekly'] },
+  firstaid: { cat: 'safety', name: 'First aid kit / AED', fields: [['where', 'Location'], ['aed', 'Includes AED', ['No', 'Yes']]], reqs: ['firstAidCheck'] },
+  evac: { cat: 'safety', name: 'Evacuation plan & fire drill', fields: [['assembly', 'Assembly point'], ['posted', 'Plan posted at']], reqs: ['drill'] },
+  roof: { cat: 'structural', name: 'Roof', fields: [['rtype', 'Roof type', ['Membrane (EPDM / TPO)', 'Metal', 'Built-up', 'Shingle']], ['installed', 'Year installed', 'number'], ['area', 'Area (sq ft)', 'number']], reqs: ['roofInsp'] },
+  dock: { cat: 'structural', name: 'Dock door / leveler', fields: [['door', 'Door #'], F.make, ['ltype', 'Leveler type', ['Hydraulic', 'Mechanical', 'Air-powered', 'None']]], reqs: ['dockPM'] },
+  overhead: { cat: 'structural', name: 'Overhead door', fields: [['door', 'Door #'], F.make, ['size', 'Size (W x H)']], reqs: ['doorPM'] },
+  racking: { cat: 'structural', name: 'Storage / slab racking', fields: [['rtype', 'Rack type', ['A-frame slab rack', 'Slab bundle rack', 'Pallet rack', 'Cantilever rack']], ['capacity', 'Rated capacity per bay (lb)', 'number'], ['where', 'Area / aisle']], reqs: ['rackInsp'] },
+  lot: { cat: 'structural', name: 'Parking lot / yard', fields: [['surface', 'Surface', ['Asphalt', 'Concrete', 'Gravel']], ['area', 'Area (sq ft)', 'number']], reqs: ['lotInsp'] },
+  structure: { cat: 'structural', name: 'Walls, floors & foundation', fields: [['construct', 'Construction'], ['known', 'Known issues', 'textarea']], reqs: ['structInsp'] }
+};
+
+const STAFF_CERTS = [['forklift', 'Operates forklifts / powered pallet jacks', 'forkliftEval'], ['crane', 'Operates cranes / hoists', 'craneCert'], ['aerial', 'Operates aerial / scissor lifts', 'aerialTrain'], ['firstAid', 'First aid / CPR responder', 'firstAid']];
+const WO_STATUS = ['Open', 'Scheduled', 'In progress', 'Waiting on parts', 'Waiting on vendor', 'Completed'];
+const PRIORITY = ['Routine', 'Urgent', 'Safety critical'];
+const VENDOR_SERVICES = ['Truck & trailer repair', 'Equipment repair', 'Crane service', 'Fire protection', 'HVAC / mechanical', 'Electrical', 'Plumbing', 'Doors & docks', 'Roofing', 'Paving / grounds', 'Snow removal', 'Utility', 'Parts supplier', 'Other'];
+const TEST_REASONS = ['Pre-employment', 'Random', 'Post-accident', 'Reasonable suspicion', 'Return-to-duty', 'Follow-up'];
+const PAGES = { today: ['Today', 'Everything due, overdue or open — each button goes straight to the form.'], drivers: ['Drivers', 'CDL drivers and driver qualification.'], staff: ['Staff', 'Employees who are not drivers, and their equipment certifications.'], vendors: ['Vendors', 'Outside companies: insurance, contracts and the work they do.'], buildings: ['Buildings', 'Each building’s utilities, safety and structural items.'], assets: ['Assets', 'Trucks, trailers and material-handling equipment.'], work: ['Work orders', 'Repairs and service: report, assign, complete.'], reports: ['Reports & data', 'Spending, testing rates, backup and demo controls.'] };
+
+/* ============================================================
+   CORE — utilities, storage, due-date logic
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = () => (globalThis.crypto && crypto.randomUUID ? crypto.randomUUID() : 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2));
+const pad = n => String(n).padStart(2, '0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const today = () => iso(new Date());
+function addDays(ds, n) { const d = new Date((ds || today()) + 'T12:00:00'); d.setDate(d.getDate() + Number(n)); return iso(d); }
+function addMonths(ds, m) { const d = new Date((ds || today()) + 'T12:00:00'), day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + Number(m)); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); d.setDate(Math.min(day, last)); return iso(d); }
+function nextFrom(ds, every) { return every[1] === 'd' ? addDays(ds, every[0]) : addMonths(ds, every[0]); }
+function everyText(every) { const [n, u] = every; if (u === 'd') return n === 7 ? 'weekly' : `every ${n} days`; return n === 1 ? 'monthly' : n === 3 ? 'quarterly' : n === 6 ? 'every 6 months' : n === 12 ? 'yearly' : n % 12 === 0 ? `every ${n / 12} years` : `every ${n} months`; }
+const daysUntil = ds => Math.round((new Date(ds + 'T12:00:00') - new Date(today() + 'T12:00:00')) / 86400000);
+const fmt = ds => ds ? new Date(ds + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+const money = v => Number(v || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+const num = v => Number(v || 0).toLocaleString('en-US');
+const validDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
+const pill = (t, c = '') => `<span class="pill ${c}">${esc(t)}</span>`;
+function B(label, a, data = {}, cls = '') { return `<button type="button" class="btn ${cls}" data-a="${a}"${Object.entries(data).map(([k, v]) => ` data-${k}="${esc(v)}"`).join('')}>${esc(label)}</button>`; }
+
+let S = null, warning = '';
+function load() {
+  try { const raw = localStorage.getItem(KEY); if (raw) { const d = JSON.parse(raw); if (d && d.version === 6) { S = d; return; } } } catch (e) { warning = 'Saved data could not be read, so the demo records were loaded. ' + e.message; }
+  S = seed(); try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { warning = 'This browser is blocking storage; changes will not be kept after you close the page.'; }
+}
+function commit(next, msg) {
+  try { localStorage.setItem(KEY, JSON.stringify(next)); S = next; notice(msg || 'Saved.'); return true; }
+  catch (e) { formError('Save failed — nothing was changed. Storage may be full (attachments are the usual cause). Export a backup, then remove some attachments. Details: ' + e.message); return false; }
+}
+const clone = () => JSON.parse(JSON.stringify(S));
+function notice(msg, err = false) { const n = $('notice'); n.hidden = false; n.textContent = msg; n.className = err ? 'error' : ''; clearTimeout(notice.t); if (!err) notice.t = setTimeout(() => { n.hidden = true; }, 6000); }
+function formError(msg) { const e = $('formError'); if (e) { e.hidden = false; e.textContent = msg; e.scrollIntoView({ block: 'nearest' }); } else notice(msg, true); return false; }
+const get = (col, id) => (S[col] || []).find(r => r.id === id);
+const getIn = (db, col, id) => (db[col] || []).find(r => r.id === id);
+const hist = (r, text) => { r.hist = r.hist || []; r.hist.push({ at: new Date().toISOString(), text }); };
+
+/* ---------- names / labels */
+const COL_NAME = { drivers: 'Driver', staff: 'Staff member', vendors: 'Vendor', buildings: 'Building', bitems: 'Building item', assets: 'Asset', work: 'Work order', tests: 'Drug / alcohol test' };
+function title(col, r) { if (!r) return ''; if (col === 'assets') return r.unit; if (col === 'bitems') return r.name; return r.name || r.title || ''; }
+function assetLabel(a) { return a ? `${a.unit} · ${ASSET_TYPES[a.type].name}` : ''; }
+function bitemLabel(i) { const b = get('buildings', i.building); return `${i.name} · ${b ? b.name : ''}`; }
+function targetOf(w) { const [t, id] = (w.target || '').split(':'); return { t, id, rec: t === 'asset' ? get('assets', id) : t === 'bitem' ? get('bitems', id) : t === 'building' ? get('buildings', id) : null }; }
+function targetLabel(w) { const { t, rec } = targetOf(w); if (!rec) return 'Missing record'; return t === 'asset' ? assetLabel(rec) : t === 'bitem' ? bitemLabel(rec) : rec.name + ' · whole building'; }
+function buildingOfTarget(w) { const { t, rec } = targetOf(w); if (!rec) return ''; return t === 'building' ? rec.id : t === 'bitem' ? rec.building : rec.basedAt || ''; }
+
+/* ---------- requirements */
+function reqKeys(col, r) {
+  if (!r) return [];
+  if (col === 'drivers') return ['medical', 'cdl', 'mvr', 'clearinghouse'];
+  if (col === 'staff') return STAFF_CERTS.filter(c => r[c[0]]).map(c => c[2]);
+  if (col === 'vendors') return r.hasContract ? ['coi', 'contract'] : ['coi'];
+  if (col === 'assets') return ASSET_TYPES[r.type].reqs;
+  if (col === 'bitems') return BITEMS[r.kind].reqs;
+  return [];
+}
+function state(next) { if (!next) return 'missing'; const n = daysUntil(next); return n < 0 ? 'overdue' : n <= SOON_DAYS ? 'soon' : 'ok'; }
+function dueText(next) { if (!next) return 'Not recorded'; const n = daysUntil(next); return n < 0 ? `Overdue ${-n} day${n === -1 ? '' : 's'} · was due ${fmt(next)}` : n === 0 ? `Due today · ${fmt(next)}` : `Due ${fmt(next)} · in ${n} day${n === 1 ? '' : 's'}`; }
+function statePill(st) { return st === 'overdue' ? pill('Overdue', 'red') : st === 'missing' ? pill('Not recorded', 'red') : st === 'soon' ? pill('Due soon', 'amber') : pill('Current', 'green'); }
+
+/* ---------- preventive maintenance */
+function pmInfo(a) {
+  const T = ASSET_TYPES[a.type]; if (!T.pm) return null;
+  const last = a.pmLast || {};
+  if (T.meter) {
+    const every = Number(a.pmEvery || T.pm.every), unit = METER[T.meter].unit;
+    if (last.meter == null || last.meter === '') return { st: 'missing', text: 'Last PM not recorded', label: `PM service (every ${num(every)} ${unit})` };
+    const nextAt = Number(last.meter) + every, left = nextAt - Number(a.meter || 0);
+    const st = left <= 0 ? 'overdue' : left <= every * 0.1 ? 'soon' : 'ok';
+    return { st, nextAt, left, label: `PM service (every ${num(every)} ${unit})`, text: left <= 0 ? `Overdue by ${num(-left)} ${unit} · was due at ${num(nextAt)} ${unit}` : `Due at ${num(nextAt)} ${unit} · ${num(left)} ${unit} to go` + (last.date ? ` · last done ${fmt(last.date)}` : '') };
+  }
+  const months = Number(a.pmMonths || T.pm.months); const lbl = `${T.pm.label || 'PM service'} (${everyText([months, 'm'])})`;
+  if (!last.date) return { st: 'missing', text: 'Last service not recorded', label: lbl };
+  const next = addMonths(last.date, months); return { st: state(next), next, label: lbl, text: dueText(next) + ` · last done ${fmt(last.date)}` };
+}
+
+/* ---------- open work for a target */
+const openWork = () => S.work.filter(w => w.status !== 'Completed');
+const workFor = (t, id) => S.work.filter(w => w.target === t + ':' + id);
+function preTestMissing(d) { return !S.tests.some(t => t.driver === d.id && t.reason === 'Pre-employment' && t.result === 'Negative'); }
+
+/* ---------- the action list (Today) */
+function actionItems() {
+  const out = [];
+  const push = o => out.push(o);
+  const reqItems = (col, r, where) => { for (const k of reqKeys(col, r)) { const d = (r.due || {})[k] || {}; const st = state(d.next); if (st !== 'ok') push({ st, date: d.next || '0000', col, id: r.id, title: `${title(col, r)} — ${REQ[k].label}`, detail: (where ? where + ' · ' : '') + dueText(d.next), act: REQ[k].act, a: 'req', data: { col, id: r.id, k } }); } };
+  S.drivers.filter(d => d.status !== 'Inactive').forEach(d => {
+    reqItems('drivers', d, 'Driver');
+    if (preTestMissing(d)) push({ st: 'missing', date: '0000', col: 'drivers', id: d.id, title: `${d.name} — Pre-employment drug test`, detail: 'Driver · no negative pre-employment result on file — must not drive until received', act: 'Log pre-employment test', a: 'test', data: { driver: d.id, reason: 'Pre-employment' } });
+  });
+  S.staff.filter(s => s.status !== 'Inactive').forEach(s => reqItems('staff', s, 'Staff · ' + (s.position || '')));
+  S.vendors.filter(v => v.status !== 'Inactive').forEach(v => reqItems('vendors', v, 'Vendor · ' + (v.service || '')));
+  S.assets.filter(a => a.status !== 'Retired').forEach(a => {
+    reqItems('assets', a, ASSET_TYPES[a.type].name);
+    const p = pmInfo(a); if (p && p.st !== 'ok') push({ st: p.st, date: p.next || (p.st === 'overdue' ? '0001' : '9998'), col: 'assets', id: a.id, title: `${a.unit} — ${p.label}`, detail: ASSET_TYPES[a.type].name + ' · ' + p.text, act: 'Record PM service', a: 'pm', data: { id: a.id } });
+  });
+  S.bitems.forEach(i => { const b = get('buildings', i.building); reqItems('bitems', i, `${b ? b.name : ''} · ${BCATS[BITEMS[i.kind].cat]}`); });
+  openWork().forEach(w => {
+    const late = w.due && w.due < today(); const tgt = targetOf(w);
+    const oos = tgt.t === 'asset' && tgt.rec && tgt.rec.status === 'Out of service' && w.oos;
+    push({ st: late || w.priority !== 'Routine' || oos ? 'overdue' : 'soon', wo: true, date: w.due || '9999', col: 'work', id: w.id, title: `Work order — ${w.title}`, detail: `${targetLabel(w)} · ${w.priority} · ${w.status}${oos ? ' · UNIT OUT OF SERVICE' : ''}${w.due ? ' · ' + (late ? 'past target ' : 'target ') + fmt(w.due) : ''}`, act: 'Update work order', a: 'wo', data: { id: w.id } });
+  });
+  const rank = { overdue: 0, missing: 1, soon: 2 };
+  return out.sort((x, y) => rank[x.st] - rank[y.st] || String(x.date).localeCompare(String(y.date)));
+}
+function worstState(col, r) {
+  const sts = reqKeys(col, r).map(k => state(((r.due || {})[k] || {}).next));
+  if (col === 'assets') { const p = pmInfo(r); if (p) sts.push(p.st); }
+  if (col === 'drivers' && preTestMissing(r)) sts.push('missing');
+  return sts.includes('overdue') ? 'overdue' : sts.includes('missing') ? 'missing' : sts.includes('soon') ? 'soon' : 'ok';
+}
+/* the single most urgent action for a record (used on list cards) */
+function topAction(col, r) { const it = actionItems().filter(x => x.col === col && x.id === r.id); return it[0] || null; }
+
+/* ============================================================
+   PAGES
+   ============================================================ */
+let page = 'today', todayFilter = 'all', assetFilter = 'all', woFilter = 'open', q = { drivers: '', staff: '', vendors: '', buildings: '', assets: '', work: '' };
+function render() {
+  $('nav').value = page; $('title').textContent = PAGES[page][0]; $('subtitle').textContent = PAGES[page][1];
+  const add = { today: B('Report a problem', 'woNew', {}, 'primary'), drivers: B('Add driver', 'edit', { col: 'drivers' }, 'primary'), staff: B('Add staff member', 'edit', { col: 'staff' }, 'primary'), vendors: B('Add vendor', 'edit', { col: 'vendors' }, 'primary'), buildings: B('Add building', 'edit', { col: 'buildings' }, 'primary'), assets: B('Add asset', 'assetPick', {}, 'primary'), work: B('New work order', 'woNew', {}, 'primary'), reports: '' };
+  $('actions').innerHTML = add[page];
+  const v = $('view');
+  if (page === 'today') v.innerHTML = pageToday();
+  else if (page === 'reports') v.innerHTML = pageReports();
+  else v.innerHTML = pageList(page);
+  const s = $('search'); if (s) { s.oninput = e => { q[page] = e.target.value; const pos = e.target.selectionStart; render(); const n = $('search'); n.focus(); n.setSelectionRange(pos, pos); }; }
+}
+function actionCard(x) {
+  return `<div class="card ${x.st}"><div class="item"><div><h3>${esc(x.title)}</h3><small>${esc(x.detail)}</small></div><div class="acts">${B(x.act, x.a, x.data, 'primary')}${B('Open ' + COL_NAME[x.col === 'work' ? targetCol(x.id) : x.col].toLowerCase(), 'view', { col: x.col === 'work' ? targetCol(x.id) : x.col, id: x.col === 'work' ? targetId(x.id) : x.id }, 'sm')}</div></div></div>`;
+}
+function targetCol(woId) { const t = targetOf(get('work', woId)).t; return t === 'asset' ? 'assets' : t === 'bitem' ? 'bitems' : 'buildings'; }
+function targetId(woId) { return targetOf(get('work', woId)).id; }
+function pageToday() {
+  const items = actionItems();
+  const oos = S.assets.filter(a => a.status === 'Out of service');
+  const groups = { overdue: items.filter(x => x.st === 'overdue' || x.st === 'missing'), soon: items.filter(x => x.st === 'soon' && !x.wo), work: items.filter(x => x.wo) };
+  const m = [['all', 'Everything', items.length], ['overdue', 'Overdue / missing', groups.overdue.length], ['soon', `Due in ${SOON_DAYS} days`, groups.soon.length], ['work', 'Open work orders', groups.work.length]];
+  let h = `<div class="metrics">${m.map(([k, l, n]) => `<button type="button" class="metric ${todayFilter === k ? 'on' : ''}" data-a="todayFilter" data-f="${k}"><small>${l}</small><div class="stat">${n}</div></button>`).join('')}</div>`;
+  if (oos.length) h += `<div class="warn"><b>Out of service:</b> ${oos.map(a => esc(a.unit)).join(', ')}</div>`;
+  const show = todayFilter === 'all' ? items : todayFilter === 'overdue' ? groups.overdue : todayFilter === 'soon' ? groups.soon : groups.work;
+  if (todayFilter === 'all') {
+    const sec = (t, arr) => arr.length ? `<div class="sect">${t}</div>${arr.map(actionCard).join('')}` : '';
+    h += sec('Overdue or missing', items.filter(x => (x.st === 'overdue' || x.st === 'missing') && !x.wo)) + sec('Open work orders', groups.work) + sec(`Due in the next ${SOON_DAYS} days`, groups.soon);
+    if (!items.length) h += '<div class="empty">Nothing due, overdue or open. Tracked dates only — this is not a compliance certification.</div>';
+  } else h += show.map(actionCard).join('') || '<div class="empty">Nothing in this group.</div>';
+  return h;
+}
+function listCard(col, r, items) {
+  const tk = col === 'assets' ? 'asset:' + r.id : col === 'bitems' ? 'bitem:' + r.id : null; const its = items.filter(x => (x.col === col && x.id === r.id) || (tk && x.wo && get('work', x.id)?.target === tk)), top = its[0], ws = worstState(col, r);
+  let sub = '', tags = '';
+  if (col === 'drivers') { const units = S.assets.filter(a => a.driver === r.id).map(a => a.unit); sub = `CDL ${r.cdlClass || '—'} · ${units.length ? 'Assigned: ' + units.join(', ') : 'No unit assigned'}`; }
+  if (col === 'staff') sub = `${r.position || ''} · ${get('buildings', r.building)?.name || 'No building'}`;
+  if (col === 'vendors') sub = `${r.service || ''} · ${r.contact || ''} ${r.phone || ''}`;
+  if (col === 'buildings') { const its2 = S.bitems.filter(i => i.building === r.id); const dueN = items.filter(x => x.col === 'bitems' && get('bitems', x.id)?.building === r.id).length; const wo = openWork().filter(w => buildingOfTarget(w) === r.id && !w.target.startsWith('asset')).length; sub = `${r.btype || ''} · ${r.address || ''}<br>${Object.keys(BCATS).map(c => `${BCATS[c]}: ${its2.filter(i => BITEMS[i.kind].cat === c).length}`).join(' · ')}`; tags = (dueN ? pill(dueN + ' due', 'amber') + ' ' : '') + (wo ? pill(wo + ' open work', 'amber') : ''); }
+  if (col === 'assets') { const T = ASSET_TYPES[r.type]; const idl = r.vin ? 'VIN …' + String(r.vin).slice(-6) : r.serial ? 'S/N ' + r.serial : ''; sub = `${T.name}${r.year || r.make ? ' · ' + [r.year, r.make, r.model].filter(Boolean).join(' ') : ''}${idl ? ' · ' + idl : ''}${T.meter ? ' · ' + num(r.meter) + ' ' + METER[T.meter].unit : ''}${r.driver ? ' · Driver: ' + (get('drivers', r.driver)?.name || '') : ''}`; tags = r.status !== 'In service' ? pill(r.status, 'red') : ''; }
+  if (col === 'work') { sub = `${targetLabel(r)} · ${r.priority} · ${r.vendor ? get('vendors', r.vendor)?.name || '' : r.assignee ? get('staff', r.assignee)?.name || '' : 'Unassigned'}${r.due ? ' · target ' + fmt(r.due) : ''}${r.status === 'Completed' ? ' · completed ' + fmt(r.completed) + (r.cost ? ' · ' + money(r.cost) : '') : ''}`; tags = pill(r.status, r.status === 'Completed' ? 'green' : r.priority !== 'Routine' ? 'red' : 'amber'); }
+  if (col !== 'work' && col !== 'buildings') tags = (ws !== 'ok' ? statePill(ws) + ' ' : r.status === 'Out of service' ? '' : pill('All current', 'green') + ' ') + tags;
+  if (r.status === 'Inactive') tags = pill('Inactive') + ' ' + tags;
+  const nameT = col === 'work' ? r.title : title(col, r);
+  const btns = col === 'work' ? B(r.status === 'Completed' ? 'View / edit work order' : 'Update work order', 'wo', { id: r.id }, 'primary')
+    : (top ? B(top.act, top.a, top.data, 'primary') : '') + B('Open ' + COL_NAME[col].toLowerCase(), 'view', { col, id: r.id }, top ? 'sm' : 'primary');
+  return `<div class="card ${col === 'work' ? (r.status === 'Completed' ? '' : r.priority !== 'Routine' ? 'overdue' : 'soon') : r.status === 'Out of service' ? 'overdue' : ws === 'ok' ? '' : ws}"><div class="item"><div><h3>${esc(nameT)} ${tags}</h3><small>${sub.includes('<br>') ? sub.split('<br>').map(esc).join('<br>') : esc(sub)}</small>${its.length > 1 ? `<br><small>${its.length} items need attention</small>` : ''}</div><div class="acts">${btns}</div></div></div>`;
+}
+function pageList(col) {
+  const items = actionItems();
+  let rows = S[col].slice();
+  let h = `<input id="search" class="search" type="search" placeholder="Search ${PAGES[col][0].toLowerCase()}" value="${esc(q[col])}" aria-label="Search">`;
+  if (col === 'assets') {
+    const groups = [['all', 'All']].concat(Object.keys(ASSET_TYPES).filter(t => S.assets.some(a => a.type === t)).map(t => [t, ASSET_TYPES[t].plural]));
+    h += `<div class="chips">${groups.map(([k, l]) => `<button type="button" class="chip ${assetFilter === k ? 'on' : ''}" data-a="assetFilter" data-f="${k}">${esc(l)} ${k === 'all' ? S.assets.length : S.assets.filter(a => a.type === k).length}</button>`).join('')}</div>`;
+    if (assetFilter !== 'all') rows = rows.filter(a => a.type === assetFilter);
+    rows.sort((a, b) => Object.keys(ASSET_TYPES).indexOf(a.type) - Object.keys(ASSET_TYPES).indexOf(b.type) || a.unit.localeCompare(b.unit, undefined, { numeric: true }));
+  }
+  if (col === 'work') {
+    h += `<div class="chips">${[['open', 'Open'], ['late', 'Past target'], ['done', 'Completed'], ['all', 'All']].map(([k, l]) => `<button type="button" class="chip ${woFilter === k ? 'on' : ''}" data-a="woFilter" data-f="${k}">${l}</button>`).join('')}</div>`;
+    rows = rows.filter(w => woFilter === 'all' || (woFilter === 'open' && w.status !== 'Completed') || (woFilter === 'done' && w.status === 'Completed') || (woFilter === 'late' && w.status !== 'Completed' && w.due && w.due < today()));
+    const pr = { 'Safety critical': 0, Urgent: 1, Routine: 2 };
+    rows.sort((a, b) => (a.status === 'Completed') - (b.status === 'Completed') || (a.status === 'Completed' ? String(b.completed).localeCompare(String(a.completed)) : pr[a.priority] - pr[b.priority] || String(a.due || '9').localeCompare(String(b.due || '9'))));
+  }
+  const term = q[col].trim().toLowerCase();
+  if (term) rows = rows.filter(r => JSON.stringify(r).toLowerCase().includes(term) || (col === 'work' && targetLabel(r).toLowerCase().includes(term)));
+  if (col !== 'assets' && col !== 'work') { const rank = { overdue: 0, missing: 1, soon: 2, ok: 3 }; rows.sort((a, b) => (a.status === 'Inactive') - (b.status === 'Inactive') || (col === 'buildings' ? 0 : rank[worstState(col, a)] - rank[worstState(col, b)]) || title(col, a).localeCompare(title(col, b))); }
+  return h + (rows.length ? `<div>${rows.map(r => listCard(col, r, items)).join('')}</div>` : `<div class="empty">No ${PAGES[col][0].toLowerCase()} ${term ? 'match “' + esc(term) + '”' : 'yet'}.</div>`);
+}
+function pageReports() {
+  const yr = String(new Date().getFullYear()), done = S.work.filter(w => w.status === 'Completed' && String(w.completed).startsWith(yr));
+  const sum = (arr) => arr.reduce((s, w) => s + Number(w.cost || 0), 0);
+  const byAsset = S.assets.map(a => [a, done.filter(w => w.target === 'asset:' + a.id)]).filter(x => x[1].length);
+  const byBldg = S.buildings.map(b => [b, done.filter(w => buildingOfTarget(w) === b.id && !w.target.startsWith('asset'))]).filter(x => x[1].length);
+  const byVendor = S.vendors.map(v => [v, done.filter(w => w.vendor === v.id)]).filter(x => x[1].length);
+  const tbl = (head, rows) => `<div class="table"><table><thead><tr>${head.map((h, i) => `<th class="${i ? 'n' : ''}">${h}</th>`).join('')}</tr></thead><tbody>${rows.join('') || `<tr><td colspan="${head.length}">No completed work with costs this year.</td></tr>`}</tbody></table></div>`;
+  const active = S.drivers.filter(d => d.status !== 'Inactive').length;
+  const rnd = S.tests.filter(t => t.reason === 'Random' && String(t.date).startsWith(yr));
+  const rDrug = rnd.filter(t => t.substance !== 'Alcohol').length, rAlc = rnd.filter(t => t.substance !== 'Drug').length;
+  const pct = n => active ? Math.round(n / active * 100) : 0;
+  return `<div class="sect">Spending ${yr} — completed work orders and service records</div><p><b>${money(sum(done))}</b> total across ${done.length} completed jobs.</p>
+  <div class="grid"><div class="card"><h3>By asset</h3>${tbl(['Asset', 'Jobs', 'Cost'], byAsset.sort((a, b) => sum(b[1]) - sum(a[1])).map(([a, ws]) => `<tr><td>${B(a.unit, 'view', { col: 'assets', id: a.id }, 'link')}<br><small>${esc(ASSET_TYPES[a.type].name)}</small></td><td class="n">${ws.length}</td><td class="n">${money(sum(ws))}</td></tr>`))}</div>
+  <div class="card"><h3>By building</h3>${tbl(['Building', 'Jobs', 'Cost'], byBldg.map(([b, ws]) => `<tr><td>${B(b.name, 'view', { col: 'buildings', id: b.id }, 'link')}</td><td class="n">${ws.length}</td><td class="n">${money(sum(ws))}</td></tr>`))}</div>
+  <div class="card"><h3>By vendor</h3>${tbl(['Vendor', 'Jobs', 'Cost'], byVendor.map(([v, ws]) => `<tr><td>${B(v.name, 'view', { col: 'vendors', id: v.id }, 'link')}</td><td class="n">${ws.length}</td><td class="n">${money(sum(ws))}</td></tr>`))}</div></div>
+  <div class="sect">DOT random testing ${yr}</div><div class="card"><p>Active drivers: <b>${active}</b>. Random drug tests: <b>${rDrug}</b> (${pct(rDrug)}% — minimum 50%). Random alcohol tests: <b>${rAlc}</b> (${pct(rAlc)}% — minimum 10%).</p><small>Rates use the current active-driver count as the pool. Your consortium or third-party administrator’s pool average is the official figure. Pre-employment, post-accident and other tests do not count toward random rates.</small></div>
+  <div class="sect">Backup and demo data</div><div class="card"><p>Everything is stored only in this browser. Export a backup file regularly.</p><div class="row">${B('Export backup (JSON)', 'export', {}, 'primary')}${B('Import backup', 'import')}${B('Reset demo data', 'reset', {}, 'danger')}</div><input type="file" id="importFile" accept="application/json,.json" hidden></div>`;
+}
+
+/* ============================================================
+   RECORD SCREENS (modal) — with a back stack
+   ============================================================ */
+let stack = [], formOpen = false, dirty = false;
+function showModal(head, body, foot = '') {
+  $('modal').innerHTML = `<div class="mhead">${head}</div><div class="mbody" id="mbody">${body}</div>${foot}`;
+  if (!$('modal').open) $('modal').showModal();
+  $('modal').scrollTop = 0;
+}
+function closeModal(force) { if (!force && formOpen && dirty && !confirm('Discard unsaved changes?')) return; stack = []; formOpen = false; dirty = false; if ($('modal').open) $('modal').close(); render(); }
+function openView(col, id, push = true) {
+  if (!$('modal').open || formOpen && !stack.length) stack = [];
+  formOpen = false; dirty = false;
+  const top = stack[stack.length - 1];
+  if (push && !(top && top.col === col && top.id === id)) stack.push({ col, id });
+  const r = get(col, id);
+  if (!r) { stack.pop(); notice('That record no longer exists.', true); return stack.length ? reshow() : closeModal(true); }
+  const back = stack.length > 1 ? B('← Back', 'back', {}, 'sm') : '';
+  const head = `<div>${back}<h2 style="margin-top:${back ? 8 : 0}px">${esc(col === 'work' ? r.title : title(col, r))}</h2><small>${esc(subtitle(col, r))}</small></div>${B('Close', 'close', {}, 'sm')}`;
+  showModal(head, VIEW[col](r));
+}
+function reshow() { const t = stack[stack.length - 1]; if (t) openView(t.col, t.id, false); else closeModal(true); }
+function subtitle(col, r) {
+  if (col === 'assets') return ASSET_TYPES[r.type].name + ' · ' + r.status + (r.basedAt ? ' · based at ' + (get('buildings', r.basedAt)?.name || '') : '');
+  if (col === 'bitems') return BCATS[BITEMS[r.kind].cat] + ' · ' + BITEMS[r.kind].name + ' · ' + (get('buildings', r.building)?.name || '');
+  if (col === 'drivers') return 'Driver' + (r.status === 'Inactive' ? ' · Inactive' : '');
+  if (col === 'staff') return 'Staff · ' + (r.position || '') + (r.status === 'Inactive' ? ' · Inactive' : '');
+  if (col === 'vendors') return 'Vendor · ' + (r.service || '');
+  if (col === 'buildings') return 'Building · ' + (r.btype || '');
+  return '';
+}
+function kv(pairs) { const p = pairs.filter(([, v]) => v !== '' && v != null); return p.length ? `<div class="kv">${p.map(([k, v]) => `<div><small>${esc(k)}</small>${esc(v)}</div>`).join('')}</div>` : ''; }
+function fieldsKV(defs, r) { return kv(defs.map(([k, l]) => [l, r[k] === 0 ? '0' : r[k] && (defs.find(d => d[0] === k)[2] === 'number') ? num(r[k]) : r[k]])); }
+function reqPanel(col, r, heading) {
+  const ks = reqKeys(col, r); if (!ks.length) return '';
+  return `<div class="panel"><h3>${esc(heading)}</h3>${ks.map(k => { const d = (r.due || {})[k] || {}, st = state(d.next), Q = REQ[k];
+    const extra = Q.extra.map(e => d[e[0]] ? `${e[1]}: ${d[e[0]]}` : '').filter(Boolean).join(' · ');
+    return `<div class="prow"><div><b>${esc(Q.label)}</b> ${statePill(st)}<br><small>${esc(dueText(d.next))}${d.last ? ' · last done ' + esc(fmt(d.last)) : ''} · ${esc(everyText(Q.every))}${extra ? '<br>' + esc(extra) : ''}</small></div><div class="acts">${B(Q.act, 'req', { col, id: r.id, k }, st === 'ok' ? '' : 'primary')}</div></div>`; }).join('')}</div>`;
+}
+function filesPanel(r) { const f = r.files || []; return f.length ? `<details><summary>Attachments (${f.length})</summary>${f.map((x, i) => `<p>${esc(x.label ? x.label + ' — ' : '')}${esc(x.name)} <small>${esc(fmt(x.at))}</small> ${B('Download', 'dl', { col: x.col || '', id: r.id, i }, 'sm')}</p>`).join('')}</details>` : ''; }
+function histPanel(r) { const h = (r.hist || []).slice().reverse(); return `<details><summary>History (${h.length})</summary>${h.map(x => `<div class="history">${esc(new Date(x.at).toLocaleString())}<br>${esc(x.text)}</div>`).join('') || '<p><small>No changes yet.</small></p>'}<small>Local history for this demo; not a tamper-proof audit trail.</small></details>`; }
+function workPanel(list, heading, prefill) {
+  const open = list.filter(w => w.status !== 'Completed'), done = list.filter(w => w.status === 'Completed').sort((a, b) => String(b.completed).localeCompare(String(a.completed)));
+  const row = w => `<div class="prow"><div><b>${esc(w.title)}</b> ${pill(w.status, w.status === 'Completed' ? 'green' : w.priority !== 'Routine' ? 'red' : 'amber')}<br><small>${w.status === 'Completed' ? esc(fmt(w.completed)) + (w.cost ? ' · ' + money(w.cost) : '') + (w.vendor ? ' · ' + esc(get('vendors', w.vendor)?.name || '') : '') + (w.performed ? '<br>' + esc(w.performed) : '') : esc(w.priority) + (w.due ? ' · target ' + esc(fmt(w.due)) : '') + (w.vendor ? ' · ' + esc(get('vendors', w.vendor)?.name || '') : w.assignee ? ' · ' + esc(get('staff', w.assignee)?.name || '') : ' · unassigned')}${prefill === null ? '<br>' + esc(targetLabel(w)) : ''}</small></div><div class="acts">${B(w.status === 'Completed' ? 'View / edit' : 'Update work order', 'wo', { id: w.id }, w.status === 'Completed' ? 'sm' : 'primary')}</div></div>`;
+  const total = done.reduce((s, w) => s + Number(w.cost || 0), 0);
+  return `<div class="panel"><h3>${esc(heading)} ${prefill ? B('Report a problem', 'woNew', { target: prefill }, 'sm') : ''}</h3>${open.map(row).join('') || '<div class="prow"><small>No open work orders.</small></div>'}</div>` +
+    (done.length ? `<details ${open.length ? '' : 'open'}><summary>Service & repair history (${done.length}) · ${money(total)}</summary><div class="panel">${done.map(row).join('')}</div></details>` : '');
+}
+const VIEW = {
+  drivers(r) {
+    const units = S.assets.filter(a => a.driver === r.id), tests = S.tests.filter(t => t.driver === r.id).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    return `<div class="row" style="margin-top:12px">${B('Edit driver info', 'edit', { col: 'drivers', id: r.id })}${B('Log drug / alcohol test', 'test', { driver: r.id })}</div>
+    ${kv([['CDL class', r.cdlClass], ['CDL #', r.cdlNo], ['CDL state', r.cdlState], ['Phone', r.phone], ['Hire date', r.hire ? fmt(r.hire) : ''], ['Home building', get('buildings', r.building)?.name || '']])}
+    ${reqPanel('drivers', r, 'Driver qualification')}
+    <div class="panel"><h3>Assigned units</h3>${units.map(a => `<div class="prow"><div><b>${esc(a.unit)}</b><br><small>${esc(ASSET_TYPES[a.type].name)} · ${esc([a.year, a.make, a.model].filter(Boolean).join(' '))}</small></div><div class="acts">${B('Open ' + a.unit, 'view', { col: 'assets', id: a.id }, 'sm')}${B('Unassign', 'unassign', { id: a.id }, 'sm')}</div></div>`).join('') || '<div class="prow"><small>No unit assigned.</small></div>'}<div class="prow">${B('Assign a unit', 'assignUnit', { driver: r.id }, 'sm')}</div></div>
+    <div class="panel"><h3>Drug & alcohol tests ${B('Log test', 'test', { driver: r.id }, 'sm')}</h3>${preTestMissing(r) ? `<div class="prow"><div><b>Pre-employment drug test</b> ${pill('Not on file', 'red')}<br><small>A negative pre-employment result is required before driving.</small></div><div class="acts">${B('Log pre-employment test', 'test', { driver: r.id, reason: 'Pre-employment' }, 'primary')}</div></div>` : ''}${tests.map(t => `<div class="prow"><div><b>${esc(t.reason)} · ${esc(t.substance)}</b> ${pill(t.result, t.result === 'Negative' ? 'green' : t.result === 'Positive' || t.result === 'Refusal' ? 'red' : 'amber')}<br><small>${esc(fmt(t.date))}${t.notes ? ' · ' + esc(t.notes) : ''}</small></div><div class="acts">${B('Edit test', 'test', { id: t.id }, 'sm')}</div></div>`).join('') || (preTestMissing(r) ? '' : '<div class="prow"><small>No tests logged.</small></div>')}</div>
+    ${r.notes ? `<p>${esc(r.notes)}</p>` : ''}${filesPanel(r)}${histPanel(r)}`;
+  },
+  staff(r) {
+    return `<div class="row" style="margin-top:12px">${B('Edit staff info', 'edit', { col: 'staff', id: r.id })}</div>${kv([['Position', r.position], ['Building', get('buildings', r.building)?.name || ''], ['Phone', r.phone], ['Hire date', r.hire ? fmt(r.hire) : '']])}
+    ${reqKeys('staff', r).length ? reqPanel('staff', r, 'Certifications & training') : `<div class="help">No equipment certifications apply. Use “Edit staff info” to mark the equipment this person operates.</div>`}
+    ${(() => { const w = S.work.filter(x => x.assignee === r.id && x.status !== 'Completed'); return w.length ? workPanel(w, 'Assigned work orders', null) : ''; })()}
+    ${r.notes ? `<p>${esc(r.notes)}</p>` : ''}${filesPanel(r)}${histPanel(r)}`;
+  },
+  vendors(r) {
+    return `<div class="row" style="margin-top:12px">${B('Edit vendor info', 'edit', { col: 'vendors', id: r.id })}</div>${kv([['Service', r.service], ['Contact', r.contact], ['Phone', r.phone], ['Email', r.email]])}
+    ${reqPanel('vendors', r, 'Insurance & contract')}${workPanel(S.work.filter(w => w.vendor === r.id), 'Work orders with this vendor', null)}${r.notes ? `<p>${esc(r.notes)}</p>` : ''}${filesPanel(r)}${histPanel(r)}`;
+  },
+  buildings(r) {
+    const items = S.bitems.filter(i => i.building === r.id);
+    const sec = cat => { const its = items.filter(i => BITEMS[i.kind].cat === cat); return `<div class="panel"><h3>${BCATS[cat]} (${its.length}) ${B({ utilities: 'Add utility', safety: 'Add safety item', structural: 'Add structural item' }[cat], 'bitemPick', { building: r.id, cat }, 'sm')}</h3>${its.map(i => { const ks = reqKeys('bitems', i); const sts = ks.map(k => ({ k, d: (i.due || {})[k] || {} })).map(x => ({ ...x, st: state(x.d.next) })); const rank = { overdue: 0, missing: 1, soon: 2, ok: 3 }; sts.sort((a, b) => rank[a.st] - rank[b.st] || String(a.d.next).localeCompare(String(b.d.next))); const top = sts[0]; const ow = openWork().filter(w => w.target === 'bitem:' + i.id).length;
+      return `<div class="prow"><div><b>${esc(i.name)}</b> ${top ? statePill(top.st) : ''} ${ow ? pill(ow + ' open work', 'amber') : ''}<br><small>${esc(BITEMS[i.kind].name)}${top ? ' · ' + esc(REQ[top.k].label) + ': ' + esc(dueText(top.d.next)) : ''}</small></div><div class="acts">${top ? B(REQ[top.k].act, 'req', { col: 'bitems', id: i.id, k: top.k }, top.st === 'ok' ? 'sm' : 'primary') : ''}${B('Open', 'view', { col: 'bitems', id: i.id }, 'sm')}</div></div>`; }).join('') || '<div class="prow"><small>None added yet.</small></div>'}</div>`; };
+    const bw = S.work.filter(w => w.target === 'building:' + r.id || (w.target.startsWith('bitem:') && get('bitems', w.target.slice(6))?.building === r.id));
+    return `<div class="row" style="margin-top:12px">${B('Edit building info', 'edit', { col: 'buildings', id: r.id })}${B('Report a building problem', 'woNew', { target: 'building:' + r.id })}</div>
+    ${kv([['Address', r.address], ['Site contact', get('staff', r.contact)?.name || ''], ['Phone', r.phone], ['Square feet', r.sqft ? num(r.sqft) : '']])}${r.emergency ? `<div class="help"><b>Emergency info:</b> ${esc(r.emergency)}</div>` : ''}
+    ${sec('utilities')}${sec('safety')}${sec('structural')}${workPanel(bw, 'Building work orders', 'building:' + r.id)}${histPanel(r)}`;
+  },
+  bitems(r) {
+    const K = BITEMS[r.kind];
+    return `<div class="row" style="margin-top:12px">${B('Edit item info', 'edit', { col: 'bitems', id: r.id })}${B('Open ' + (get('buildings', r.building)?.name || 'building'), 'view', { col: 'buildings', id: r.building }, 'sm')}</div>${fieldsKV(K.fields, r)}${kv([['Service vendor', get('vendors', r.vendor)?.name || '']])}
+    ${reqPanel('bitems', r, 'Inspections & service')}${workPanel(workFor('bitem', r.id), 'Work orders', 'bitem:' + r.id)}${r.notes ? `<p>${esc(r.notes)}</p>` : ''}${filesPanel(r)}${histPanel(r)}`;
+  },
+  assets(r) {
+    const T = ASSET_TYPES[r.type], M = T.meter ? METER[T.meter] : null, p = pmInfo(r), drv = get('drivers', r.driver);
+    return `<div class="row" style="margin-top:12px">${B('Edit asset info', 'edit', { col: 'assets', id: r.id })}${B('Report a problem', 'woNew', { target: 'asset:' + r.id })}</div>
+    ${r.status === 'Out of service' ? `<div class="warn"><b>Out of service.</b> Complete the work order to return it to service.</div>` : ''}
+    ${fieldsKV(T.fields, r)}${kv([['Based at', get('buildings', r.basedAt)?.name || '']])}
+    ${M ? `<div class="panel"><h3>${M.label}</h3><div class="prow"><div><b>${num(r.meter)} ${M.unit}</b><br><small>${r.meterDate ? 'Read ' + esc(fmt(r.meterDate)) : 'No reading date'}</small></div><div class="acts">${B(M.act, 'meter', { id: r.id }, 'primary')}</div></div></div>` : ''}
+    ${T.driver ? `<div class="panel"><h3>Assigned driver</h3><div class="prow"><div>${drv ? `<b>${esc(drv.name)}</b><br><small>CDL ${esc(drv.cdlClass || '—')}</small>` : '<small>No driver assigned.</small>'}</div><div class="acts">${drv ? B('Open ' + drv.name, 'view', { col: 'drivers', id: drv.id }, 'sm') : ''}${B(drv ? 'Change driver' : 'Assign driver', 'assignDriver', { id: r.id }, 'sm')}</div></div></div>` : ''}
+    ${p ? `<div class="panel"><h3>Preventive maintenance</h3><div class="prow"><div><b>${esc(p.label)}</b> ${statePill(p.st)}<br><small>${esc(p.text)}</small></div><div class="acts">${B('Record PM service', 'pm', { id: r.id }, p.st === 'ok' ? '' : 'primary')}</div></div></div>` : ''}
+    ${reqPanel('assets', r, 'Inspections & registration')}${workPanel(workFor('asset', r.id), 'Work orders', 'asset:' + r.id)}${r.notes ? `<p>${esc(r.notes)}</p>` : ''}${filesPanel(r)}${histPanel(r)}`;
+  }
+};
+
+/* ============================================================
+   FORMS
+   ============================================================ */
+function opts(col, filter) { return (S[col] || []).filter(filter || (() => true)).map(r => [r.id, title(col, r)]).sort((a, b) => a[1].localeCompare(b[1], undefined, { numeric: true })); }
+function field([k, label, type = 'text'], value = '', o = {}) {
+  const id = 'f-' + k, req = o.req ? ' <span class="req">*</span>' : '', cls = o.full || type === 'textarea' ? 'full' : '', hide = o.hidden ? ' hidden' : '', wrapId = o.wrap ? ` id="${o.wrap}"` : '';
+  let input;
+  const list = Array.isArray(type) ? type.map(x => [x, x]) : typeof type === 'string' && type.startsWith('ref:') ? [['', o.none || '— None —']].concat(opts(type.slice(4), o.filter)) : null;
+  if (list) input = `<select id="${id}" name="${k}"${o.req ? ' required' : ''}>${(Array.isArray(type) && !o.req && o.blank !== false ? [['', '— Select —']] : []).concat(list).map(([v, l]) => `<option value="${esc(v)}"${String(v) === String(value ?? '') ? ' selected' : ''}>${esc(l)}</option>`).join('')}</select>`;
+  else if (type === 'textarea') input = `<textarea id="${id}" name="${k}"${o.ph ? ` placeholder="${esc(o.ph)}"` : ''}>${esc(value)}</textarea>`;
+  else input = `<input id="${id}" name="${k}" type="${type}" value="${esc(value)}"${type === 'number' ? ' min="0" step="any" inputmode="decimal"' : ''}${o.req ? ' required' : ''}${o.ro ? ' readonly' : ''}${o.ph ? ` placeholder="${esc(o.ph)}"` : ''}>`;
+  return `<div class="${cls}"${wrapId}${hide}><label for="${id}">${esc(label)}${req}</label>${input}${o.help ? `<small>${esc(o.help)}</small>` : ''}</div>`;
+}
+const check = (k, label, on, o = {}) => `<label class="check full"${o.wrap ? ` id="${o.wrap}"` : ''}${o.hidden ? ' hidden' : ''}><input type="checkbox" id="f-${k}" name="${k}"${on ? ' checked' : ''}> ${esc(label)}</label>`;
+const filesInput = () => `<details class="full"><summary>Attach a photo or PDF (optional)</summary><small>Demo limit: 5 files, 300 KB each. Fictional documents only.</small><div id="fileList"></div><input type="file" id="upload" accept="image/*,application/pdf" aria-label="Attach file"></details>`;
+let draft = [], busy = false;
+function bindFiles() {
+  draft = []; const up = $('upload'); if (!up) return;
+  const draw = () => { $('fileList').innerHTML = draft.map((f, i) => `<p>${esc(f.name)} ${B('Remove', 'fileRm', { i }, 'sm')}</p>`).join(''); };
+  up.onchange = e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+    if (draft.length >= 5) return formError('Up to 5 files per save.');
+    if (f.size > 300 * 1024) return formError('That file is over 300 KB. Use a smaller photo or PDF.');
+    if (!(f.type.startsWith('image/') || f.type === 'application/pdf')) return formError('Only photos and PDFs can be attached.');
+    busy = true; const rd = new FileReader(); rd.onload = () => { draft.push({ name: f.name, type: f.type, data: rd.result, at: today() }); busy = false; dirty = true; draw(); }; rd.onerror = () => { busy = false; formError('Could not read that file.'); }; rd.readAsDataURL(f); };
+  drawFiles = draw;
+}
+let drawFiles = () => {};
+function openForm(heading, sub, body, submitLabel, onSubmit, after, extraFoot = '') {
+  formOpen = true; dirty = false;
+  const head = `<div><h2>${esc(heading)}</h2>${sub ? `<small>${esc(sub)}</small>` : ''}</div>${B('Cancel', 'cancel', {}, 'sm')}`;
+  showModal(head, `<form id="form" novalidate><div class="cols">${body}</div><div id="formError" class="form-error" role="alert" hidden></div></form>`, `<div class="foot"><button class="btn primary" type="submit" form="form">${esc(submitLabel)}</button>${B('Cancel', 'cancel')}${extraFoot}</div>`);
+  const form = $('form');
+  form.addEventListener('input', () => { dirty = true; }); form.addEventListener('change', () => { dirty = true; });
+  form.onsubmit = e => { e.preventDefault(); if (busy) return formError('Wait for the file to finish loading.');
+    const d = {}; for (const el of form.elements) { if (!el.name) continue; d[el.name] = el.type === 'checkbox' ? el.checked : el.value.trim(); }
+    for (const el of form.querySelectorAll('[required]')) if (!el.closest('[hidden]') && !el.value.trim()) { el.focus(); return formError((el.labels?.[0]?.textContent || 'A field').replace('*', '').trim() + ' is required.'); }
+    for (const el of form.querySelectorAll('input[type=date]')) if (el.value && !el.closest('[hidden]') && !validDate(el.value)) return formError('Check the date in “' + (el.labels?.[0]?.textContent || '').replace('*', '').trim() + '”.');
+    for (const el of form.querySelectorAll('input[type=number]')) if (el.value !== '' && !el.closest('[hidden]') && (!isFinite(Number(el.value)) || Number(el.value) < 0)) return formError('“' + (el.labels?.[0]?.textContent || '').replace('*', '').trim() + '” must be a number of 0 or more.');
+    try { if (onSubmit(d) !== false) finishForm(); } catch (err) { formError('Something went wrong: ' + err.message); console.error(err); } };
+  bindFiles(); if (after) after();
+  setTimeout(() => { const f = form.querySelector('input:not([readonly]):not([type=hidden]),select,textarea'); if (f && window.innerWidth > 640) f.focus(); }, 0);
+}
+function finishForm() { formOpen = false; dirty = false; if (stack.length) reshow(); else closeModal(true); render(); }
+function cancelForm() { if (dirty && !confirm('Discard unsaved changes?')) return; formOpen = false; dirty = false; if (stack.length) reshow(); else closeModal(true); }
+const addFiles = (x, label) => { if (draft.length) { x.files = (x.files || []).concat(draft.map(f => ({ ...f, label }))); } };
+
+/* ---------- Record a tracked requirement (medical exam, inspection, COI ...) */
+function reqForm(col, id, k) {
+  const r = get(col, id), Q = REQ[k]; if (!r || !Q) return notice('That item no longer exists.', true);
+  const d = (r.due || {})[k] || {}, last = today(), isWork = col === 'assets' || col === 'bitems';
+  const hasResult = Q.extra.some(e => e[0] === 'result' && Array.isArray(e[2]) && e[2].some(v => /^Fail/.test(v)));
+  const body = `<div class="full help"><b>${esc(col === 'bitems' ? bitemLabel(r) : title(col, r))}</b> · ${esc(Q.label)}<br>Currently: ${esc(dueText(d.next))}${d.last ? ' · last done ' + esc(fmt(d.last)) : ''}</div>
+    ${field(['last', Q.done, 'date'], last, { req: true })}${field(['next', Q.next, 'date'], nextFrom(last, Q.every), { req: true, help: `Fills in automatically (${everyText(Q.every)}). Change it to match the document if different.` })}
+    ${Q.extra.map(e => field(e, e[0] === 'result' ? '' : d[e[0]] || '', { blank: e[0] !== 'result' })).join('')}
+    ${isWork ? field(['vendor', 'Vendor (if outside service)', 'ref:vendors'], r.vendor || '', { none: 'In-house / none' }) + field(['cost', 'Cost $', 'number'], '') : ''}
+    ${hasResult ? `<div class="full" id="failBox" hidden><div class="warn">Failed inspection — a repair work order will be created.</div>${col === 'assets' ? check('oos', 'Take ' + r.unit + ' out of service until repaired', true) : ''}</div>` : ''}
+    ${field(['notes', 'Notes', 'textarea'], '', { ph: Q.hint ? '' : 'Findings, document #, anything to follow up' })}${Q.hint ? `<div class="full help">${esc(Q.hint)}</div>` : ''}${filesInput()}`;
+  openForm(Q.act, col === 'bitems' ? bitemLabel(r) : title(col, r), body, 'Save ' + Q.label.toLowerCase(), v => {
+    if (v.last > today()) return formError(Q.done + ' cannot be in the future.');
+    if (v.next <= v.last) return formError(Q.next + ' must be after ' + Q.done.toLowerCase() + '.');
+    const n = clone(), x = getIn(n, col, id); x.due = x.due || {};
+    const rec = { last: v.last, next: v.next }; Q.extra.forEach(e => { rec[e[0]] = v[e[0]]; }); if (v.notes) rec.notes = v.notes;
+    const prev = (x.due[k] || {}).next; x.due[k] = rec;
+    const ex = Q.extra.map(e => v[e[0]] ? e[1] + ': ' + v[e[0]] : '').filter(Boolean).join(' · ');
+    hist(x, `${Q.label} recorded — ${Q.done.toLowerCase()} ${fmt(v.last)}, ${Q.next.toLowerCase()} ${fmt(v.next)} (was ${prev ? fmt(prev) : 'not recorded'})${ex ? ' · ' + ex : ''}${v.notes ? ' · ' + v.notes : ''}`);
+    addFiles(x, Q.label);
+    const failed = /^Fail/.test(v.result || '');
+    if (isWork && (v.vendor || Number(v.cost) > 0)) n.work.push({ id: uid(), target: (col === 'assets' ? 'asset:' : 'bitem:') + id, title: Q.label + (v.result ? ' — ' + v.result : ''), priority: 'Routine', status: 'Completed', vendor: v.vendor, assignee: '', due: '', oos: false, completed: v.last, performed: [Q.label, ex, v.notes].filter(Boolean).join(' · '), cost: Number(v.cost || 0), invoice: '', created: today(), hist: [{ at: new Date().toISOString(), text: 'Created from ' + Q.label + ' record' }] });
+    if (failed) { n.work.push({ id: uid(), target: (col === 'assets' ? 'asset:' : 'bitem:') + id, title: 'Repairs from failed ' + Q.label.toLowerCase(), priority: 'Urgent', status: 'Open', vendor: v.vendor || '', assignee: '', due: addDays(today(), 7), oos: col === 'assets' && !!v.oos, completed: '', performed: '', cost: '', invoice: '', notes: v.notes, created: today(), hist: [{ at: new Date().toISOString(), text: 'Created from failed ' + Q.label }] }); if (col === 'assets' && v.oos) { x.status = 'Out of service'; hist(x, 'Out of service — failed ' + Q.label); } }
+    return commit(n, `${Q.label} saved for ${title(col, x)}. Next due ${fmt(v.next)}.${failed ? ' Repair work order created.' : ''}`);
+  }, () => {
+    let touched = false; $('f-next').addEventListener('input', () => { touched = true; });
+    $('f-last').addEventListener('change', e => { if (!touched && validDate(e.target.value)) $('f-next').value = nextFrom(e.target.value, Q.every); });
+    const res = $('f-result'); if (res && $('failBox')) { const t = () => { $('failBox').hidden = !/^Fail/.test(res.value); }; res.addEventListener('change', t); t(); }
+  });
+}
+
+/* ---------- PM service */
+function pmForm(id) {
+  const a = get('assets', id); if (!a) return; const T = ASSET_TYPES[a.type], M = T.meter ? METER[T.meter] : null, p = pmInfo(a);
+  const body = `<div class="full help"><b>${esc(a.unit)}</b> · ${esc(p.label)}<br>${esc(p.text)}</div>${field(['date', 'Service date', 'date'], today(), { req: true })}
+  ${M ? field(['reading', `${M.label} at service (${M.unit})`, 'number'], a.meter ?? '', { req: true }) : ''}
+  ${field(['vendor', 'Vendor (if outside shop)', 'ref:vendors'], a.vendor || '', { none: 'In-house' })}${field(['assignee', 'Done by (in-house)', 'ref:staff'], '', { none: '—' })}
+  ${field(['cost', 'Cost $', 'number'], '')}${field(['invoice', 'Invoice / RO #'], '')}
+  ${field(['performed', 'Work performed', 'textarea'], T.meter ? 'Oil & filter, lube, fluids, belts/hoses, brakes, tires, lights — inspected and serviced.' : 'Brakes adjusted, bearings and seals checked, lights and wiring inspected.', { req: true })}${filesInput()}`;
+  openForm('Record PM service', a.unit, body, 'Save PM service', v => {
+    if (v.date > today()) return formError('Service date cannot be in the future.');
+    const reading = M ? Number(v.reading) : null;
+    if (M && a.pmLast && a.pmLast.meter != null && a.pmLast.meter !== '' && reading < Number(a.pmLast.meter)) return formError(`Reading is lower than the last PM (${num(a.pmLast.meter)} ${M.unit}).`);
+    const n = clone(), x = getIn(n, 'assets', id);
+    x.pmLast = { date: v.date, meter: reading };
+    if (M && reading > Number(x.meter || 0)) { x.meter = reading; x.meterDate = v.date; }
+    n.work.push({ id: uid(), target: 'asset:' + id, title: 'PM service', isPM: true, priority: 'Routine', status: 'Completed', vendor: v.vendor, assignee: v.assignee, due: '', oos: false, completed: v.date, performed: v.performed, cost: Number(v.cost || 0), invoice: v.invoice, meterAt: reading, created: today(), files: draft.map(f => ({ ...f, label: 'PM service' })), hist: [{ at: new Date().toISOString(), text: 'PM service recorded' }] });
+    hist(x, `PM service recorded ${fmt(v.date)}${M ? ' at ' + num(reading) + ' ' + M.unit : ''}${v.cost ? ' · ' + money(v.cost) : ''}`);
+    const np = pmInfo(x);
+    return commit(n, `PM service saved for ${x.unit}. ${np.nextAt ? 'Next due at ' + num(np.nextAt) + ' ' + M.unit : 'Next due ' + fmt(np.next)}.`);
+  });
+}
+
+/* ---------- Meter reading */
+function meterForm(id) {
+  const a = get('assets', id); const M = METER[ASSET_TYPES[a.type].meter];
+  openForm(M.act, a.unit, `<div class="full help">Current: <b>${num(a.meter)} ${M.unit}</b>${a.meterDate ? ' · read ' + esc(fmt(a.meterDate)) : ''}</div>${field(['reading', `New reading (${M.unit})`, 'number'], '', { req: true })}${field(['date', 'Reading date', 'date'], today(), { req: true })}${check('fix', 'This corrects a wrong earlier reading (allows a lower number)', false)}`, 'Save reading', v => {
+    const r = Number(v.reading); if (r < Number(a.meter || 0) && !v.fix) return formError(`New reading is lower than the current ${num(a.meter)} ${M.unit}. Tick the correction box if the old reading was wrong.`);
+    if (v.date > today()) return formError('Reading date cannot be in the future.');
+    const n = clone(), x = getIn(n, 'assets', id); hist(x, `${M.label} ${num(x.meter)} → ${num(r)} ${M.unit}${v.fix ? ' (correction)' : ''}`); x.meter = r; x.meterDate = v.date;
+    const p = pmInfo(x); return commit(n, `${x.unit}: ${num(r)} ${M.unit} saved.${p && p.st !== 'ok' ? ' PM service is ' + (p.st === 'overdue' ? 'overdue' : 'due soon') + '.' : ''}`);
+  });
+}
+
+/* ---------- Driver ↔ unit assignment (the only link between drivers and assets) */
+const driverTypes = () => Object.keys(ASSET_TYPES).filter(t => ASSET_TYPES[t].driver);
+function assignDriverForm(id) {
+  const a = get('assets', id);
+  openForm(a.driver ? 'Change driver' : 'Assign driver', a.unit, field(['driver', 'Driver', 'ref:drivers'], a.driver || '', { none: '— No driver —', filter: d => d.status !== 'Inactive', full: true }), 'Save assignment', v => {
+    const n = clone(), x = getIn(n, 'assets', id), old = getIn(n, 'drivers', x.driver), nw = getIn(n, 'drivers', v.driver);
+    if ((x.driver || '') === v.driver) return true;
+    x.driver = v.driver; hist(x, 'Driver ' + (nw ? 'assigned: ' + nw.name : 'removed') + (old ? ' (was ' + old.name + ')' : ''));
+    if (old) hist(old, 'Unassigned from ' + x.unit); if (nw) hist(nw, 'Assigned to ' + x.unit);
+    return commit(n, nw ? `${nw.name} assigned to ${x.unit}.` : `${x.unit} has no driver now.`);
+  });
+}
+function assignUnitForm(driverId) {
+  const d = get('drivers', driverId);
+  openForm('Assign a unit', d.name, field(['asset', 'Unit', 'ref:assets'], '', { req: true, filter: a => driverTypes().includes(a.type) && a.status !== 'Retired', full: true, help: 'Trucks and pickups only. Assigning moves the unit from any other driver.' }), 'Assign unit', v => {
+    const n = clone(), x = getIn(n, 'assets', v.asset), dr = getIn(n, 'drivers', driverId), old = getIn(n, 'drivers', x.driver);
+    if (x.driver === driverId) return true;
+    x.driver = driverId; hist(x, 'Driver assigned: ' + dr.name + (old ? ' (was ' + old.name + ')' : '')); hist(dr, 'Assigned to ' + x.unit); if (old) hist(old, 'Unassigned from ' + x.unit);
+    return commit(n, `${dr.name} assigned to ${x.unit}.`);
+  });
+}
+
+/* ---------- Work orders */
+function targetOptions(sel) {
+  const o = (v, l) => `<option value="${esc(v)}"${v === sel ? ' selected' : ''}>${esc(l)}</option>`;
+  let h = '<option value="">— Choose what needs work —</option>';
+  const groups = Object.keys(ASSET_TYPES).map(t => [ASSET_TYPES[t].plural, S.assets.filter(a => a.type === t && a.status !== 'Retired')]).filter(g => g[1].length);
+  groups.forEach(([g, list]) => { h += `<optgroup label="Assets — ${esc(g)}">${list.map(a => o('asset:' + a.id, a.unit + (a.make ? ' · ' + a.make + ' ' + (a.model || '') : ''))).join('')}</optgroup>`; });
+  S.buildings.forEach(b => { h += `<optgroup label="Building — ${esc(b.name)}">${o('building:' + b.id, b.name + ' (whole building)')}${S.bitems.filter(i => i.building === b.id).map(i => o('bitem:' + i.id, BCATS[BITEMS[i.kind].cat] + ' · ' + i.name)).join('')}</optgroup>`; });
+  return h;
+}
+function woForm(id, pre = {}) {
+  const w = id ? get('work', id) : null; if (id && !w) return notice('That work order no longer exists.', true);
+  const v0 = w || { target: pre.target || '', title: '', priority: 'Routine', status: 'Open', due: '', vendor: '', assignee: '', oos: false };
+  const locked = !!(w || pre.target);
+  const tLabel = v0.target ? targetLabel({ target: v0.target }) : '';
+  const body = `${locked ? `<div class="full"><label>For</label><input readonly value="${esc(tLabel)}"><input type="hidden" name="target" id="f-target" value="${esc(v0.target)}"></div>` : `<div class="full"><label for="f-target">What needs work? <span class="req">*</span></label><select id="f-target" name="target" required>${targetOptions(v0.target)}</select></div>`}
+  ${field(['title', 'Problem / work needed', 'text'], v0.title, { req: true, full: true, ph: 'e.g. Hydraulic leak at mast, dock seal torn' })}
+  ${field(['priority', 'Priority', PRIORITY], v0.priority, { blank: false })}${field(['status', 'Status', WO_STATUS], v0.status, { blank: false })}
+  ${field(['due', 'Target date', 'date'], v0.due)}${field(['vendor', 'Vendor', 'ref:vendors'], v0.vendor, { none: '— None / in-house —' })}${field(['assignee', 'Assigned to (staff)', 'ref:staff'], v0.assignee, { none: '— Unassigned —' })}
+  <div></div>${check('oos', 'Unit is out of service until this is fixed', v0.oos, { wrap: 'oosBox', hidden: true })}
+  <div class="full" id="doneBox" hidden><div class="sect" style="margin-top:6px">Completion</div><div class="cols">${field(['completed', 'Completed on', 'date'], (w && w.completed) || today(), { req: true })}${field(['cost', 'Total cost $', 'number'], w ? w.cost : '')}${field(['invoice', 'Invoice / RO #'], w ? w.invoice : '')}<div id="meterBox" hidden>${field(['meterAt', 'Meter reading at completion', 'number'], w && w.meterAt != null ? w.meterAt : '')}</div>${field(['performed', 'Work performed / findings', 'textarea'], w ? w.performed : '', { req: true })}${check('isPM', 'This was the scheduled PM service (resets the PM interval)', w ? w.isPM : false, { wrap: 'pmBox', hidden: true })}${check('rts', 'Return the unit to service', true, { wrap: 'rtsBox', hidden: true })}</div></div>
+  ${field(['note', w ? 'Add a progress note' : 'Details', 'textarea'], w ? '' : '', { ph: w ? 'Parts ordered, vendor ETA, what was found…' : 'What happened, where, who reported it' })}${filesInput()}
+  ${w ? `<div class="full">${histPanel(w)}${filesPanel(w)}</div>` : ''}`;
+  openForm(w ? (w.status === 'Completed' ? 'Work order (completed)' : 'Update work order') : 'New work order', w ? targetLabel(w) : pre.target ? tLabel : '', body, w ? 'Save work order' : 'Create work order', v => {
+    if (!v.target) return formError('Choose what needs work.');
+    const tgt = targetOf({ target: v.target }); if (!tgt.rec) return formError('That asset or building no longer exists.');
+    const asset = tgt.t === 'asset' ? tgt.rec : null, M = asset && ASSET_TYPES[asset.type].meter ? METER[ASSET_TYPES[asset.type].meter] : null;
+    const completing = v.status === 'Completed';
+    if (completing) { if (v.completed > today()) return formError('Completed date cannot be in the future.'); if (!v.performed) return formError('Describe the work performed before completing.'); if (M && v.meterAt !== '' && Number(v.meterAt) < Number(asset.pmLast?.meter || 0) && v.isPM) return formError('Meter reading is lower than the last PM reading.'); }
+    const n = clone(), now = new Date().toISOString();
+    let x = w ? getIn(n, 'work', id) : { id: uid(), created: today(), hist: [] };
+    const before = w ? { status: w.status, priority: w.priority, vendor: w.vendor, assignee: w.assignee, due: w.due } : null;
+    Object.assign(x, { target: v.target, title: v.title, priority: v.priority, status: v.status, due: v.due, vendor: v.vendor, assignee: v.assignee, oos: !!asset && !!v.oos });
+    if (completing) Object.assign(x, { completed: v.completed, cost: v.cost === '' ? '' : Number(v.cost), invoice: v.invoice, performed: v.performed, meterAt: M && v.meterAt !== '' ? Number(v.meterAt) : null, isPM: !!(asset && ASSET_TYPES[asset.type].pm && v.isPM) }); else { x.completed = ''; }
+    if (!w && v.note) x.notes = v.note;
+    const changes = before ? Object.keys(before).filter(k => String(before[k] || '') !== String(x[k] || '')).map(k => k === 'vendor' ? 'vendor → ' + (getIn(n, 'vendors', x.vendor)?.name || 'none') : k === 'assignee' ? 'assigned → ' + (getIn(n, 'staff', x.assignee)?.name || 'nobody') : k + ' → ' + (x[k] || 'none')) : [];
+    x.hist.push({ at: now, text: (w ? (changes.length ? 'Updated: ' + changes.join(', ') : 'Updated') : 'Created · ' + x.priority + ' · ' + x.status) + (v.note ? ' · Note: ' + v.note : '') + (completing && (!w || w.status !== 'Completed') ? ' · Completed: ' + v.performed + (v.cost ? ' · ' + money(v.cost) : '') : '') });
+    addFiles(x, 'Work order');
+    if (!w) n.work.push(x);
+    let msg = w ? 'Work order saved.' : 'Work order created.';
+    if (asset) {
+      const a = getIn(n, 'assets', asset.id);
+      if (completing && x.meterAt != null && x.meterAt > Number(a.meter || 0)) { a.meter = x.meterAt; a.meterDate = x.completed; }
+      if (completing && x.isPM && (!w || !w.isPM || w.status !== 'Completed')) { a.pmLast = { date: x.completed, meter: M ? (x.meterAt != null ? x.meterAt : Number(a.meter || 0)) : null }; hist(a, 'PM service completed via work order: ' + x.title); }
+      const otherOOS = n.work.some(o => o.id !== x.id && o.target === 'asset:' + a.id && o.status !== 'Completed' && o.oos);
+      if (!completing && x.oos && a.status !== 'Out of service') { a.status = 'Out of service'; hist(a, 'Out of service — ' + x.title); msg += ` ${a.unit} is marked out of service.`; }
+      if (a.status === 'Out of service' && ((completing && v.rts) || (!completing && !x.oos)) && !otherOOS) { a.status = 'In service'; hist(a, 'Returned to service — ' + x.title); msg += ` ${a.unit} is back in service.`; }
+      else if (a.status === 'Out of service' && completing && v.rts && otherOOS) msg += ` ${a.unit} stays out of service — another open work order has it down.`;
+      if (completing && (!w || w.status !== 'Completed')) hist(a, 'Work completed: ' + x.title + (x.cost ? ' · ' + money(x.cost) : ''));
+    } else { const t = tgt.t === 'bitem' ? getIn(n, 'bitems', tgt.id) : getIn(n, 'buildings', tgt.id); if (completing && (!w || w.status !== 'Completed')) hist(t, 'Work completed: ' + x.title + (x.cost ? ' · ' + money(x.cost) : '')); if (!w) hist(t, 'Work order opened: ' + x.title); }
+    return commit(n, msg);
+  }, () => {
+    const upd = () => {
+      const t = targetOf({ target: $('f-target').value }), a = t.t === 'asset' ? t.rec : null, T = a ? ASSET_TYPES[a.type] : null, done = $('f-status').value === 'Completed';
+      $('oosBox').hidden = !a || done; $('doneBox').hidden = !done; $('meterBox').hidden = !(done && T && T.meter); $('pmBox').hidden = !(done && T && T.pm);
+      $('rtsBox').hidden = !(done && a && a.status === 'Out of service');
+      if (T && T.meter) $('meterBox').querySelector('label').textContent = `${METER[T.meter].label} at completion (${METER[T.meter].unit})`;
+    };
+    $('f-status').addEventListener('change', upd); const ts = $('f-target'); if (ts.tagName === 'SELECT') ts.addEventListener('change', upd); upd();
+  }, w ? B('Delete work order', 'woDelete', { id }, 'danger') : '');
+}
+
+/* ---------- Drug & alcohol tests */
+function testForm(o) {
+  const t = o.id ? get('tests', o.id) : null;
+  const v0 = t || { driver: o.driver || '', date: today(), reason: o.reason || 'Random', substance: o.reason === 'Pre-employment' ? 'Drug' : 'Both', result: 'Negative', notes: '' };
+  const body = `${field(['driver', 'Driver', 'ref:drivers'], v0.driver, { req: true })}${field(['date', 'Collection date', 'date'], v0.date, { req: true })}${field(['reason', 'Reason', TEST_REASONS], v0.reason, { blank: false })}${field(['substance', 'Test type', ['Drug', 'Alcohol', 'Both']], v0.substance, { blank: false })}${field(['result', 'Result', ['Pending', 'Negative', 'Positive', 'Refusal', 'Cancelled']], v0.result, { blank: false })}<div></div>
+  <div class="full warn" id="posBox" hidden>Positive or refusal: remove the driver from safety-sensitive duty immediately and report to the Clearinghouse. Return to duty requires the SAP process.</div>${field(['notes', 'Notes (collector, CCF #, MRO)', 'textarea'], v0.notes)}${filesInput()}`;
+  openForm(t ? 'Edit drug / alcohol test' : (v0.reason === 'Pre-employment' ? 'Log pre-employment test' : 'Log drug / alcohol test'), get('drivers', v0.driver)?.name || '', body, 'Save test', v => {
+    if (v.date > today()) return formError('Collection date cannot be in the future.');
+    const n = clone(); let x = t ? getIn(n, 'tests', t.id) : { id: uid() };
+    Object.assign(x, { driver: v.driver, date: v.date, reason: v.reason, substance: v.substance, result: v.result, notes: v.notes }); addFiles(x, 'Test result'); if (!t) n.tests.push(x);
+    const d = getIn(n, 'drivers', v.driver); hist(d, `${t ? 'Edited' : 'Logged'} ${v.reason.toLowerCase()} ${v.substance.toLowerCase()} test ${fmt(v.date)} — ${v.result}`);
+    return commit(n, `${v.reason} test saved for ${d.name}.`);
+  }, () => { const r = $('f-result'), u = () => { $('posBox').hidden = !['Positive', 'Refusal'].includes(r.value); }; r.addEventListener('change', u); u(); }, t ? B('Delete test', 'testDelete', { id: t.id }, 'danger') : '');
+}
+
+/* ---------- Due-date section used in add/edit forms */
+function dueInputs(col, r, keys) { return keys.map(k => field(['due_' + k, REQ[k].label + (/^Next/.test(REQ[k].next) ? ' — next due' : ' — expires'), 'date'], ((r.due || {})[k] || {}).next || '', { wrap: 'w_due_' + k, help: everyText(REQ[k].every) + (((r.due || {})[k] || {}).last ? ' · last done ' + fmt(r.due[k].last) : '') })).join(''); }
+function applyDue(x, keys, v, label) { x.due = x.due || {}; const ch = []; keys.forEach(k => { const nv = v['due_' + k] || ''; const cur = x.due[k] || {}; if ((cur.next || '') !== nv) { ch.push(REQ[k].label + ' → ' + (nv ? fmt(nv) : 'cleared')); x.due[k] = { ...cur, next: nv }; } }); return ch; }
+
+/* ---------- Add / edit records */
+function editForm(col, id, pre = {}) {
+  const r = id ? get(col, id) : null; if (id && !r) return notice('That record no longer exists.', true);
+  if (col === 'assets') return assetForm(id, pre);
+  if (col === 'bitems') return bitemForm(id, pre);
+  const v0 = r || { status: 'Active', ...pre };
+  const del = r ? B('Delete ' + COL_NAME[col].toLowerCase(), 'del', { col, id }, 'danger') : '';
+  const statusF = field(['status', 'Status', ['Active', 'Inactive']], v0.status || 'Active', { blank: false });
+  let body = '', keys = [], after = null;
+  if (col === 'drivers') { keys = reqKeys('drivers', v0);
+    body = field(['name', 'Full name'], v0.name, { req: true }) + statusF + field(['cdlClass', 'CDL class', ['A', 'B', 'C']], v0.cdlClass) + field(['cdlNo', 'CDL #'], v0.cdlNo) + field(['cdlState', 'CDL state'], v0.cdlState || 'MI') + field(['phone', 'Phone', 'tel'], v0.phone) + field(['hire', 'Hire date', 'date'], v0.hire) + field(['building', 'Home building', 'ref:buildings'], v0.building) +
+      `<div class="full sect">Qualification dates</div>` + dueInputs(col, v0, keys) + field(['notes', 'Notes', 'textarea'], v0.notes); }
+  if (col === 'staff') { keys = STAFF_CERTS.map(c => c[2]);
+    body = field(['name', 'Full name'], v0.name, { req: true }) + statusF + field(['position', 'Position', ['Warehouse', 'Fabrication shop', 'Yard', 'Installer', 'Maintenance', 'Office', 'Supervisor', 'Other']], v0.position) + field(['building', 'Building', 'ref:buildings'], v0.building) + field(['phone', 'Phone', 'tel'], v0.phone) + field(['hire', 'Hire date', 'date'], v0.hire) +
+      `<div class="full sect">Equipment this person operates</div>` + STAFF_CERTS.map(c => check(c[0], c[1], v0[c[0]])).join('') + `<div class="full sect" id="certHead">Certification dates</div>` + dueInputs(col, v0, keys) + field(['notes', 'Notes', 'textarea'], v0.notes);
+    after = () => { const u = () => { let any = false; STAFF_CERTS.forEach(c => { const on = $('f-' + c[0]).checked; any = any || on; $('w_due_' + c[2]).hidden = !on; }); $('certHead').hidden = !any; }; STAFF_CERTS.forEach(c => $('f-' + c[0]).addEventListener('change', u)); u(); }; }
+  if (col === 'vendors') { keys = ['coi', 'contract'];
+    body = field(['name', 'Company name'], v0.name, { req: true }) + statusF + field(['service', 'Service type', VENDOR_SERVICES], v0.service) + field(['contact', 'Contact person'], v0.contact) + field(['phone', 'Phone', 'tel'], v0.phone) + field(['email', 'Email', 'email'], v0.email) + check('hasContract', 'Has a service contract to renew', v0.hasContract) + dueInputs(col, v0, keys) + field(['notes', 'Notes (rates, scope, performance)', 'textarea'], v0.notes);
+    after = () => { const u = () => { $('w_due_contract').hidden = !$('f-hasContract').checked; }; $('f-hasContract').addEventListener('change', u); u(); }; }
+  if (col === 'buildings') {
+    body = field(['name', 'Building name'], v0.name, { req: true }) + field(['btype', 'Building type', ['Warehouse', 'Showroom', 'Fabrication shop', 'Office', 'Yard', 'Mixed use']], v0.btype) + field(['address', 'Address'], v0.address, { full: true }) + field(['contact', 'Site contact (staff)', 'ref:staff'], v0.contact) + field(['phone', 'Site phone', 'tel'], v0.phone) + field(['sqft', 'Square feet', 'number'], v0.sqft) + '<div></div>' + field(['emergency', 'Emergency info (shutoffs, alarm code holder, assembly point)', 'textarea'], v0.emergency) + (r ? '' : check('starter', 'Add the standard items (electric, gas, water, HVAC, extinguishers, emergency lights, first aid, fire drill, roof, overhead door) — fill in details later', true)); }
+  openForm((r ? 'Edit ' : 'Add ') + COL_NAME[col].toLowerCase(), r ? title(col, r) : '', body, r ? 'Save changes' : 'Add ' + COL_NAME[col].toLowerCase(), v => {
+    const n = clone(); let x = r ? getIn(n, col, id) : { id: uid(), hist: [], due: {} };
+    if (col === 'vendors' && !v.hasContract) v.due_contract = (x.due || {}).contract?.next || '';
+    if (col === 'staff') STAFF_CERTS.forEach(c => { if (!v[c[0]]) v['due_' + c[2]] = ((x.due || {})[c[2]] || {}).next || ''; });
+    const skip = k => k.startsWith('due_') || k === 'starter';
+    const changed = Object.keys(v).filter(k => !skip(k) && String(x[k] ?? '') !== String(v[k] ?? '') && !(x[k] == null && (v[k] === '' || v[k] === false)));
+    Object.keys(v).forEach(k => { if (!skip(k)) x[k] = v[k]; });
+    if (col === 'buildings' && v.sqft !== '') x.sqft = Number(v.sqft);
+    const dch = keys.length ? applyDue(x, keys, v) : [];
+    hist(x, r ? 'Edited' + (changed.length ? ': ' + changed.join(', ') : '') + (dch.length ? ' · Dates: ' + dch.join('; ') : '') : 'Added');
+    if (!r) n[col].push(x);
+    if (col === 'buildings' && !r && v.starter) ['electric', 'gas', 'water', 'hvac', 'extinguishers', 'emlights', 'firstaid', 'evac', 'roof', 'overhead'].forEach(kind => n.bitems.push({ id: uid(), building: x.id, kind, name: BITEMS[kind].name, due: {}, hist: [{ at: new Date().toISOString(), text: 'Added with building' }] }));
+    const ok = commit(n, `${COL_NAME[col]} ${r ? 'saved' : 'added'}: ${title(col, x)}.`);
+    if (ok && !r) { formOpen = false; stack = []; openView(col, x.id); render(); return false; }
+    return ok;
+  }, after, del);
+}
+function bitemPick(building, cat) {
+  formOpen = true; dirty = false;
+  showModal(`<div><h2>Add ${esc(BCATS[cat].toLowerCase())} item</h2><small>${esc(get('buildings', building)?.name || '')}</small></div>${B('Cancel', 'cancel', {}, 'sm')}`, `<div class="typegrid">${Object.keys(BITEMS).filter(k => BITEMS[k].cat === cat).map(k => `<button type="button" class="typebtn" data-a="bitemNew" data-building="${esc(building)}" data-kind="${k}"><b>${esc(BITEMS[k].name)}</b><small>${esc(BITEMS[k].reqs.map(q => REQ[q].label + ' (' + everyText(REQ[q].every) + ')').join(', '))}</small></button>`).join('')}</div>`);
+}
+function bitemForm(id, pre) {
+  const r = id ? get('bitems', id) : null, v0 = r || { building: pre.building, kind: pre.kind, name: BITEMS[pre.kind].name }, K = BITEMS[v0.kind];
+  const body = `<div class="full help">${esc(BCATS[K.cat])} · ${esc(K.name)} · ${esc(get('buildings', v0.building)?.name || '')}</div>` + field(['name', 'Name / label'], v0.name, { req: true, help: 'e.g. “Dock door 2”, “RTU-1 office”' }) + field(['vendor', 'Service vendor', 'ref:vendors'], v0.vendor) + K.fields.map(f => field(f, v0[f[0]])).join('') + `<div class="full sect">Next due dates</div>` + dueInputs('bitems', v0, K.reqs) + field(['notes', 'Notes', 'textarea'], v0.notes);
+  openForm((r ? 'Edit ' : 'Add ') + K.name.toLowerCase(), get('buildings', v0.building)?.name || '', body, r ? 'Save changes' : 'Add item', v => {
+    const n = clone(); let x = r ? getIn(n, 'bitems', id) : { id: uid(), building: v0.building, kind: v0.kind, hist: [], due: {} };
+    const keys = Object.keys(v).filter(k => !k.startsWith('due_')); const changed = keys.filter(k => String(x[k] ?? '') !== String(v[k] ?? ''));
+    keys.forEach(k => { x[k] = K.fields.find(f => f[0] === k && f[2] === 'number') && v[k] !== '' ? Number(v[k]) : v[k]; });
+    const dch = applyDue(x, K.reqs, v); hist(x, r ? 'Edited' + (changed.length ? ': ' + changed.join(', ') : '') + (dch.length ? ' · Dates: ' + dch.join('; ') : '') : 'Added');
+    if (!r) n.bitems.push(x);
+    const ok = commit(n, `${x.name} ${r ? 'saved' : 'added'}.`);
+    if (ok && !r) { formOpen = false; if (!stack.length) stack = [{ col: 'buildings', id: x.building }]; openView('bitems', x.id); render(); return false; }
+    return ok;
+  }, null, r ? B('Delete item', 'del', { col: 'bitems', id }, 'danger') : '');
+}
+function assetPick() {
+  formOpen = true; dirty = false;
+  showModal(`<div><h2>Add asset</h2><small>Pick the type — the form shows only the fields that apply.</small></div>${B('Cancel', 'cancel', {}, 'sm')}`, `<div class="typegrid">${Object.keys(ASSET_TYPES).map(t => `<button type="button" class="typebtn" data-a="assetNew" data-type="${t}"><b>${esc(ASSET_TYPES[t].name)}</b><small>${esc(ASSET_TYPES[t].desc)}</small></button>`).join('')}</div>`);
+}
+function assetForm(id, pre = {}, carry = null) {
+  const r = id ? get('assets', id) : null, v0 = carry || r || { status: 'In service', type: pre.type || 'truck' }, T = ASSET_TYPES[v0.type], M = T.meter ? METER[T.meter] : null;
+  const pmL = v0.pmLast || {};
+  const body = `${field(['type', 'Asset type', Object.keys(ASSET_TYPES).map(k => ASSET_TYPES[k].name)], T.name, { blank: false })}${field(['unit', 'Unit # / name'], v0.unit, { req: true, ph: 'e.g. Truck 104, FL-05' })}
+  ${r && r.status === 'Out of service' ? `<div><label>Status</label><input readonly value="Out of service (cleared by completing its work order)"><input type="hidden" name="status" value="Out of service"></div>` : field(['status', 'Status', ['In service', 'Retired']], v0.status === 'Out of service' ? 'In service' : v0.status, { blank: false })}
+  ${field(['basedAt', 'Based at', 'ref:buildings'], v0.basedAt)}${T.driver ? field(['driver', 'Assigned driver', 'ref:drivers'], v0.driver, { none: '— No driver —', filter: d => d.status !== 'Inactive' }) : ''}
+  <div class="full sect">Identification</div>${T.fields.map(f => field(f, v0[f[0]])).join('')}
+  ${M ? `<div class="full sect">${M.label}</div>${field(['meter', `Current ${M.label.toLowerCase()} (${M.unit})`, 'number'], v0.meter ?? '', { req: !r, ro: !!r, help: r ? 'Use “' + M.act + '” on the asset screen to change it.' : '' })}` : ''}
+  ${T.pm ? `<div class="full sect">Preventive maintenance</div>${M ? field(['pmEvery', `PM interval (${M.unit})`, 'number'], v0.pmEvery || T.pm.every, { req: true }) : field(['pmMonths', 'Service interval (months)', 'number'], v0.pmMonths || T.pm.months, { req: true })}${field(['pmDate', 'Last PM date', 'date'], pmL.date || '')}${M ? field(['pmMeter', `Last PM at (${M.unit})`, 'number'], pmL.meter ?? '') : ''}` : ''}
+  <div class="full sect">Next due dates</div>${dueInputs('assets', v0, T.reqs)}${field(['notes', 'Notes', 'textarea'], v0.notes)}`;
+  openForm(r ? 'Edit ' + r.unit : 'Add ' + T.name.toLowerCase(), r ? T.name : '', body, r ? 'Save changes' : 'Add asset', v => {
+    const type = Object.keys(ASSET_TYPES).find(k => ASSET_TYPES[k].name === v.type); const TT = ASSET_TYPES[type], MM = TT.meter;
+    if (S.assets.some(a => a.id !== id && a.unit.toLowerCase() === v.unit.toLowerCase())) return formError('Another asset already uses unit # “' + v.unit + '”.');
+    if (MM && TT.pm && v.pmMeter !== '' && v.pmMeter != null && Number(v.pmMeter) > Number(r ? r.meter : v.meter)) return formError('Last PM reading cannot be higher than the current meter.');
+    if (v.pmDate && v.pmDate > today()) return formError('Last PM date cannot be in the future.');
+    const n = clone(); let x = r ? getIn(n, 'assets', id) : { id: uid(), hist: [], due: {} };
+    const keep = ['type', 'unit', 'status', 'basedAt', 'driver', 'notes'].concat(TT.fields.map(f => f[0]));
+    const changed = keep.filter(k => k !== 'type' && String(x[k] ?? '') !== String(v[k] ?? '') && v[k] !== undefined);
+    if (r && type !== r.type) { ASSET_TYPES[r.type].fields.forEach(f => { if (!TT.fields.some(g => g[0] === f[0])) delete x[f[0]]; }); if (!TT.driver) x.driver = ''; if (!MM) { delete x.meter; delete x.meterDate; } x.pmLast = {}; delete x.pmEvery; delete x.pmMonths; x.due = Object.fromEntries(Object.entries(x.due || {}).filter(([k]) => TT.reqs.includes(k))); }
+    x.type = type; keep.forEach(k => { if (k !== 'type' && v[k] !== undefined) x[k] = TT.fields.find(f => f[0] === k && f[2] === 'number') && v[k] !== '' ? Number(v[k]) : v[k]; });
+    if (!TT.driver) x.driver = '';
+    if (MM && !r) { x.meter = Number(v.meter); x.meterDate = today(); }
+    if (MM && r && r.type !== type) { x.meter = Number(v.meter || 0); x.meterDate = today(); }
+    if (TT.pm) { if (MM) x.pmEvery = Number(v.pmEvery); else x.pmMonths = Number(v.pmMonths); const nl = { date: v.pmDate || '', meter: MM ? (v.pmMeter === '' ? null : Number(v.pmMeter)) : null }; const ol = x.pmLast || {}; if ((ol.date || '') !== nl.date || String(ol.meter ?? '') !== String(nl.meter ?? '')) { x.pmLast = nl; changed.push('last PM'); } }
+    const dch = applyDue(x, TT.reqs, v);
+    if (r && r.driver !== x.driver) { const od = getIn(n, 'drivers', r.driver), nd = getIn(n, 'drivers', x.driver); if (od) hist(od, 'Unassigned from ' + x.unit); if (nd) hist(nd, 'Assigned to ' + x.unit); } else if (!r && x.driver) { const nd = getIn(n, 'drivers', x.driver); if (nd) hist(nd, 'Assigned to ' + x.unit); }
+    hist(x, r ? 'Edited' + (changed.length ? ': ' + changed.join(', ') : '') + (dch.length ? ' · Dates: ' + dch.join('; ') : '') : 'Added');
+    if (!r) n.assets.push(x);
+    const ok = commit(n, `${x.unit} ${r ? 'saved' : 'added'}.`);
+    if (ok && !r) { formOpen = false; stack = []; openView('assets', x.id); render(); return false; }
+    return ok;
+  }, () => {
+    $('f-type').addEventListener('change', e => { const nt = Object.keys(ASSET_TYPES).find(k => ASSET_TYPES[k].name === e.target.value); const cur = Object.fromEntries([...new FormData($('form'))]); const c = { ...(r || {}), ...cur, type: nt, due: r ? r.due : {}, pmLast: r ? r.pmLast : {} }; if (r) c.meter = cur.meter ?? r.meter; assetForm(id, pre, c); dirty = true; });
+  }, r ? B('Delete asset', 'del', { col: 'assets', id }, 'danger') : '');
+}
+
+/* ---------- Delete with clean-up of links */
+function deleteRecord(col, id) {
+  const r = get(col, id); if (!r) return;
+  const n = clone(); let extra = '';
+  if (col === 'assets') { const w = n.work.filter(x => x.target === 'asset:' + id).length; extra = w ? ` and its ${w} work order(s)` : ''; }
+  if (col === 'buildings') { const it = n.bitems.filter(i => i.building === id); extra = ` and its ${it.length} item(s) and their work orders`; }
+  if (col === 'bitems') { const w = n.work.filter(x => x.target === 'bitem:' + id).length; extra = w ? ` and its ${w} work order(s)` : ''; }
+  if (col === 'drivers') { const t = n.tests.filter(x => x.driver === id).length; extra = t ? ` and their ${t} test record(s)` : ''; }
+  if (!confirm(`Delete ${title(col, r)}${extra}? This cannot be undone. (Use Inactive/Retired to keep history.)`)) return;
+  n[col] = n[col].filter(x => x.id !== id);
+  if (col === 'assets') n.work = n.work.filter(x => x.target !== 'asset:' + id);
+  if (col === 'bitems') n.work = n.work.filter(x => x.target !== 'bitem:' + id);
+  if (col === 'buildings') { const ids = n.bitems.filter(i => i.building === id).map(i => i.id); n.bitems = n.bitems.filter(i => i.building !== id); n.work = n.work.filter(x => x.target !== 'building:' + id && !ids.some(i => x.target === 'bitem:' + i)); n.assets.forEach(a => { if (a.basedAt === id) a.basedAt = ''; }); n.staff.forEach(s => { if (s.building === id) s.building = ''; }); n.drivers.forEach(s => { if (s.building === id) s.building = ''; }); }
+  if (col === 'drivers') { n.tests = n.tests.filter(t => t.driver !== id); n.assets.forEach(a => { if (a.driver === id) { a.driver = ''; hist(a, 'Driver removed (driver record deleted)'); } }); }
+  if (col === 'staff') { n.work.forEach(w => { if (w.assignee === id) w.assignee = ''; }); n.buildings.forEach(b => { if (b.contact === id) b.contact = ''; }); }
+  if (col === 'vendors') { n.work.forEach(w => { if (w.vendor === id) w.vendor = ''; }); n.bitems.forEach(i => { if (i.vendor === id) i.vendor = ''; }); }
+  if (commit(n, `${title(col, r)} deleted.`)) { formOpen = false; dirty = false; stack = stack.filter(s => !(s.col === col && s.id === id) && get(s.col, s.id)); if (stack.length) reshow(); else closeModal(true); render(); }
+}
+
+/* ============================================================
+   ACTIONS — every button routes here
+   ============================================================ */
+function act(a, d) {
+  switch (a) {
+    case 'close': return closeModal();
+    case 'cancel': return cancelForm();
+    case 'back': if (formOpen && dirty && !confirm('Discard unsaved changes?')) return; stack.pop(); return reshow();
+    case 'view': if (formOpen && dirty && !confirm('Discard unsaved changes?')) return; if (formOpen) { formOpen = false; } return openView(d.col, d.id);
+    case 'req': return reqForm(d.col, d.id, d.k);
+    case 'pm': return pmForm(d.id);
+    case 'meter': return meterForm(d.id);
+    case 'assignDriver': return assignDriverForm(d.id);
+    case 'assignUnit': return assignUnitForm(d.driver);
+    case 'unassign': { const a2 = get('assets', d.id); const dr = get('drivers', a2.driver); if (!confirm(`Unassign ${dr?.name || 'driver'} from ${a2.unit}?`)) return; const n = clone(), x = getIn(n, 'assets', d.id), od = getIn(n, 'drivers', x.driver); x.driver = ''; hist(x, 'Driver removed' + (od ? ': ' + od.name : '')); if (od) hist(od, 'Unassigned from ' + x.unit); if (commit(n, `${x.unit} unassigned.`)) { reshow(); render(); } return; }
+    case 'wo': return woForm(d.id);
+    case 'woNew': return woForm(null, { target: d.target || '' });
+    case 'woDelete': { const w = get('work', d.id); if (!confirm(`Delete work order “${w.title}”? Its cost history will be removed.`)) return; const n = clone(); n.work = n.work.filter(x => x.id !== d.id); const t = targetOf(w); if (t.t === 'asset') { const a2 = getIn(n, 'assets', t.id); if (a2 && a2.status === 'Out of service' && w.oos && !n.work.some(o => o.target === w.target && o.status !== 'Completed' && o.oos)) { a2.status = 'In service'; hist(a2, 'Returned to service — work order deleted'); } } if (commit(n, 'Work order deleted.')) finishForm(); return; }
+    case 'test': return testForm({ driver: d.driver, reason: d.reason, id: d.id });
+    case 'testDelete': { if (!confirm('Delete this test record?')) return; const n = clone(), t = getIn(n, 'tests', d.id); n.tests = n.tests.filter(x => x.id !== d.id); const dr = getIn(n, 'drivers', t.driver); if (dr) hist(dr, `Deleted ${t.reason.toLowerCase()} test record ${fmt(t.date)}`); if (commit(n, 'Test deleted.')) finishForm(); return; }
+    case 'edit': return editForm(d.col, d.id || null);
+    case 'del': return deleteRecord(d.col, d.id);
+    case 'assetPick': return assetPick();
+    case 'assetNew': formOpen = false; return assetForm(null, { type: d.type });
+    case 'bitemPick': return bitemPick(d.building, d.cat);
+    case 'bitemNew': formOpen = false; return bitemForm(null, { building: d.building, kind: d.kind });
+    case 'todayFilter': todayFilter = d.f; return render();
+    case 'assetFilter': assetFilter = d.f; return render();
+    case 'woFilter': woFilter = d.f; return render();
+    case 'fileRm': draft.splice(Number(d.i), 1); return drawFiles();
+    case 'dl': { let r = null; for (const c of ['drivers', 'staff', 'vendors', 'buildings', 'bitems', 'assets', 'work', 'tests']) { r = get(c, d.id); if (r) break; } const f = r && (r.files || [])[Number(d.i)]; if (!f) return notice('File not found.', true); const l = document.createElement('a'); l.href = f.data; l.download = f.name; document.body.appendChild(l); l.click(); l.remove(); return; }
+    case 'export': { const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' }); const l = document.createElement('a'); l.href = URL.createObjectURL(blob); l.download = `dwyer-fleet-facilities-backup-${today()}.json`; document.body.appendChild(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(l.href), 1000); return notice('Backup downloaded.'); }
+    case 'import': { const f = $('importFile'); f.onchange = e => { const file = e.target.files[0]; e.target.value = ''; if (!file) return; const rd = new FileReader(); rd.onload = () => { try { const d2 = JSON.parse(rd.result); const cols = ['drivers', 'staff', 'vendors', 'buildings', 'bitems', 'assets', 'work', 'tests']; if (d2.version !== 6 || !cols.every(c => Array.isArray(d2[c]))) throw Error('This is not a backup from this version of the app.'); if (!d2.assets.every(a => ASSET_TYPES[a.type]) || !d2.bitems.every(i => BITEMS[i.kind])) throw Error('The backup contains unknown asset or item types.'); if (!confirm('Replace everything in this browser with the backup?')) return; if (commit(d2, 'Backup restored.')) render(); } catch (err) { notice('Import failed: ' + err.message, true); } }; rd.readAsText(file); }; f.click(); return; }
+    case 'reset': if (confirm('Erase all changes and reload the demo records?')) { if (commit(seed(), 'Demo data restored.')) { todayFilter = 'all'; render(); } } return;
+  }
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (!b) return; e.preventDefault(); act(b.dataset.a, { ...b.dataset }); });
+
+/* ============================================================
+   DEMO DATA — all fictional, dates relative to today
+   ============================================================ */
+function seed() {
+  const D = n => addDays(today(), n), M = n => addMonths(today(), n), at = new Date().toISOString(), h = t => [{ at, text: t }];
+  const ids = {};
+  const mk = (col, key, o) => { const id = col.slice(0, 1) + '_' + key; ids[key] = id; return { id, hist: h('Demo record'), due: {}, ...o }; };
+  const drivers = [
+    mk('drivers', 'alex', { name: 'Alex Sample', status: 'Active', cdlClass: 'A', cdlNo: 'S-000-000-000-001', cdlState: 'MI', phone: '555-0101', hire: M(-40), due: { medical: { last: addMonths(D(18), -24), next: D(18), examiner: 'Dr. Sample', registry: '0000000000' }, cdl: { next: M(26) }, mvr: { last: M(-11), next: D(40) }, clearinghouse: { last: M(-6), next: M(6) } } }),
+    mk('drivers', 'jordan', { name: 'Jordan Example', status: 'Active', cdlClass: 'A', cdlNo: 'E-000-000-000-002', cdlState: 'MI', phone: '555-0102', hire: M(-20), due: { medical: { last: M(-10), next: M(14) }, cdl: { next: M(30) }, mvr: { last: M(-12), next: D(-6) }, clearinghouse: { last: M(-3), next: M(9) } } }),
+    mk('drivers', 'casey', { name: 'Casey Demo', status: 'Active', cdlClass: 'B', cdlNo: 'D-000-000-000-003', cdlState: 'MI', phone: '555-0103', hire: D(-5), due: { medical: { last: D(-12), next: M(24) }, cdl: { next: M(40) }, mvr: { last: D(-10), next: M(12) }, clearinghouse: { last: D(-10), next: M(12) } } })
+  ];
+  const buildings = [
+    mk('buildings', 'fh', { name: 'Farmington Hills warehouse — SAMPLE', btype: 'Warehouse', address: '123 Example Dr, Farmington Hills, MI (fictional)', phone: '555-0110', sqft: 42000, emergency: 'Gas shutoff: east wall outside. Water main: mechanical room. Assembly point: front lot by flagpole.' }),
+    mk('buildings', 'shop', { name: 'Fabrication shop — SAMPLE', btype: 'Fabrication shop', address: '125 Example Dr, Farmington Hills, MI (fictional)', phone: '555-0111', sqft: 18000, emergency: 'Water shutoff: by saw line drain. Compressed air shutoff: compressor room.' })
+  ];
+  const staff = [
+    mk('staff', 'pat', { name: 'Pat Warehouse', status: 'Active', position: 'Warehouse', building: ids.fh, phone: '555-0120', forklift: true, firstAid: true, due: { forkliftEval: { last: M(-36), next: D(20) }, firstAid: { last: M(-12), next: M(12) } } }),
+    mk('staff', 'riley', { name: 'Riley Shop', status: 'Active', position: 'Fabrication shop', building: ids.shop, phone: '555-0121', crane: true, forklift: true, due: { craneCert: { last: M(-30), next: M(30) }, forkliftEval: { last: M(-10), next: M(26) } } }),
+    mk('staff', 'morgan', { name: 'Morgan Office', status: 'Active', position: 'Office', building: ids.fh, phone: '555-0122' })
+  ];
+  buildings[0].contact = ids.pat; buildings[1].contact = ids.riley;
+  const vendors = [
+    mk('vendors', 'fleet', { name: 'Lakes Fleet Service — SAMPLE', status: 'Active', service: 'Truck & trailer repair', contact: 'Sam Service', phone: '555-0130', email: 'service@example.com', due: { coi: { last: M(-12), next: D(12) } } }),
+    mk('vendors', 'fire', { name: 'Metro Fire Protection — SAMPLE', status: 'Active', service: 'Fire protection', contact: 'Dana Fire', phone: '555-0131', email: 'fire@example.com', hasContract: true, due: { coi: { last: M(-4), next: M(8) }, contract: { last: M(-10), next: M(2) } } }),
+    mk('vendors', 'hvac', { name: 'Great Lakes HVAC — SAMPLE', status: 'Active', service: 'HVAC / mechanical', contact: 'Lee Air', phone: '555-0132', due: { coi: { last: M(-6), next: M(6) } } }),
+    mk('vendors', 'lift', { name: 'Motor City Lift Truck — SAMPLE', status: 'Active', service: 'Equipment repair', contact: 'Chris Forks', phone: '555-0133', due: { coi: { last: M(-2), next: M(10) } } }),
+    mk('vendors', 'door', { name: 'Overhead Door Co — SAMPLE', status: 'Active', service: 'Doors & docks', contact: 'Jamie Door', phone: '555-0134', due: { coi: { last: M(-1), next: M(11) } } })
+  ];
+  const A = (key, type, o) => mk('assets', key, { type, status: 'In service', ...o });
+  const assets = [
+    A('t101', 'truck', { unit: 'Truck 101', body: 'A-frame slab truck', year: 2020, make: 'Freightliner', model: 'M2 106', vin: '1FVACWDT0LHSAMPLE1', plate: 'DEMO101', plateState: 'MI', gvwr: 33000, basedAt: ids.fh, driver: ids.alex, meter: 148210, meterDate: D(-2), pmEvery: 15000, pmLast: { date: M(-5), meter: 135000 }, vendor: ids.fleet, due: { dotInsp: { last: M(-11), next: D(13) }, registration: { last: M(-6), next: M(6) } } }),
+    A('t102', 'truck', { unit: 'Truck 102', body: 'Boom truck', year: 2018, make: 'International', model: 'MV607', vin: '3HAEUMML0JSAMPLE2', plate: 'DEMO102', plateState: 'MI', gvwr: 33000, basedAt: ids.fh, driver: ids.jordan, meter: 201450, meterDate: D(-1), pmEvery: 15000, pmLast: { date: M(-2), meter: 196000 }, vendor: ids.fleet, due: { dotInsp: { last: M(-12), next: D(-3) }, registration: { last: M(-3), next: M(9) } } }),
+    A('p201', 'pickup', { unit: 'Pickup 201', year: 2022, make: 'Ford', model: 'F-250', vin: '1FT7W2BT0NSAMPLE3', plate: 'DEMO201', plateState: 'MI', basedAt: ids.fh, meter: 38400, meterDate: D(-3), pmEvery: 5000, pmLast: { date: M(-2), meter: 35500 }, due: { registration: { last: M(-10), next: M(2) } } }),
+    A('tr301', 'trailer', { unit: 'Trailer 301', ttype: 'A-frame slab trailer', year: 2019, make: 'Sample Trailer Co', vin: '5SAMPLETR0KSAMPLE4', plate: 'DEMOT301', plateState: 'MI', gvwr: 24000, basedAt: ids.fh, pmMonths: 6, pmLast: { date: addDays(M(-6), 9) }, due: { dotInsp: { last: M(-5), next: M(7) }, registration: { last: M(-8), next: M(4) } } }),
+    A('fl02', 'forklift', { unit: 'Forklift 02', make: 'Toyota', model: '8FGU25', serial: 'SN-FL02-SAMPLE', power: 'LP gas', capacity: 5000, attach: 'Side shift, 48" forks', basedAt: ids.fh, status: 'Out of service', meter: 6210, meterDate: D(-1), pmEvery: 250, pmLast: { date: M(-2), meter: 6050 }, vendor: ids.lift, due: { annualInsp: { last: M(-8), next: M(4) } } }),
+    A('fl03', 'forklift', { unit: 'Forklift 03', make: 'Hyster', model: 'H80FT', serial: 'SN-FL03-SAMPLE', power: 'Diesel', capacity: 8000, attach: 'Slab clamp ready', basedAt: ids.fh, meter: 4488, meterDate: D(0), pmEvery: 250, pmLast: { date: M(-3), meter: 4250 }, vendor: ids.lift, due: { annualInsp: { last: M(-6), next: M(6) } } }),
+    A('cr1', 'crane', { unit: 'Bridge crane 1', ctype: 'Overhead bridge crane', make: 'Sample Hoist', model: 'SH-5T', serial: 'SN-CR1-SAMPLE', capacity: 5, span: 40, basedAt: ids.shop, meter: 3120, meterDate: D(-7), pmEvery: 500, pmLast: { date: M(-4), meter: 2800 }, due: { craneMonthly: { last: D(-27), next: D(3) }, craneAnnual: { last: M(-10), next: M(2) } } }),
+    A('pj1', 'powerjack', { unit: 'Power jack 1', ptype: 'Walkie stacker', make: 'Crown', model: 'WP 3000', serial: 'SN-PJ1-SAMPLE', capacity: 4500, basedAt: ids.fh, meter: 1210, meterDate: D(-4), pmEvery: 250, pmLast: { date: M(-2), meter: 1050 }, due: { annualInsp: { last: M(-9), next: M(3) } } }),
+    A('al1', 'aerial', { unit: 'Scissor lift 1', ltype: 'Scissor lift', make: 'Genie', model: 'GS-1930', serial: 'SN-AL1-SAMPLE', height: 19, basedAt: ids.fh, meter: 410, meterDate: D(-20), pmEvery: 250, pmLast: { date: M(-5), meter: 300 }, due: { annualInsp: { last: M(-11), next: D(25) } } }),
+    A('vl1', 'lifter', { unit: 'Vacuum lifter VL-1', ltype: 'Vacuum lifter', make: 'Sample Vac', model: 'SV-1500', serial: 'SN-VL1-SAMPLE', capacity: 1500, basedAt: ids.shop, due: { lifterInsp: { last: M(-12), next: D(-10) } } }),
+    A('mj1', 'manualjack', { unit: 'Pallet jack 3', make: 'Uline', model: 'H-1043', serial: 'SN-MJ3-SAMPLE', capacity: 5500, basedAt: ids.fh, due: { annualInsp: { last: M(-4), next: M(8) } } })
+  ];
+  const I = (key, b, kind, o) => mk('bitems', key, { building: b, kind, name: BITEMS[kind].name, ...o });
+  const bitems = [
+    I('el1', ids.fh, 'electric', { provider: 'DTE Energy', account: 'XXXX-1001', meterNo: 'E-55501', amps: 800, panel: 'Mechanical room', due: { elecInsp: { last: M(-8), next: M(4) } } }),
+    I('gas1', ids.fh, 'gas', { provider: 'Consumers Energy', account: 'XXXX-2001', meterNo: 'G-77701', shutoff: 'East wall exterior', due: { gasCheck: { last: M(-10), next: M(2) } } }),
+    I('wat1', ids.fh, 'water', { provider: 'City water', account: 'XXXX-3001', meterNo: 'W-12001', shutoff: 'Mechanical room', due: { backflow: { last: addDays(M(-12), 21), next: D(21) } } }),
+    I('hv1', ids.fh, 'hvac', { name: 'RTU-1 Office', make: 'Carrier', model: '48TC', serial: 'SN-RTU1', serves: 'Office & showroom', filter: '20x25x2 (x4)', vendor: ids.hvac, due: { hvacPM: { last: M(-5), next: M(1) } } }),
+    I('uh1', ids.fh, 'heater', { name: 'Unit heaters — warehouse', make: 'Modine', serves: 'Warehouse floor', vendor: ids.hvac, due: { heaterInsp: { last: M(-11), next: D(28) } } }),
+    I('ext1', ids.fh, 'extinguishers', { qty: 14, where: 'Each exit, forklift charging area, office', vendor: ids.fire, due: { extMonthly: { last: D(-34), next: D(-4) }, extAnnual: { last: M(-9), next: M(3) } } }),
+    I('spr1', ids.fh, 'sprinkler', { stype: 'Wet', riser: 'NE corner', vendor: ids.fire, due: { sprinklerQ: { last: M(-2), next: M(1) } } }),
+    I('al1', ids.fh, 'alarm', { panel: 'Front entry', monitor: 'Sample Monitoring', vendor: ids.fire, due: { alarmAnnual: { last: M(-7), next: M(5) } } }),
+    I('em1', ids.fh, 'emlights', { qty: 22, due: { emMonthly: { last: D(-20), next: D(10) }, emAnnual: { last: M(-6), next: M(6) } } }),
+    I('eye1', ids.fh, 'eyewash', { name: 'Eyewash — battery charging', where: 'Forklift battery charging station', due: { eyewashWeekly: { last: D(-9), next: D(-2) } } }),
+    I('fa1', ids.fh, 'firstaid', { name: 'First aid kit & AED — office', where: 'Office hallway', aed: 'Yes', due: { firstAidCheck: { last: D(-25), next: D(5) } } }),
+    I('ev1', ids.fh, 'evac', { assembly: 'Front lot by flagpole', posted: 'Each exit and breakroom', due: { drill: { last: M(-11), next: D(26) } } }),
+    I('rf1', ids.fh, 'roof', { rtype: 'Membrane (EPDM / TPO)', installed: 2012, area: 42000, due: { roofInsp: { last: M(-5), next: M(1) } } }),
+    I('dk2', ids.fh, 'dock', { name: 'Dock door 2', door: '2', make: 'Sample Dock', ltype: 'Hydraulic', vendor: ids.door, due: { dockPM: { last: M(-5), next: M(1) } } }),
+    I('od1', ids.fh, 'overhead', { name: 'Overhead door 1 (drive-in)', door: '1', make: 'Sample Door', size: '14 x 16', vendor: ids.door, due: { doorPM: { last: M(-6), next: M(6) } } }),
+    I('rk1', ids.fh, 'racking', { name: 'A-frame slab racks — aisle A', rtype: 'A-frame slab rack', capacity: 12000, where: 'Aisle A', due: { rackInsp: { last: M(-12), next: D(-15) } } }),
+    I('lot1', ids.fh, 'lot', { surface: 'Asphalt', area: 30000, due: { lotInsp: { last: M(-4), next: M(8) } } }),
+    I('el2', ids.shop, 'electric', { provider: 'DTE Energy', account: 'XXXX-1002', meterNo: 'E-55502', amps: 1200, panel: 'Shop north wall', due: { elecInsp: { last: M(-3), next: M(9) } } }),
+    I('wat2', ids.shop, 'water', { provider: 'City water', account: 'XXXX-3002', meterNo: 'W-12002', shutoff: 'By saw-line drain', due: { backflow: { last: M(-5), next: M(7) } } }),
+    I('cmp1', ids.shop, 'compressor', { make: 'Quincy', model: 'QGS-15', serial: 'SN-CMP1', hp: 15, due: { compService: { last: M(-6), next: D(-1) } } }),
+    I('ext2', ids.shop, 'extinguishers', { qty: 8, where: 'Exits, saw line, polishing area', vendor: ids.fire, due: { extMonthly: { last: D(-14), next: D(16) }, extAnnual: { last: M(-9), next: M(3) } } }),
+    I('eye2', ids.shop, 'eyewash', { name: 'Eyewash — saw line', where: 'Saw line', due: { eyewashWeekly: { last: D(-3), next: D(4) } } }),
+    I('ev2', ids.shop, 'evac', { assembly: 'Side lot', posted: 'Shop entrance', due: { drill: { last: M(-6), next: M(6) } } }),
+    I('rf2', ids.shop, 'roof', { rtype: 'Metal', installed: 2016, area: 18000, due: { roofInsp: { last: M(-3), next: M(3) } } }),
+    I('od2', ids.shop, 'overhead', { name: 'Overhead door — shop bay', door: 'Bay 1', make: 'Sample Door', size: '12 x 14', vendor: ids.door, due: { doorPM: { last: M(-8), next: M(4) } } }),
+    I('st2', ids.shop, 'structure', { construct: 'Steel frame, slab-on-grade', known: 'Hairline floor crack at saw line — monitor', due: { structInsp: { last: M(-6), next: M(6) } } })
+  ];
+  const W = (o) => ({ id: uid(), priority: 'Routine', vendor: '', assignee: '', due: '', oos: false, completed: '', performed: '', cost: '', invoice: '', created: D(-3), hist: h('Demo record'), ...o });
+  const work = [
+    W({ target: 'asset:' + ids.fl02, title: 'Hydraulic leak at mast — tilt cylinder', priority: 'Urgent', status: 'Waiting on parts', vendor: ids.lift, due: D(2), oos: true, notes: 'Reported by Pat at shift start. Seal kit ordered.' }),
+    W({ target: 'bitem:' + ids.dk2, title: 'Dock seal torn, door not sealing', status: 'Scheduled', vendor: ids.door, due: D(6) }),
+    W({ target: 'bitem:' + ids.rk1, title: 'Damaged upright — bay A4', priority: 'Safety critical', status: 'Open', assignee: ids.riley, due: D(1), notes: 'Bay A4 unloaded and tagged out.' }),
+    W({ target: 'asset:' + ids.t101, title: 'PM service', isPM: true, status: 'Completed', vendor: ids.fleet, completed: M(-5), performed: 'Oil & filter, chassis lube, brake adjust', cost: 685, invoice: 'RO-1001', meterAt: 135000 }),
+    W({ target: 'asset:' + ids.t102, title: 'Replace front brake chambers', status: 'Completed', vendor: ids.fleet, completed: M(-1), performed: 'Both front chambers replaced, brakes adjusted', cost: 940, invoice: 'RO-1022' }),
+    W({ target: 'bitem:' + ids.hv1, title: 'HVAC service', status: 'Completed', vendor: ids.hvac, completed: M(-5), performed: 'Filters, belts, coil clean', cost: 420, invoice: 'H-332' }),
+    W({ target: 'asset:' + ids.fl03, title: 'PM service', isPM: true, status: 'Completed', vendor: ids.lift, completed: M(-3), performed: '250-hour service', cost: 310, invoice: 'L-871', meterAt: 4250 })
+  ];
+  const tests = [
+    { id: uid(), driver: ids.alex, date: M(-40), reason: 'Pre-employment', substance: 'Drug', result: 'Negative', notes: '' },
+    { id: uid(), driver: ids.alex, date: M(-2), reason: 'Random', substance: 'Both', result: 'Negative', notes: '' },
+    { id: uid(), driver: ids.jordan, date: M(-20), reason: 'Pre-employment', substance: 'Drug', result: 'Negative', notes: '' }
+  ];
+  return { version: 6, drivers, staff, vendors, buildings, bitems, assets, work, tests };
+}
+
+/* ============================================================
+   START
+   ============================================================ */
+load();
+$('nav').addEventListener('change', e => { if ($('modal').open) closeModal(true); page = e.target.value; render(); window.scrollTo(0, 0); });
+$('modal').addEventListener('cancel', e => { e.preventDefault(); if (formOpen) cancelForm(); else closeModal(); });
+window.addEventListener('beforeunload', e => { if (formOpen && dirty) { e.preventDefault(); e.returnValue = ''; } });
+render(); if (warning) notice(warning, true);
+
 </script></body></html>
